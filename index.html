@@ -9,13 +9,13 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="icon" type="image/jpeg" href="logo.jpg">
+<link rel="icon" type="image/jpeg" href="transport/logo.jpg">
 
 <style>
 /* ===================================================
    CTL – Compagnie Tra-Log SARL — une seule page
    Palette : cyan #1AA7EC · rouge #D62828 · navy #0A2540
-   Images : acceuil.jpg (bannière) · logo.jpg (logo)
+   Images : transport/acceuil.jpg · transport/logo.jpg
    =================================================== */
 :root{
   --cyan:#1AA7EC; --cyan-dark:#1287c0; --red:#D62828; --navy:#0A2540;
@@ -65,8 +65,6 @@ p{margin:0 0 1em}
 .header-inner{display:flex;align-items:center;justify-content:space-between;height:var(--header-h);gap:20px}
 .logo{display:inline-flex;align-items:center;gap:10px;flex-shrink:0}
 .logo-img{height:52px;width:auto;display:block;object-fit:contain}
-.logo-text{display:flex;flex-direction:column;font-weight:700;color:var(--navy);font-size:.98rem;line-height:1.15}
-.logo-text small{font-size:.68rem;font-weight:500;color:var(--muted);letter-spacing:.03em}
 .main-nav{display:flex;gap:26px;font-weight:500;font-size:.95rem}
 .main-nav a{position:relative;padding:6px 0;color:var(--ink)}
 .main-nav a:hover,.main-nav a.active{color:var(--cyan-dark)}
@@ -81,11 +79,11 @@ p{margin:0 0 1em}
 .nav-toggle.open span:nth-child(2){opacity:0}
 .nav-toggle.open span:nth-child(3){transform:translateY(-7.5px) rotate(-45deg)}
 
-/* ===== Hero — bannière avec acceuil.jpg ===== */
+/* ===== Hero — bannière avec transport/acceuil.jpg ===== */
 .hero{position:relative;color:#fff;padding:120px 0 100px;scroll-margin-top:var(--header-h);
   background:
     linear-gradient(120deg,rgba(10,37,64,.88) 25%,rgba(26,167,236,.45)),
-    url('acceuil.jpg') center/cover no-repeat;
+    url('transport/acceuil.jpg') center/cover no-repeat;
   background-color:var(--navy);}
 .hero h1{color:#fff;max-width:18ch;text-shadow:0 2px 12px rgba(0,0,0,.25)}
 .hero p{color:rgba(255,255,255,.95);font-size:1.15rem;max-width:52ch;text-shadow:0 1px 6px rgba(0,0,0,.3)}
@@ -162,7 +160,7 @@ p{margin:0 0 1em}
 .site-footer h4{color:#fff;font-size:.95rem;letter-spacing:.03em;margin-bottom:16px}
 .site-footer ul{list-style:none;padding:0;margin:0;display:grid;gap:10px;font-size:.92rem}
 .site-footer a:hover{color:#fff}
-/* ⚠️ logo.jpg est un JPG à fond blanc. Le filtre le passe en blanc pur
+/* ⚠️ logo.jpg est un JPG à fond blanc. Ce filtre le passe en blanc uni
       pour rester lisible sur le footer bleu foncé.
       À remplacer par un logo PNG/SVG transparent dès que possible. */
 .logo--light .logo-img{height:52px;filter:brightness(0) invert(1);opacity:.95}
@@ -225,7 +223,7 @@ p{margin:0 0 1em}
 <header class="site-header">
   <div class="container header-inner">
     <a href="#accueil" class="logo" aria-label="CTL Accueil">
-      <img src="logo.jpg" alt="CTL – Compagnie Tra-Log SARL" class="logo-img">
+      <img src="transport/logo.jpg" alt="CTL – Compagnie Tra-Log SARL" class="logo-img">
     </a>
     <nav class="main-nav" id="mainNav">
       <a href="#accueil" class="active">Accueil</a>
@@ -245,7 +243,7 @@ p{margin:0 0 1em}
   </div>
 </header>
 
-<!-- ============ HERO / ACCUEIL — utilise acceuil.jpg ============ -->
+<!-- ============ HERO / ACCUEIL — utilise transport/acceuil.jpg ============ -->
 <section class="hero" id="accueil">
   <div class="container">
     <span class="eyebrow" style="color:#bfe7fb">Terre · Air · Mer</span>
@@ -523,7 +521,7 @@ p{margin:0 0 1em}
   <div class="container footer-grid">
     <div>
       <a href="#accueil" class="logo logo--light">
-        <img src="logo.jpg" alt="CTL" class="logo-img">
+        <img src="transport/logo.jpg" alt="CTL" class="logo-img">
       </a>
       <p style="margin-top:16px;font-size:.92rem">Transit, douane et logistique à Ouagadougou. Terre · Air · Mer.</p>
     </div>
