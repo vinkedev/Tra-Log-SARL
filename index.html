@@ -79,7 +79,7 @@ p{margin:0 0 1em}
 .nav-toggle.open span:nth-child(2){opacity:0}
 .nav-toggle.open span:nth-child(3){transform:translateY(-7.5px) rotate(-45deg)}
 
-/* ===== HERO avec DIAPORAMA ===== */
+/* ===== HERO avec DIAPORAMA + SLOGAN DYNAMIQUE ===== */
 .hero{
   position:relative;overflow:hidden;color:#fff;
   min-height:calc(100vh - var(--header-h));
@@ -98,7 +98,23 @@ p{margin:0 0 1em}
 .hero .container{position:relative;z-index:2}
 .hero-logo{display:inline-flex;background:#fff;border-radius:20px;padding:14px 26px;margin-bottom:30px;box-shadow:0 20px 44px rgba(0,0,0,.3);animation:float 5s ease-in-out infinite}
 .hero-logo img{height:104px;width:auto}
-.hero h1{color:#fff;font-size:clamp(1.7rem,3.6vw,2.6rem);max-width:24ch;text-shadow:0 3px 18px rgba(0,0,0,.4)}
+.hero h1{
+  color:#fff;
+  font-size:clamp(1.7rem,3.6vw,2.6rem);
+  max-width:30ch;
+  text-shadow:0 3px 18px rgba(0,0,0,.4);
+  min-height:3em;
+}
+.hero-dyn{
+  display:inline-block;
+  color:var(--cyan);
+  transition:opacity .38s var(--ease), transform .38s var(--ease);
+}
+.hero-dyn.out{
+  opacity:0;
+  transform:translateY(-14px);
+}
+
 .hero p{color:#fff;font-size:1.18rem;max-width:52ch;text-shadow:0 2px 10px rgba(0,0,0,.45)}
 .hero-actions{display:flex;flex-wrap:wrap;gap:14px;margin-top:30px}
 .hero .in-seq{opacity:0;animation:rise .9s var(--ease) forwards}
@@ -122,49 +138,22 @@ p{margin:0 0 1em}
 .modes span{padding:10px 20px;border-radius:999px;background:var(--bg-soft);border:1px solid var(--line);font-weight:600;color:var(--navy);transition:.3s var(--ease)}
 .modes span:hover{background:var(--cyan-dark);color:#fff;transform:translateY(-3px)}
 
-/* ===== BANDEAU D'IMAGES DÉFILANT ===== */
+/* Bandeau d'images défilant */
 @keyframes scrollImages { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
 .image-marquee{
-  background:var(--navy);
-  padding:46px 0;
-  overflow:hidden;
-  position:relative;
+  background:var(--navy);padding:46px 0;overflow:hidden;position:relative;
   border-top:1px solid rgba(255,255,255,.08);
   border-bottom:1px solid rgba(255,255,255,.08);
 }
 .image-marquee::before,
-.image-marquee::after{
-  content:"";
-  position:absolute;top:0;bottom:0;width:120px;z-index:2;pointer-events:none;
-}
+.image-marquee::after{content:"";position:absolute;top:0;bottom:0;width:120px;z-index:2;pointer-events:none}
 .image-marquee::before{left:0;background:linear-gradient(90deg,var(--navy) 0%,transparent 100%)}
 .image-marquee::after{right:0;background:linear-gradient(270deg,var(--navy) 0%,transparent 100%)}
-.marquee-track{
-  display:flex;gap:24px;width:max-content;
-  animation:scrollImages 30s linear infinite;
-  will-change:transform;
-}
+.marquee-track{display:flex;gap:24px;width:max-content;animation:scrollImages 30s linear infinite;will-change:transform}
 .marquee-track:hover{animation-play-state:paused}
-.marquee-item{
-  flex:none;
-  width:320px;height:200px;
-  border-radius:var(--radius);
-  overflow:hidden;
-  position:relative;
-  box-shadow:0 10px 30px rgba(0,0,0,.3);
-  border:2px solid rgba(26,167,236,.35);
-  transition:transform .4s var(--ease),border-color .4s,box-shadow .4s;
-}
-.marquee-item:hover{
-  transform:scale(1.06);
-  border-color:var(--red);
-  box-shadow:0 16px 40px rgba(214,40,40,.35);
-}
-.marquee-item img{
-  width:100%;height:100%;object-fit:cover;
-  display:block;
-  transition:transform .5s var(--ease);
-}
+.marquee-item{flex:none;width:320px;height:200px;border-radius:var(--radius);overflow:hidden;position:relative;box-shadow:0 10px 30px rgba(0,0,0,.3);border:2px solid rgba(26,167,236,.35);transition:transform .4s var(--ease),border-color .4s,box-shadow .4s}
+.marquee-item:hover{transform:scale(1.06);border-color:var(--red);box-shadow:0 16px 40px rgba(214,40,40,.35)}
+.marquee-item img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s var(--ease)}
 .marquee-item:hover img{transform:scale(1.08)}
 
 /* Titres mot par mot */
@@ -191,15 +180,15 @@ p{margin:0 0 1em}
 .card .icon{font-size:1.8rem;margin-bottom:12px}
 .card p{color:var(--muted);margin:0}
 
-/* Pourquoi nous choisir */
+/* Pourquoi nous choisir — 3 cartes */
 .why-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
-.why{position:relative;background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:32px 26px;transition:transform .35s var(--ease),box-shadow .35s,border-color .35s;overflow:hidden}
+.why{position:relative;background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:36px 30px;transition:transform .35s var(--ease),box-shadow .35s,border-color .35s;overflow:hidden}
 .why::before{content:"";position:absolute;inset:0;background:linear-gradient(135deg,rgba(26,167,236,.05),transparent 60%);opacity:0;transition:opacity .4s;pointer-events:none}
 .why:hover{transform:translateY(-6px);box-shadow:var(--shadow);border-color:rgba(26,167,236,.35)}
 .why:hover::before{opacity:1}
-.why-num{font-size:2rem;font-weight:800;line-height:1;margin-bottom:14px;background:linear-gradient(120deg,var(--cyan),var(--red));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
-.why h3{font-size:1.08rem;margin-bottom:8px;color:var(--navy)}
-.why p{color:var(--muted);font-size:.95rem;margin:0}
+.why-num{font-size:2.2rem;font-weight:800;line-height:1;margin-bottom:16px;background:linear-gradient(120deg,var(--cyan),var(--red));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.why h3{font-size:1.15rem;margin-bottom:10px;color:var(--navy)}
+.why p{color:var(--muted);font-size:.98rem;margin:0}
 
 /* Témoignages */
 .testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
@@ -271,7 +260,8 @@ p{margin:0 0 1em}
 }
 
 @media (max-width:980px){
-  .services,.grid-3,.why-grid,.testi-grid{grid-template-columns:repeat(2,1fr)}
+  .services,.grid-3,.testi-grid{grid-template-columns:repeat(2,1fr)}
+  .why-grid{grid-template-columns:repeat(2,1fr)}
   .footer-grid{grid-template-columns:1fr 1fr}
   .split{grid-template-columns:1fr;gap:36px}
 }
@@ -292,35 +282,46 @@ p{margin:0 0 1em}
   .site-header.scrolled .header-inner{height:70px}
   .site-header.scrolled .logo-img{height:50px}
 
-  .services,.grid-3,.why-grid,.testi-grid{grid-template-columns:repeat(2,1fr)}
+  .services,.grid-3,.testi-grid{grid-template-columns:repeat(2,1fr)}
+  .why-grid{grid-template-columns:repeat(2,1fr)}
   .footer-grid{grid-template-columns:1fr 1fr}
   .split{grid-template-columns:1fr;gap:36px}
 
-  /* Marquee tablette */
-  .marquee-item{width:260px;height:170px}
+  /* Marquee tablette agrandi */
+  .marquee-item{width:320px;height:220px}
 }
 
+/* ================= MOBILE ================= */
 @media (max-width:640px){
   .section{padding:58px 0}
-  .services,.grid-3,.why-grid,.testi-grid{grid-template-columns:1fr}
-  .hero{padding:64px 0 90px}
+  .services,.grid-3,.testi-grid{grid-template-columns:1fr}
+  .why-grid{grid-template-columns:1fr;gap:20px}
+
+  /* Hero plus haut sur mobile (min 700px garanti) */
+  .hero{
+    min-height: max(calc(100dvh - var(--header-h)), 700px);
+    padding: 100px 0 120px;
+  }
   .hero::after{background:linear-gradient(180deg,rgba(10,37,64,.72),rgba(10,37,64,.5))}
   .hero-logo img{height:76px}
-  .hero h1{font-size:clamp(1.45rem,5.6vw,1.9rem)}
-  .hero-dots{bottom:30px}
+  .hero h1{font-size:clamp(1.45rem,5.6vw,1.9rem);min-height:4.4em}
+  .hero p{font-size:1.05rem}
+  .hero-dots{bottom:34px}
+  .hero-dot{width:11px;height:11px}
   .scroll-hint{display:none}
   .hero-slide.is-active{transform:scale(1.04)}
+
   .cta-band{padding:38px 22px}
   .form-row{grid-template-columns:1fr}
   .footer-grid{grid-template-columns:1fr;gap:28px}
   .footer-bottom{justify-content:center;text-align:center}
   .logo-img{height:50px}
 
-  /* Marquee mobile */
-  .image-marquee{padding:28px 0}
-  .marquee-track{gap:16px;animation-duration:22s}
-  .marquee-item{width:220px;height:145px}
-  .image-marquee::before,.image-marquee::after{width:60px}
+  /* Marquee mobile agrandi */
+  .image-marquee{padding:42px 0}
+  .marquee-track{gap:20px;animation-duration:26s}
+  .marquee-item{width:300px;height:210px}
+  .image-marquee::before,.image-marquee::after{width:50px}
 }
 
 @media (prefers-reduced-motion:reduce){
@@ -329,6 +330,8 @@ p{margin:0 0 1em}
   .reveal,.hero .in-seq,.split-words .w{opacity:1;transform:none}
   .hero-slide{transition:opacity .9s ease !important;transform:none !important}
   .hero-slide.is-active{opacity:1;transform:none !important}
+  .hero-dyn{transition:none !important}
+  .hero-dyn.out{opacity:1;transform:none}
   .marquee-track{animation:none !important;transform:none !important}
 }
 </style>
@@ -366,7 +369,7 @@ p{margin:0 0 1em}
   </div>
   <div class="container">
     <div class="hero-logo in-seq d1"><img src="transport/logo.jpg" alt="CTL – Compagnie Tra-Log SARL"></div>
-    <h1 class="in-seq d2">Un partenaire stratégique pour une Supply Chain plus intégrée</h1>
+    <h1 class="in-seq d2">Un partenaire stratégique pour <span class="hero-dyn">une supply chain plus intégrée</span></h1>
     <p class="in-seq d3">Compagnie Tra-Log SARL accompagne ses clients dans le dédouanement, la logistique et la gestion de la supply chain depuis Ouagadougou.</p>
     <div class="hero-actions in-seq d4">
       <a href="#contact" class="btn btn-accent">Demander un devis</a>
@@ -394,17 +397,15 @@ p{margin:0 0 1em}
   </div>
 </section>
 
-<!-- ===== BANDEAU D'IMAGES DÉFILANT (après À propos) ===== -->
+<!-- BANDEAU D'IMAGES DÉFILANT -->
 <div class="image-marquee" aria-hidden="true">
   <div class="marquee-track">
-    <!-- 1er cycle -->
     <div class="marquee-item"><img src="transport/IM2.jpg" alt="" /></div>
     <div class="marquee-item"><img src="transport/IM3.jpg" alt="" /></div>
     <div class="marquee-item"><img src="transport/acceuil.jpg" alt="" /></div>
     <div class="marquee-item"><img src="transport/im1.jpg" alt="" /></div>
     <div class="marquee-item"><img src="transport/im4.jpg" alt="" /></div>
     <div class="marquee-item"><img src="transport/im5.jpg" alt="" /></div>
-    <!-- 2e cycle (dupliqué pour boucle infinie) -->
     <div class="marquee-item"><img src="transport/IM2.jpg" alt="" /></div>
     <div class="marquee-item"><img src="transport/IM3.jpg" alt="" /></div>
     <div class="marquee-item"><img src="transport/acceuil.jpg" alt="" /></div>
@@ -430,7 +431,7 @@ p{margin:0 0 1em}
   </div>
 </section>
 
-<!-- 4. POURQUOI NOUS CHOISIR -->
+<!-- 4. POURQUOI NOUS CHOISIR — 3 cartes -->
 <section class="section" id="pourquoi">
   <div class="container">
     <div class="section-head reveal">
@@ -439,12 +440,21 @@ p{margin:0 0 1em}
       <p>Un partenaire engagé, réactif et transparent pour sécuriser vos flux.</p>
     </div>
     <div class="why-grid">
-      <article class="why reveal"><div class="why-num">01</div><h3>Réactivité & disponibilité</h3><p>Une équipe joignable et des réponses rapides à chaque étape de votre dossier.</p></article>
-      <article class="why reveal"><div class="why-num">02</div><h3>Expertise douanière</h3><p>Maîtrise des procédures et conformité réglementaire à l'import comme à l'export.</p></article>
-      <article class="why reveal"><div class="why-num">03</div><h3>Réseau international</h3><p>Des partenaires fiables en Afrique et dans le monde pour vos expéditions.</p></article>
-      <article class="why reveal"><div class="why-num">04</div><h3>Solutions sur mesure</h3><p>Des prestations adaptées à votre activité, vos volumes et vos contraintes.</p></article>
-      <article class="why reveal"><div class="why-num">05</div><h3>Suivi transparent</h3><p>Une visibilité continue sur vos marchandises, vos délais et vos coûts.</p></article>
-      <article class="why reveal"><div class="why-num">06</div><h3>Équipe expérimentée</h3><p>Des professionnels du transit et de la supply chain à votre écoute.</p></article>
+      <article class="why reveal">
+        <div class="why-num">01</div>
+        <h3>Expertise reconnue</h3>
+        <p>Maîtrise complète des procédures douanières et des opérations de transit, à l'import comme à l'export.</p>
+      </article>
+      <article class="why reveal">
+        <div class="why-num">02</div>
+        <h3>Réactivité & suivi</h3>
+        <p>Une équipe disponible et un suivi transparent à chaque étape de votre dossier, jusqu'à la livraison.</p>
+      </article>
+      <article class="why reveal">
+        <div class="why-num">03</div>
+        <h3>Solutions sur mesure</h3>
+        <p>Des prestations adaptées à votre activité, vos volumes et vos contraintes spécifiques.</p>
+      </article>
     </div>
   </div>
 </section>
@@ -576,10 +586,33 @@ document.addEventListener('DOMContentLoaded', () => {
   const reduce = matchMedia('(prefers-reduced-motion:reduce)').matches;
   const canHover = matchMedia('(hover:hover) and (pointer:fine)').matches;
 
-  /* DIAPORAMA — jamais de pause, ordre : im5 → IM2 → acceuil */
+  /* DIAPORAMA + SLOGAN DYNAMIQUE (synchronisés, jamais en pause) */
   const slides = [...document.querySelectorAll('.hero-slide')];
   const dots = [...document.querySelectorAll('.hero-dot')];
+  const dynEl = document.querySelector('.hero-dyn');
   let slideIdx = 0;
+
+  const SLOGANS = [
+    'une supply chain plus intégrée',
+    'des approvisionnements maîtrisés',
+    'un dédouanement sans faille'
+  ];
+
+  let displayedIdx = 0;
+  let pendingIdx = -1;
+
+  const updateSlogan = i => {
+    if (i === displayedIdx && pendingIdx === -1) return;
+    pendingIdx = i;
+    dynEl.classList.add('out');
+    setTimeout(() => {
+      if (pendingIdx !== i) return;
+      dynEl.textContent = SLOGANS[i];
+      dynEl.classList.remove('out');
+      displayedIdx = i;
+      pendingIdx = -1;
+    }, 360);
+  };
 
   const showSlide = i => {
     slideIdx = (i + slides.length) % slides.length;
@@ -588,6 +621,7 @@ document.addEventListener('DOMContentLoaded', () => {
       d.classList.toggle('is-active', k === slideIdx);
       d.setAttribute('aria-selected', k === slideIdx);
     });
+    updateSlogan(slideIdx);
   };
 
   showSlide(0);
