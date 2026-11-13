@@ -11,7 +11,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="icon" type="image/jpeg" href="transport/logo.jpg">
-<link rel="preload" as="image" href="transport/im5.jpg">
+<link rel="preload" as="image" href="transport/im5.jpg" fetchpriority="high">
 <style>
 :root{
   --cyan:#1AA7EC; --cyan-dark:#1287c0; --red:#D62828; --navy:#0A2540;
@@ -66,8 +66,8 @@ p{margin:0 0 1em}
 .logo:hover .logo-img{transform:scale(1.05)}
 .site-header.scrolled .header-inner{height:76px}
 .site-header.scrolled .logo-img{height:56px}
-.main-nav{display:flex;gap:24px;font-weight:500;font-size:.93rem}
-.main-nav a{position:relative;padding:6px 0;transition:color .2s}
+.main-nav{display:flex;gap:20px;font-weight:500;font-size:.9rem}
+.main-nav a{position:relative;padding:6px 0;transition:color .2s;white-space:nowrap}
 .main-nav a::after{content:"";position:absolute;left:0;bottom:-2px;height:3px;width:100%;background:var(--red);border-radius:2px;transform:scaleX(0);transform-origin:left;transition:transform .35s var(--ease)}
 .main-nav a:hover,.main-nav a.active{color:var(--cyan-dark)}
 .main-nav a:hover::after,.main-nav a.active::after{transform:scaleX(1)}
@@ -84,9 +84,16 @@ p{margin:0 0 1em}
   position:relative;overflow:hidden;color:#fff;
   min-height:calc(100vh - var(--header-h));
   min-height:calc(100svh - var(--header-h));
-  display:flex;align-items:center;padding:90px 0;background:var(--navy);scroll-margin-top:var(--header-h)
+  display:flex;align-items:center;padding:90px 0;
+  background:linear-gradient(135deg,var(--navy) 0%,#0d3a5f 55%,var(--cyan-dark) 100%);
+  scroll-margin-top:var(--header-h);
 }
-.hero-slides{position:absolute;inset:-200px 0;transform:translateY(var(--py,0px));will-change:transform;z-index:0}
+.hero-slides{
+  position:absolute;inset:-200px 0;transform:translateY(var(--py,0px));
+  will-change:transform;z-index:0;
+  opacity:0;transition:opacity .9s ease;
+}
+.hero.img-ready .hero-slides{opacity:1}
 .hero-slide{
   position:absolute;inset:0;opacity:0;transform:scale(1);
   transition:opacity 1.1s ease, transform 3s ease-out;
@@ -191,7 +198,7 @@ p{margin:0 0 1em}
 .card .icon{font-size:1.8rem;margin-bottom:12px}
 .card p{color:var(--muted);margin:0}
 
-/* Pourquoi nous choisir — 3 cartes */
+/* Pourquoi nous choisir */
 .why-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
 .why{position:relative;background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:36px 30px;transition:transform .35s var(--ease),box-shadow .35s,border-color .35s;overflow:hidden}
 .why::before{content:"";position:absolute;inset:0;background:linear-gradient(135deg,rgba(26,167,236,.05),transparent 60%);opacity:0;transition:opacity .4s;pointer-events:none}
@@ -212,6 +219,29 @@ p{margin:0 0 1em}
 .testi-avatar{width:44px;height:44px;flex:0 0 44px;border-radius:50%;background:linear-gradient(135deg,var(--cyan),var(--red));color:#fff;display:grid;place-items:center;font-weight:700;font-size:1rem}
 .testi-who strong{display:block;color:var(--navy);font-size:.93rem}
 .testi-who span{color:var(--muted);font-size:.82rem}
+
+/* ===== ACTUALITÉS (état vide) ===== */
+.news-empty{
+  max-width:520px;margin:0 auto;text-align:center;
+  padding:56px 32px;
+  background:#fff;
+  border:2px dashed var(--line);
+  border-radius:var(--radius);
+  transition:border-color .3s var(--ease),transform .3s var(--ease);
+}
+.news-empty:hover{border-color:var(--cyan);transform:translateY(-4px)}
+.news-empty-icon{
+  width:80px;height:80px;margin:0 auto 20px;
+  border-radius:50%;
+  display:grid;place-items:center;
+  font-size:2.2rem;
+  background:linear-gradient(135deg,rgba(26,167,236,.12),rgba(214,40,40,.08));
+  animation:float 4s ease-in-out infinite;
+}
+.news-empty h3{
+  font-size:1.25rem;color:var(--navy);margin-bottom:10px;
+}
+.news-empty p{color:var(--muted);font-size:1rem;margin-bottom:0}
 
 /* Bande CTA */
 .cta-band{background:linear-gradient(120deg,var(--navy),var(--cyan-dark),var(--navy));background-size:200% 100%;animation:shift 10s ease-in-out infinite alternate;color:#fff;border-radius:22px;padding:58px;text-align:center}
@@ -264,10 +294,12 @@ p{margin:0 0 1em}
 .reveal{opacity:0;transform:translateY(30px);transition:opacity .8s var(--ease),transform .8s var(--ease);transition-delay:var(--d,0s)}
 .reveal.in{opacity:1;transform:none}
 
+/* Nav compacte entre 1080 et 901px (7 liens) */
 @media (max-width:1080px) and (min-width:901px){
-  .main-nav{gap:15px;font-size:.86rem}
+  .main-nav{gap:12px;font-size:.82rem}
   .phone-link{display:none}
-  .header-actions{gap:10px}
+  .header-actions{gap:8px}
+  .header-actions .btn-sm{padding:9px 14px;font-size:.8rem}
 }
 
 @media (max-width:980px){
@@ -333,6 +365,11 @@ p{margin:0 0 1em}
 
   .hero-slide.is-active{transform:scale(1.04)}
 
+  .news-empty{padding:44px 24px}
+  .news-empty-icon{width:68px;height:68px;font-size:1.9rem}
+  .news-empty h3{font-size:1.1rem}
+  .news-empty p{font-size:.94rem}
+
   .cta-band{padding:38px 22px}
   .form-row{grid-template-columns:1fr}
   .footer-grid{grid-template-columns:1fr;gap:28px}
@@ -369,6 +406,7 @@ p{margin:0 0 1em}
       <a href="#services">Services</a>
       <a href="#pourquoi">Pourquoi nous</a>
       <a href="#temoignages">Témoignages</a>
+      <a href="#actualites">Actualités</a>
       <a href="#contact">Contact</a>
     </nav>
     <div class="header-actions">
@@ -379,17 +417,17 @@ p{margin:0 0 1em}
   </div>
 </header>
 
-<!-- 1. ACCUEIL — im5 → IM2 → IM6 -->
+<!-- 1. ACCUEIL -->
 <section class="hero" id="accueil">
   <div class="hero-slides" aria-hidden="true">
     <div class="hero-slide is-active">
-      <img src="transport/im5.jpg" alt="" style="object-position:center center">
+      <img src="transport/im5.jpg" alt="" fetchpriority="high" decoding="async" style="object-position:center center">
     </div>
     <div class="hero-slide">
-      <img src="transport/IM2.jpg" alt="" style="object-position:center center">
+      <img data-src="transport/IM2.jpg" alt="" decoding="async" style="object-position:center center">
     </div>
     <div class="hero-slide">
-      <img src="transport/IM6.jpg" alt="" style="object-position:center center">
+      <img data-src="transport/IM6.jpg" alt="" decoding="async" style="object-position:center center">
     </div>
   </div>
   <div class="container">
@@ -422,10 +460,9 @@ p{margin:0 0 1em}
   </div>
 </section>
 
-<!-- BANDEAU D'IMAGES DÉFILANT — 7 images (IM6 ajouté) -->
+<!-- BANDEAU D'IMAGES DÉFILANT -->
 <div class="image-marquee" aria-hidden="true">
   <div class="marquee-track">
-    <!-- 1er cycle -->
     <div class="marquee-item"><img src="transport/IM2.jpg" alt="" loading="lazy" decoding="async" /></div>
     <div class="marquee-item"><img src="transport/IM3.jpg" alt="" loading="lazy" decoding="async" /></div>
     <div class="marquee-item"><img src="transport/acceuil.jpg" alt="" loading="lazy" decoding="async" /></div>
@@ -433,7 +470,6 @@ p{margin:0 0 1em}
     <div class="marquee-item"><img src="transport/im4.jpg" alt="" loading="lazy" decoding="async" /></div>
     <div class="marquee-item"><img src="transport/im5.jpg" alt="" loading="lazy" decoding="async" /></div>
     <div class="marquee-item"><img src="transport/IM6.jpg" alt="" loading="lazy" decoding="async" /></div>
-    <!-- 2e cycle (dupliqué pour boucle infinie) -->
     <div class="marquee-item"><img src="transport/IM2.jpg" alt="" loading="lazy" decoding="async" /></div>
     <div class="marquee-item"><img src="transport/IM3.jpg" alt="" loading="lazy" decoding="async" /></div>
     <div class="marquee-item"><img src="transport/acceuil.jpg" alt="" loading="lazy" decoding="async" /></div>
@@ -516,6 +552,22 @@ p{margin:0 0 1em}
   </div>
 </section>
 
+<!-- ===== 6. ACTUALITÉS (état vide pour le moment) ===== -->
+<section class="section" id="actualites">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="eyebrow">Actualités</span>
+      <h2>Nos dernières actualités</h2>
+      <p>Suivez la vie de Compagnie Tra-Log SARL : nouvelles prestations, interventions et temps forts.</p>
+    </div>
+    <div class="news-empty reveal">
+      <div class="news-empty-icon">📰</div>
+      <h3>Aucune actualité pour le moment</h3>
+      <p>Nos prochaines publications arrivent très bientôt. Revenez régulièrement pour ne rien manquer.</p>
+    </div>
+  </div>
+</section>
+
 <!-- Bande CTA -->
 <section class="section" id="besoin" style="padding-top:0">
   <div class="container">
@@ -530,7 +582,7 @@ p{margin:0 0 1em}
   </div>
 </section>
 
-<!-- 6. CONTACT -->
+<!-- 7. CONTACT -->
 <section class="section section--soft" id="contact">
   <div class="container">
     <div class="section-head reveal">
@@ -577,7 +629,7 @@ p{margin:0 0 1em}
   </div>
 </section>
 
-<!-- 7. FOOTER -->
+<!-- 8. FOOTER -->
 <footer class="site-footer">
   <div class="container footer-grid">
     <div>
@@ -586,7 +638,8 @@ p{margin:0 0 1em}
     </div>
     <div><h4>Navigation</h4><ul>
       <li><a href="#accueil">Accueil</a></li><li><a href="#a-propos">À propos</a></li><li><a href="#services">Services</a></li>
-      <li><a href="#pourquoi">Pourquoi nous</a></li><li><a href="#temoignages">Témoignages</a></li><li><a href="#contact">Contact</a></li>
+      <li><a href="#pourquoi">Pourquoi nous</a></li><li><a href="#temoignages">Témoignages</a></li>
+      <li><a href="#actualites">Actualités</a></li><li><a href="#contact">Contact</a></li>
     </ul></div>
     <div><h4>Services</h4><ul>
       <li>Logistique et supply chain</li><li>Gestion de la Supply Chain</li><li>Transit et dédouanement</li>
@@ -652,10 +705,51 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   showSlide(0);
-  if (slides.length > 1) {
-    setInterval(() => showSlide(slideIdx + 1), 3000);
+
+  const firstImg = slides[0].querySelector('img');
+  let started = false;
+
+  const startHero = () => {
+    if (started) return;
+    started = true;
+    hero.classList.add('img-ready');
+
+    slides.slice(1).forEach(s => {
+      const im = s.querySelector('img');
+      if (im && im.dataset.src) {
+        im.src = im.dataset.src;
+        im.removeAttribute('data-src');
+      }
+    });
+
+    if (slides.length > 1) {
+      setInterval(() => {
+        const nextImg = slides[(slideIdx + 1) % slides.length].querySelector('img');
+        if (nextImg.complete && nextImg.naturalWidth) {
+          showSlide(slideIdx + 1);
+        }
+      }, 3000);
+    }
+  };
+
+  if (firstImg.complete && firstImg.naturalWidth) {
+    startHero();
+  } else {
+    firstImg.addEventListener('load', startHero, { once: true });
+    firstImg.addEventListener('error', startHero, { once: true });
+    setTimeout(startHero, 3500);
   }
-  dots.forEach((d, i) => d.addEventListener('click', () => showSlide(i)));
+
+  dots.forEach((d, i) => d.addEventListener('click', () => {
+    const im = slides[i].querySelector('img');
+    if (!im) return;
+    if (im.dataset.src) {
+      im.src = im.dataset.src;
+      im.removeAttribute('data-src');
+    }
+    if (im.complete && im.naturalWidth) showSlide(i);
+    else im.addEventListener('load', () => showSlide(i), { once: true });
+  }));
 
   /* Scroll */
   const onScroll = () => {
