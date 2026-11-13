@@ -79,7 +79,7 @@ p{margin:0 0 1em}
 .nav-toggle.open span:nth-child(2){opacity:0}
 .nav-toggle.open span:nth-child(3){transform:translateY(-7.5px) rotate(-45deg)}
 
-/* ===== HERO avec DIAPORAMA + SLOGAN DYNAMIQUE ===== */
+/* ===== HERO avec DIAPORAMA + SLOGAN MACHINE À ÉCRIRE ===== */
 .hero{
   position:relative;overflow:hidden;color:#fff;
   min-height:calc(100vh - var(--header-h));
@@ -105,14 +105,27 @@ p{margin:0 0 1em}
   text-shadow:0 3px 18px rgba(0,0,0,.4);
   min-height:3em;
 }
+
+/* Partie dynamique = machine à écrire */
 .hero-dyn{
-  display:inline-block;
   color:var(--cyan);
-  transition:opacity .38s var(--ease), transform .38s var(--ease);
+  position:relative;
+  white-space:pre-wrap;
 }
-.hero-dyn.out{
-  opacity:0;
-  transform:translateY(-14px);
+/* Curseur clignotant */
+.hero-dyn::after{
+  content:"";
+  display:inline-block;
+  width:2px;
+  height:1em;
+  background:var(--cyan);
+  margin-left:3px;
+  vertical-align:text-bottom;
+  animation:blink 1s step-end infinite;
+}
+@keyframes blink{
+  0%,50%{opacity:1}
+  51%,100%{opacity:0}
 }
 
 .hero p{color:#fff;font-size:1.18rem;max-width:52ch;text-shadow:0 2px 10px rgba(0,0,0,.45)}
@@ -287,7 +300,6 @@ p{margin:0 0 1em}
   .footer-grid{grid-template-columns:1fr 1fr}
   .split{grid-template-columns:1fr;gap:36px}
 
-  /* Marquee tablette agrandi */
   .marquee-item{width:320px;height:220px}
 }
 
@@ -297,7 +309,6 @@ p{margin:0 0 1em}
   .services,.grid-3,.testi-grid{grid-template-columns:1fr}
   .why-grid{grid-template-columns:1fr;gap:20px}
 
-  /* Hero plus haut sur mobile (min 700px garanti) */
   .hero{
     min-height: max(calc(100dvh - var(--header-h)), 700px);
     padding: 100px 0 120px;
@@ -317,7 +328,6 @@ p{margin:0 0 1em}
   .footer-bottom{justify-content:center;text-align:center}
   .logo-img{height:50px}
 
-  /* Marquee mobile agrandi */
   .image-marquee{padding:42px 0}
   .marquee-track{gap:20px;animation-duration:26s}
   .marquee-item{width:300px;height:210px}
@@ -330,8 +340,6 @@ p{margin:0 0 1em}
   .reveal,.hero .in-seq,.split-words .w{opacity:1;transform:none}
   .hero-slide{transition:opacity .9s ease !important;transform:none !important}
   .hero-slide.is-active{opacity:1;transform:none !important}
-  .hero-dyn{transition:none !important}
-  .hero-dyn.out{opacity:1;transform:none}
   .marquee-track{animation:none !important;transform:none !important}
 }
 </style>
@@ -369,7 +377,7 @@ p{margin:0 0 1em}
   </div>
   <div class="container">
     <div class="hero-logo in-seq d1"><img src="transport/logo.jpg" alt="CTL – Compagnie Tra-Log SARL"></div>
-    <h1 class="in-seq d2">Un partenaire stratégique pour <span class="hero-dyn">une supply chain plus intégrée</span></h1>
+    <h1 class="in-seq d2">Un partenaire stratégique pour <span class="hero-dyn"></span></h1>
     <p class="in-seq d3">Compagnie Tra-Log SARL accompagne ses clients dans le dédouanement, la logistique et la gestion de la supply chain depuis Ouagadougou.</p>
     <div class="hero-actions in-seq d4">
       <a href="#contact" class="btn btn-accent">Demander un devis</a>
@@ -586,32 +594,37 @@ document.addEventListener('DOMContentLoaded', () => {
   const reduce = matchMedia('(prefers-reduced-motion:reduce)').matches;
   const canHover = matchMedia('(hover:hover) and (pointer:fine)').matches;
 
-  /* DIAPORAMA + SLOGAN DYNAMIQUE (synchronisés, jamais en pause) */
+  /* ============================================================
+     DIAPORAMA + SLOGAN MACHINE À ÉCRIRE (lettre par lettre)
+     ============================================================ */
   const slides = [...document.querySelectorAll('.hero-slide')];
   const dots = [...document.querySelectorAll('.hero-dot')];
   const dynEl = document.querySelector('.hero-dyn');
   let slideIdx = 0;
 
+  /* 3 fins de slogan (une par service) — modifie ici si besoin */
   const SLOGANS = [
     'une supply chain plus intégrée',
     'des approvisionnements maîtrisés',
     'un dédouanement sans faille'
   ];
 
-  let displayedIdx = 0;
-  let pendingIdx = -1;
+  /* Vitesse d'écriture : ms par lettre.
+     30 ms = très rapide  |  45 ms = naturel  |  70 ms = lent
+     À 45 ms, un mot de 30 lettres se tape en ~1.35s → tient dans les 3s du slide. */
+  const TYPE_SPEED = 45;
 
-  const updateSlogan = i => {
-    if (i === displayedIdx && pendingIdx === -1) return;
-    pendingIdx = i;
-    dynEl.classList.add('out');
-    setTimeout(() => {
-      if (pendingIdx !== i) return;
-      dynEl.textContent = SLOGANS[i];
-      dynEl.classList.remove('out');
-      displayedIdx = i;
-      pendingIdx = -1;
-    }, 360);
+  let typeTimer = null;
+
+  const typeSlogan = text => {
+    clearInterval(typeTimer);
+    dynEl.textContent = '';
+    let i = 0;
+    typeTimer = setInterval(() => {
+      i++;
+      dynEl.textContent = text.slice(0, i);
+      if (i >= text.length) clearInterval(typeTimer);
+    }, TYPE_SPEED);
   };
 
   const showSlide = i => {
@@ -621,7 +634,7 @@ document.addEventListener('DOMContentLoaded', () => {
       d.classList.toggle('is-active', k === slideIdx);
       d.setAttribute('aria-selected', k === slideIdx);
     });
-    updateSlogan(slideIdx);
+    typeSlogan(SLOGANS[slideIdx]);
   };
 
   showSlide(0);
