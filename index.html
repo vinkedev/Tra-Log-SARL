@@ -79,11 +79,11 @@ p{margin:0 0 1em}
 .nav-toggle.open span:nth-child(2){opacity:0}
 .nav-toggle.open span:nth-child(3){transform:translateY(-7.5px) rotate(-45deg)}
 
-/* ===== HERO avec DIAPORAMA + SLOGAN MACHINE À ÉCRIRE ===== */
+/* ===== HERO ===== */
 .hero{
   position:relative;overflow:hidden;color:#fff;
   min-height:calc(100vh - var(--header-h));
-  min-height:calc(100dvh - var(--header-h));
+  min-height:calc(100svh - var(--header-h));
   display:flex;align-items:center;padding:90px 0;background:var(--navy);scroll-margin-top:var(--header-h)
 }
 .hero-slides{position:absolute;inset:-200px 0;transform:translateY(var(--py,0px));will-change:transform;z-index:0}
@@ -112,7 +112,6 @@ p{margin:0 0 1em}
   position:relative;
   white-space:pre-wrap;
 }
-/* Curseur clignotant */
 .hero-dyn::after{
   content:"";
   display:inline-block;
@@ -309,17 +308,35 @@ p{margin:0 0 1em}
   .services,.grid-3,.testi-grid{grid-template-columns:1fr}
   .why-grid{grid-template-columns:1fr;gap:20px}
 
+  /* HERO — hauteur adaptée au vrai viewport mobile, sans min fixe */
   .hero{
-    min-height: max(calc(100dvh - var(--header-h)), 700px);
-    padding: 100px 0 120px;
+    min-height: calc(100svh - var(--header-h));
+    padding: 48px 0 90px;
   }
-  .hero::after{background:linear-gradient(180deg,rgba(10,37,64,.72),rgba(10,37,64,.5))}
-  .hero-logo img{height:76px}
-  .hero h1{font-size:clamp(1.45rem,5.6vw,1.9rem);min-height:4.4em}
-  .hero p{font-size:1.05rem}
-  .hero-dots{bottom:34px}
+  /* Overlay plus léger : photo visible + texte lisible */
+  .hero::after{
+    background: linear-gradient(180deg,
+      rgba(10,37,64,.55) 0%,
+      rgba(10,37,64,.30) 40%,
+      rgba(10,37,64,.78) 100%);
+  }
+
+  /* Logo hero réduit (déjà dans le header) */
+  .hero-logo{padding:10px 18px;margin-bottom:18px}
+  .hero-logo img{height:56px}
+
+  /* H1 : taille stable, pas de vide */
+  .hero h1{font-size:clamp(1.45rem,5.6vw,1.9rem);min-height:4em}
+  .hero p{font-size:1rem;margin-bottom:.8em}
+  .hero-actions{margin-top:22px;gap:10px}
+  .hero-actions .btn{padding:12px 22px;font-size:.9rem}
+
+  /* Dots remontés au-dessus de la zone safe */
+  .hero-dots{bottom:24px}
   .hero-dot{width:11px;height:11px}
   .scroll-hint{display:none}
+
+  /* Zoom discret sur mobile */
   .hero-slide.is-active{transform:scale(1.04)}
 
   .cta-band{padding:38px 22px}
@@ -328,6 +345,7 @@ p{margin:0 0 1em}
   .footer-bottom{justify-content:center;text-align:center}
   .logo-img{height:50px}
 
+  /* Marquee mobile */
   .image-marquee{padding:42px 0}
   .marquee-track{gap:20px;animation-duration:26s}
   .marquee-item{width:300px;height:210px}
@@ -371,9 +389,15 @@ p{margin:0 0 1em}
 <!-- 1. ACCUEIL -->
 <section class="hero" id="accueil">
   <div class="hero-slides" aria-hidden="true">
-    <div class="hero-slide is-active"><img src="transport/im5.jpg" alt=""></div>
-    <div class="hero-slide"><img src="transport/IM2.jpg" alt="" loading="lazy"></div>
-    <div class="hero-slide"><img src="transport/acceuil.jpg" alt="" loading="lazy"></div>
+    <div class="hero-slide is-active">
+      <img src="transport/im5.jpg" alt="" style="object-position:center center">
+    </div>
+    <div class="hero-slide">
+      <img src="transport/IM2.jpg" alt="" style="object-position:center center">
+    </div>
+    <div class="hero-slide">
+      <img src="transport/acceuil.jpg" alt="" style="object-position:center center">
+    </div>
   </div>
   <div class="container">
     <div class="hero-logo in-seq d1"><img src="transport/logo.jpg" alt="CTL – Compagnie Tra-Log SARL"></div>
@@ -405,21 +429,21 @@ p{margin:0 0 1em}
   </div>
 </section>
 
-<!-- BANDEAU D'IMAGES DÉFILANT -->
+<!-- BANDEAU D'IMAGES DÉFILANT — loading="lazy" ajouté -->
 <div class="image-marquee" aria-hidden="true">
   <div class="marquee-track">
-    <div class="marquee-item"><img src="transport/IM2.jpg" alt="" /></div>
-    <div class="marquee-item"><img src="transport/IM3.jpg" alt="" /></div>
-    <div class="marquee-item"><img src="transport/acceuil.jpg" alt="" /></div>
-    <div class="marquee-item"><img src="transport/im1.jpg" alt="" /></div>
-    <div class="marquee-item"><img src="transport/im4.jpg" alt="" /></div>
-    <div class="marquee-item"><img src="transport/im5.jpg" alt="" /></div>
-    <div class="marquee-item"><img src="transport/IM2.jpg" alt="" /></div>
-    <div class="marquee-item"><img src="transport/IM3.jpg" alt="" /></div>
-    <div class="marquee-item"><img src="transport/acceuil.jpg" alt="" /></div>
-    <div class="marquee-item"><img src="transport/im1.jpg" alt="" /></div>
-    <div class="marquee-item"><img src="transport/im4.jpg" alt="" /></div>
-    <div class="marquee-item"><img src="transport/im5.jpg" alt="" /></div>
+    <div class="marquee-item"><img src="transport/IM2.jpg" alt="" loading="lazy" decoding="async" /></div>
+    <div class="marquee-item"><img src="transport/IM3.jpg" alt="" loading="lazy" decoding="async" /></div>
+    <div class="marquee-item"><img src="transport/acceuil.jpg" alt="" loading="lazy" decoding="async" /></div>
+    <div class="marquee-item"><img src="transport/im1.jpg" alt="" loading="lazy" decoding="async" /></div>
+    <div class="marquee-item"><img src="transport/im4.jpg" alt="" loading="lazy" decoding="async" /></div>
+    <div class="marquee-item"><img src="transport/im5.jpg" alt="" loading="lazy" decoding="async" /></div>
+    <div class="marquee-item"><img src="transport/IM2.jpg" alt="" loading="lazy" decoding="async" /></div>
+    <div class="marquee-item"><img src="transport/IM3.jpg" alt="" loading="lazy" decoding="async" /></div>
+    <div class="marquee-item"><img src="transport/acceuil.jpg" alt="" loading="lazy" decoding="async" /></div>
+    <div class="marquee-item"><img src="transport/im1.jpg" alt="" loading="lazy" decoding="async" /></div>
+    <div class="marquee-item"><img src="transport/im4.jpg" alt="" loading="lazy" decoding="async" /></div>
+    <div class="marquee-item"><img src="transport/im5.jpg" alt="" loading="lazy" decoding="async" /></div>
   </div>
 </div>
 
@@ -560,7 +584,7 @@ p{margin:0 0 1em}
 <footer class="site-footer">
   <div class="container footer-grid">
     <div>
-      <a href="#accueil" class="footer-logo" aria-label="CTL Accueil"><img src="transport/logo.jpg" alt="CTL"></a>
+      <a href="#accueil" class="footer-logo" aria-label="CTL Accueil"><img src="transport/logo.jpg" alt="CTL" loading="lazy"></a>
       <p style="margin-top:16px;font-size:.92rem">Transit, logistique et supply chain à Ouagadougou.</p>
     </div>
     <div><h4>Navigation</h4><ul>
@@ -594,26 +618,19 @@ document.addEventListener('DOMContentLoaded', () => {
   const reduce = matchMedia('(prefers-reduced-motion:reduce)').matches;
   const canHover = matchMedia('(hover:hover) and (pointer:fine)').matches;
 
-  /* ============================================================
-     DIAPORAMA + SLOGAN MACHINE À ÉCRIRE (lettre par lettre)
-     ============================================================ */
+  /* DIAPORAMA + SLOGAN MACHINE À ÉCRIRE */
   const slides = [...document.querySelectorAll('.hero-slide')];
   const dots = [...document.querySelectorAll('.hero-dot')];
   const dynEl = document.querySelector('.hero-dyn');
   let slideIdx = 0;
 
-  /* 3 fins de slogan (une par service) — modifie ici si besoin */
   const SLOGANS = [
     'une supply chain plus intégrée',
     'des approvisionnements maîtrisés',
     'un dédouanement sans faille'
   ];
 
-  /* Vitesse d'écriture : ms par lettre.
-     30 ms = très rapide  |  45 ms = naturel  |  70 ms = lent
-     À 45 ms, un mot de 30 lettres se tape en ~1.35s → tient dans les 3s du slide. */
   const TYPE_SPEED = 45;
-
   let typeTimer = null;
 
   const typeSlogan = text => {
