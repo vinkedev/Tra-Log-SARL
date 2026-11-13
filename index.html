@@ -122,6 +122,51 @@ p{margin:0 0 1em}
 .modes span{padding:10px 20px;border-radius:999px;background:var(--bg-soft);border:1px solid var(--line);font-weight:600;color:var(--navy);transition:.3s var(--ease)}
 .modes span:hover{background:var(--cyan-dark);color:#fff;transform:translateY(-3px)}
 
+/* ===== BANDEAU D'IMAGES DÉFILANT ===== */
+@keyframes scrollImages { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+.image-marquee{
+  background:var(--navy);
+  padding:46px 0;
+  overflow:hidden;
+  position:relative;
+  border-top:1px solid rgba(255,255,255,.08);
+  border-bottom:1px solid rgba(255,255,255,.08);
+}
+.image-marquee::before,
+.image-marquee::after{
+  content:"";
+  position:absolute;top:0;bottom:0;width:120px;z-index:2;pointer-events:none;
+}
+.image-marquee::before{left:0;background:linear-gradient(90deg,var(--navy) 0%,transparent 100%)}
+.image-marquee::after{right:0;background:linear-gradient(270deg,var(--navy) 0%,transparent 100%)}
+.marquee-track{
+  display:flex;gap:24px;width:max-content;
+  animation:scrollImages 30s linear infinite;
+  will-change:transform;
+}
+.marquee-track:hover{animation-play-state:paused}
+.marquee-item{
+  flex:none;
+  width:320px;height:200px;
+  border-radius:var(--radius);
+  overflow:hidden;
+  position:relative;
+  box-shadow:0 10px 30px rgba(0,0,0,.3);
+  border:2px solid rgba(26,167,236,.35);
+  transition:transform .4s var(--ease),border-color .4s,box-shadow .4s;
+}
+.marquee-item:hover{
+  transform:scale(1.06);
+  border-color:var(--red);
+  box-shadow:0 16px 40px rgba(214,40,40,.35);
+}
+.marquee-item img{
+  width:100%;height:100%;object-fit:cover;
+  display:block;
+  transition:transform .5s var(--ease);
+}
+.marquee-item:hover img{transform:scale(1.08)}
+
 /* Titres mot par mot */
 .split-words .w{display:inline-block;opacity:0;transform:translateY(22px);transition:opacity .6s var(--ease),transform .6s var(--ease);transition-delay:calc(var(--i) * .09s)}
 .split-words.in .w{opacity:1;transform:none}
@@ -225,6 +270,12 @@ p{margin:0 0 1em}
   .header-actions{gap:10px}
 }
 
+@media (max-width:980px){
+  .services,.grid-3,.why-grid,.testi-grid{grid-template-columns:repeat(2,1fr)}
+  .footer-grid{grid-template-columns:1fr 1fr}
+  .split{grid-template-columns:1fr;gap:36px}
+}
+
 @media (max-width:900px){
   :root{--header-h:80px}
   .hero-slides{inset:0}
@@ -244,6 +295,9 @@ p{margin:0 0 1em}
   .services,.grid-3,.why-grid,.testi-grid{grid-template-columns:repeat(2,1fr)}
   .footer-grid{grid-template-columns:1fr 1fr}
   .split{grid-template-columns:1fr;gap:36px}
+
+  /* Marquee tablette */
+  .marquee-item{width:260px;height:170px}
 }
 
 @media (max-width:640px){
@@ -261,6 +315,12 @@ p{margin:0 0 1em}
   .footer-grid{grid-template-columns:1fr;gap:28px}
   .footer-bottom{justify-content:center;text-align:center}
   .logo-img{height:50px}
+
+  /* Marquee mobile */
+  .image-marquee{padding:28px 0}
+  .marquee-track{gap:16px;animation-duration:22s}
+  .marquee-item{width:220px;height:145px}
+  .image-marquee::before,.image-marquee::after{width:60px}
 }
 
 @media (prefers-reduced-motion:reduce){
@@ -269,6 +329,7 @@ p{margin:0 0 1em}
   .reveal,.hero .in-seq,.split-words .w{opacity:1;transform:none}
   .hero-slide{transition:opacity .9s ease !important;transform:none !important}
   .hero-slide.is-active{opacity:1;transform:none !important}
+  .marquee-track{animation:none !important;transform:none !important}
 }
 </style>
 </head>
@@ -296,7 +357,7 @@ p{margin:0 0 1em}
   </div>
 </header>
 
-<!-- 1. ACCUEIL (diaporama : im5 → IM2 → acceuil) -->
+<!-- 1. ACCUEIL -->
 <section class="hero" id="accueil">
   <div class="hero-slides" aria-hidden="true">
     <div class="hero-slide is-active"><img src="transport/im5.jpg" alt=""></div>
@@ -332,6 +393,26 @@ p{margin:0 0 1em}
     </div>
   </div>
 </section>
+
+<!-- ===== BANDEAU D'IMAGES DÉFILANT (après À propos) ===== -->
+<div class="image-marquee" aria-hidden="true">
+  <div class="marquee-track">
+    <!-- 1er cycle -->
+    <div class="marquee-item"><img src="transport/IM2.jpg" alt="" /></div>
+    <div class="marquee-item"><img src="transport/IM3.jpg" alt="" /></div>
+    <div class="marquee-item"><img src="transport/acceuil.jpg" alt="" /></div>
+    <div class="marquee-item"><img src="transport/im1.jpg" alt="" /></div>
+    <div class="marquee-item"><img src="transport/im4.jpg" alt="" /></div>
+    <div class="marquee-item"><img src="transport/im5.jpg" alt="" /></div>
+    <!-- 2e cycle (dupliqué pour boucle infinie) -->
+    <div class="marquee-item"><img src="transport/IM2.jpg" alt="" /></div>
+    <div class="marquee-item"><img src="transport/IM3.jpg" alt="" /></div>
+    <div class="marquee-item"><img src="transport/acceuil.jpg" alt="" /></div>
+    <div class="marquee-item"><img src="transport/im1.jpg" alt="" /></div>
+    <div class="marquee-item"><img src="transport/im4.jpg" alt="" /></div>
+    <div class="marquee-item"><img src="transport/im5.jpg" alt="" /></div>
+  </div>
+</div>
 
 <!-- 3. SERVICES -->
 <section class="section section--soft" id="services">
@@ -495,7 +576,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const reduce = matchMedia('(prefers-reduced-motion:reduce)').matches;
   const canHover = matchMedia('(hover:hover) and (pointer:fine)').matches;
 
-  /* DIAPORAMA — aucune pause, ordre : im5 → IM2 → acceuil */
+  /* DIAPORAMA — jamais de pause, ordre : im5 → IM2 → acceuil */
   const slides = [...document.querySelectorAll('.hero-slide')];
   const dots = [...document.querySelectorAll('.hero-dot')];
   let slideIdx = 0;
