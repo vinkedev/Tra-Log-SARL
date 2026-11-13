@@ -65,7 +65,7 @@ p{margin:0 0 1em}
 .logo:hover .logo-img{transform:scale(1.05)}
 .site-header.scrolled .header-inner{height:76px}
 .site-header.scrolled .logo-img{height:56px}
-.main-nav{display:flex;gap:26px;font-weight:500;font-size:.95rem}
+.main-nav{display:flex;gap:24px;font-weight:500;font-size:.93rem}
 .main-nav a{position:relative;padding:6px 0;transition:color .2s}
 .main-nav a::after{content:"";position:absolute;left:0;bottom:-2px;height:3px;width:100%;background:var(--red);border-radius:2px;transform:scaleX(0);transform-origin:left;transition:transform .35s var(--ease)}
 .main-nav a:hover,.main-nav a.active{color:var(--cyan-dark)}
@@ -105,7 +105,6 @@ p{margin:0 0 1em}
 .modes span{padding:10px 20px;border-radius:999px;background:var(--bg-soft);border:1px solid var(--line);font-weight:600;color:var(--navy);transition:.3s var(--ease)}
 .modes span:hover{background:var(--cyan-dark);color:#fff;transform:translateY(-3px)}
 
-
 /* Titres mot par mot */
 .split-words .w{display:inline-block;opacity:0;transform:translateY(22px);transition:opacity .6s var(--ease),transform .6s var(--ease);transition-delay:calc(var(--i) * .09s)}
 .split-words.in .w{opacity:1;transform:none}
@@ -130,6 +129,28 @@ p{margin:0 0 1em}
 .card .icon{font-size:1.8rem;margin-bottom:12px}
 .card p{color:var(--muted);margin:0}
 
+/* Pourquoi nous choisir */
+.why-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.why{position:relative;background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:32px 26px;transition:transform .35s var(--ease),box-shadow .35s,border-color .35s;overflow:hidden}
+.why::before{content:"";position:absolute;inset:0;background:linear-gradient(135deg,rgba(26,167,236,.05),transparent 60%);opacity:0;transition:opacity .4s;pointer-events:none}
+.why:hover{transform:translateY(-6px);box-shadow:var(--shadow);border-color:rgba(26,167,236,.35)}
+.why:hover::before{opacity:1}
+.why-num{font-size:2rem;font-weight:800;line-height:1;margin-bottom:14px;background:linear-gradient(120deg,var(--cyan),var(--red));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.why h3{font-size:1.08rem;margin-bottom:8px;color:var(--navy)}
+.why p{color:var(--muted);font-size:.95rem;margin:0}
+
+/* Témoignages */
+.testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.testi{position:relative;background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:32px 28px 24px;transition:transform .35s var(--ease),box-shadow .35s;overflow:hidden}
+.testi:hover{transform:translateY(-6px);box-shadow:var(--shadow)}
+.testi::before{content:"\201C";position:absolute;top:-10px;right:16px;font-size:6rem;line-height:1;color:var(--cyan);opacity:.12;font-family:Georgia,serif;pointer-events:none}
+.testi-stars{color:#f5a623;font-size:.95rem;letter-spacing:2px;margin-bottom:12px}
+.testi blockquote{margin:0 0 20px;color:var(--ink);font-size:.98rem;line-height:1.65;font-style:italic}
+.testi-who{display:flex;align-items:center;gap:12px;border-top:1px solid var(--line);padding-top:16px}
+.testi-avatar{width:44px;height:44px;flex:0 0 44px;border-radius:50%;background:linear-gradient(135deg,var(--cyan),var(--red));color:#fff;display:grid;place-items:center;font-weight:700;font-size:1rem}
+.testi-who strong{display:block;color:var(--navy);font-size:.93rem}
+.testi-who span{color:var(--muted);font-size:.82rem}
+
 /* Bande CTA */
 .cta-band{background:linear-gradient(120deg,var(--navy),var(--cyan-dark),var(--navy));background-size:200% 100%;animation:shift 10s ease-in-out infinite alternate;color:#fff;border-radius:22px;padding:58px;text-align:center}
 .cta-band h2{color:#fff}
@@ -148,14 +169,14 @@ p{margin:0 0 1em}
 .form-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:8px}
 
 /* Contact */
-.split{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center}
+.split{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:start}
 .contact-list{list-style:none;padding:0;margin:0;display:grid;gap:18px}
 .contact-list li{display:flex;gap:14px;align-items:flex-start}
-.contact-list .ci{width:44px;height:44px;flex:0 0 44px;border-radius:12px;display:grid;place-items:center;background:var(--bg-soft);transition:transform .3s var(--ease)}
+.contact-list .ci{width:44px;height:44px;flex:0 0 44px;border-radius:12px;display:grid;place-items:center;background:var(--bg-soft);transition:transform .3s var(--ease);font-size:1.2rem}
 .contact-list li:hover .ci{transform:scale(1.12) rotate(-6deg)}
 .contact-list strong{display:block;color:var(--navy)}
 .contact-list span{color:var(--muted);font-size:.95rem}
-.map-wrap{border-radius:var(--radius);overflow:hidden;border:1px solid var(--line);min-height:340px}
+.map-wrap{border-radius:var(--radius);overflow:hidden;border:1px solid var(--line);min-height:340px;margin-top:28px}
 .map-wrap iframe{width:100%;height:100%;min-height:340px;border:0;display:block}
 
 /* Footer */
@@ -181,8 +202,15 @@ p{margin:0 0 1em}
 .reveal{opacity:0;transform:translateY(30px);transition:opacity .8s var(--ease),transform .8s var(--ease);transition-delay:var(--d,0s)}
 .reveal.in{opacity:1;transform:none}
 
+/* Ajustement nav : 6 liens, tient entre 1080 et 901px */
+@media (max-width:1080px) and (min-width:901px){
+  .main-nav{gap:15px;font-size:.86rem}
+  .phone-link{display:none}
+  .header-actions{gap:10px}
+}
+
 @media (max-width:980px){
-  .services,.grid-3{grid-template-columns:repeat(2,1fr)}
+  .services,.grid-3,.why-grid,.testi-grid{grid-template-columns:repeat(2,1fr)}
   .footer-grid{grid-template-columns:1fr 1fr}
   .split{grid-template-columns:1fr;gap:36px}
 }
@@ -190,7 +218,7 @@ p{margin:0 0 1em}
   :root{--header-h:80px}
   .main-nav{position:absolute;top:var(--header-h);left:0;right:0;background:#fff;flex-direction:column;gap:0;padding:10px 20px 20px;border-bottom:1px solid var(--line);box-shadow:var(--shadow);display:none}
   .main-nav.open{display:flex}
-  .main-nav a{padding:13px 0;border-bottom:1px solid var(--line)}
+  .main-nav a{padding:13px 0;border-bottom:1px solid var(--line);font-size:.95rem}
   .main-nav a::after{display:none}
   .nav-toggle{display:inline-flex}
   .phone-link{display:none}
@@ -201,7 +229,7 @@ p{margin:0 0 1em}
 }
 @media (max-width:640px){
   .section{padding:58px 0}
-  .services,.grid-3{grid-template-columns:1fr}
+  .services,.grid-3,.why-grid,.testi-grid{grid-template-columns:1fr}
   .hero{padding:64px 0 80px}
   .hero::after{background:linear-gradient(180deg,rgba(10,37,64,.72),rgba(10,37,64,.5))}
   .hero-logo img{height:76px}
@@ -231,29 +259,33 @@ p{margin:0 0 1em}
       <a href="#accueil" class="active">Accueil</a>
       <a href="#a-propos">À propos</a>
       <a href="#services">Services</a>
+      <a href="#pourquoi">Pourquoi nous</a>
+      <a href="#temoignages">Témoignages</a>
       <a href="#contact">Contact</a>
     </nav>
     <div class="header-actions">
       <a href="tel:+22676853514" class="phone-link">+226 76 85 35 14</a>
-      <a href="#besoin" class="btn btn-primary btn-sm">Demander un devis</a>
+      <a href="#contact" class="btn btn-primary btn-sm">Demander un devis</a>
       <button class="nav-toggle" id="navToggle" aria-label="Menu" aria-expanded="false"><span></span><span></span><span></span></button>
     </div>
   </div>
 </header>
 
+<!-- 1. ACCUEIL -->
 <section class="hero" id="accueil">
   <div class="container">
     <div class="hero-logo in-seq d1"><img src="transport/logo.jpg" alt="CTL – Compagnie Tra-Log SARL"></div>
     <h1 class="in-seq d2">Un partenaire stratégique pour une Supply Chain plus intégrée</h1>
     <p class="in-seq d3">Compagnie Tra-Log SARL accompagne ses clients dans le dédouanement, la logistique et la gestion de la supply chain depuis Ouagadougou.</p>
     <div class="hero-actions in-seq d4">
-      <a href="#besoin" class="btn btn-accent">Demander un devis</a>
+      <a href="#contact" class="btn btn-accent">Demander un devis</a>
       <a href="#services" class="btn btn-light">Découvrir nos services</a>
     </div>
   </div>
   <span class="scroll-hint" aria-hidden="true"></span>
 </section>
 
+<!-- 2. À PROPOS -->
 <section class="section" id="a-propos">
   <div class="container about">
     <div class="reveal">
@@ -266,6 +298,7 @@ p{margin:0 0 1em}
   </div>
 </section>
 
+<!-- 3. SERVICES -->
 <section class="section section--soft" id="services">
   <div class="container">
     <div class="section-head reveal">
@@ -274,13 +307,94 @@ p{margin:0 0 1em}
       <p>Nos principales prestations en transit, logistique et supply chain.</p>
     </div>
     <div class="services">
-      <article class="svc reveal"><div class="svc-icon">📦</div><h3>Logistique et supply chain</h3><p>Collecte, expédition et livraison de marchandises.</p><a href="#besoin">Demander un devis</a></article>
-      <article class="svc reveal"><div class="svc-icon">🌍</div><h3>Gestion de la Supply Chain</h3><p>Appui aux entreprises minières, agro-industrielles, dans leurs opérations d'approvisionnement.</p><a href="#besoin">Demander un devis</a></article>
-      <article class="svc reveal"><div class="svc-icon">🛃</div><h3>Transit et dédouanement</h3><p>Prise en charge des formalités douanières à l'import et à l'export.</p><a href="#besoin">Demander un devis</a></article>
+      <article class="svc reveal"><div class="svc-icon">📦</div><h3>Logistique et supply chain</h3><p>Collecte, expédition et livraison de marchandises.</p><a href="#contact">Demander un devis</a></article>
+      <article class="svc reveal"><div class="svc-icon">🌍</div><h3>Gestion de la Supply Chain</h3><p>Appui aux entreprises minières, agro-industrielles, dans leurs opérations d'approvisionnement.</p><a href="#contact">Demander un devis</a></article>
+      <article class="svc reveal"><div class="svc-icon">🛃</div><h3>Transit et dédouanement</h3><p>Prise en charge des formalités douanières à l'import et à l'export.</p><a href="#contact">Demander un devis</a></article>
     </div>
   </div>
 </section>
 
+<!-- 4. POURQUOI NOUS CHOISIR -->
+<section class="section" id="pourquoi">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="eyebrow">Pourquoi nous choisir</span>
+      <h2>Ce qui fait la différence</h2>
+      <p>Un partenaire engagé, réactif et transparent pour sécuriser vos flux.</p>
+    </div>
+    <div class="why-grid">
+      <article class="why reveal">
+        <div class="why-num">01</div>
+        <h3>Réactivité & disponibilité</h3>
+        <p>Une équipe joignable et des réponses rapides à chaque étape de votre dossier.</p>
+      </article>
+      <article class="why reveal">
+        <div class="why-num">02</div>
+        <h3>Expertise douanière</h3>
+        <p>Maîtrise des procédures et conformité réglementaire à l'import comme à l'export.</p>
+      </article>
+      <article class="why reveal">
+        <div class="why-num">03</div>
+        <h3>Réseau international</h3>
+        <p>Des partenaires fiables en Afrique et dans le monde pour vos expéditions.</p>
+      </article>
+      <article class="why reveal">
+        <div class="why-num">04</div>
+        <h3>Solutions sur mesure</h3>
+        <p>Des prestations adaptées à votre activité, vos volumes et vos contraintes.</p>
+      </article>
+      <article class="why reveal">
+        <div class="why-num">05</div>
+        <h3>Suivi transparent</h3>
+        <p>Une visibilité continue sur vos marchandises, vos délais et vos coûts.</p>
+      </article>
+      <article class="why reveal">
+        <div class="why-num">06</div>
+        <h3>Équipe expérimentée</h3>
+        <p>Des professionnels du transit et de la supply chain à votre écoute.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- 5. TÉMOIGNAGES -->
+<section class="section section--soft" id="temoignages">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="eyebrow">Témoignages</span>
+      <h2>Ils nous font confiance</h2>
+      <p>Quelques retours de clients accompagnés par nos équipes.</p>
+    </div>
+    <div class="testi-grid">
+      <article class="testi reveal">
+        <div class="testi-stars" aria-label="5 étoiles sur 5">★★★★★</div>
+        <blockquote>« Compagnie Tra-Log a assuré le dédouanement de nos équipements dans les délais. Un partenaire fiable et professionnel. »</blockquote>
+        <div class="testi-who">
+          <div class="testi-avatar">A</div>
+          <div><strong>Responsable Logistique</strong><span>Société minière · Ouagadougou</span></div>
+        </div>
+      </article>
+      <article class="testi reveal">
+        <div class="testi-stars" aria-label="5 étoiles sur 5">★★★★★</div>
+        <blockquote>« Grâce à leur réseau, nos expéditions arrivent à temps. Le suivi est impeccable et l'équipe très à l'écoute. »</blockquote>
+        <div class="testi-who">
+          <div class="testi-avatar">B</div>
+          <div><strong>Directrice Achats</strong><span>Agro-industrie · Bobo-Dioulasso</span></div>
+        </div>
+      </article>
+      <article class="testi reveal">
+        <div class="testi-stars" aria-label="5 étoiles sur 5">★★★★★</div>
+        <blockquote>« Une équipe réactive et de bon conseil. Nos approvisionnements sont mieux coordonnés depuis que nous travaillons avec eux. »</blockquote>
+        <div class="testi-who">
+          <div class="testi-avatar">C</div>
+          <div><strong>Gérant</strong><span>PME Import · Ouagadougou</span></div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- Bande CTA de transition -->
 <section class="section" id="besoin" style="padding-top:0">
   <div class="container">
     <div class="cta-band reveal">
@@ -294,18 +408,93 @@ p{margin:0 0 1em}
   </div>
 </section>
 
-<footer class="site-footer" id="contact">
+<!-- 6. CONTACT -->
+<section class="section section--soft" id="contact">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="eyebrow">Contact</span>
+      <h2>Parlons de votre projet</h2>
+      <p>Une question, une demande de devis ou d'information ? Notre équipe vous répond rapidement.</p>
+    </div>
+    <div class="split">
+      <div class="reveal">
+        <ul class="contact-list">
+          <li>
+            <div class="ci">📞</div>
+            <div><strong>Téléphone</strong><span>+226 76 85 35 14<br>+226 70 82 32 17<br>+226 79 26 31 66</span></div>
+          </li>
+          <li>
+            <div class="ci">✉️</div>
+            <div><strong>Email</strong><span>Compagnietralog@gmail.com</span></div>
+          </li>
+          <li>
+            <div class="ci">📍</div>
+            <div><strong>Adresse</strong><span>Ouagadougou, Burkina Faso</span></div>
+          </li>
+        </ul>
+        <div class="map-wrap">
+          <iframe src="https://www.google.com/maps?q=Ouagadougou,Burkina Faso&output=embed" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Localisation CTL – Ouagadougou"></iframe>
+        </div>
+      </div>
+      <div class="reveal">
+        <form class="form" data-mailto="Demande depuis le site">
+          <div class="form-row">
+            <div class="field">
+              <label for="c-nom">Nom complet *</label>
+              <input type="text" id="c-nom" name="nom" required>
+            </div>
+            <div class="field">
+              <label for="c-tel">Téléphone</label>
+              <input type="tel" id="c-tel" name="telephone">
+            </div>
+          </div>
+          <div class="field">
+            <label for="c-email">Email *</label>
+            <input type="email" id="c-email" name="email" required>
+          </div>
+          <div class="field">
+            <label for="c-sujet">Sujet</label>
+            <select id="c-sujet" name="sujet">
+              <option value="Devis transit / dédouanement">Devis transit / dédouanement</option>
+              <option value="Devis logistique / supply chain">Devis logistique / supply chain</option>
+              <option value="Gestion de la supply chain">Gestion de la supply chain</option>
+              <option value="Autre demande">Autre demande</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="c-msg">Votre message *</label>
+            <textarea id="c-msg" name="message" required placeholder="Décrivez votre marchandise, votre origine et votre destination…"></textarea>
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Envoyer par email</button>
+            <button type="button" class="btn btn-accent" data-wa>Envoyer via WhatsApp</button>
+          </div>
+          <p class="form-note">* Champs requis. Nous vous répondons dans les meilleurs délais.</p>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 7. FOOTER -->
+<footer class="site-footer">
   <div class="container footer-grid">
     <div>
       <a href="#accueil" class="footer-logo" aria-label="CTL Accueil"><img src="transport/logo.jpg" alt="CTL"></a>
       <p style="margin-top:16px;font-size:.92rem">Transit, logistique et supply chain à Ouagadougou.</p>
     </div>
     <div><h4>Navigation</h4><ul>
-      <li><a href="#accueil">Accueil</a></li><li><a href="#a-propos">À propos</a></li><li><a href="#services">Services</a></li>
+      <li><a href="#accueil">Accueil</a></li>
+      <li><a href="#a-propos">À propos</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#pourquoi">Pourquoi nous</a></li>
+      <li><a href="#temoignages">Témoignages</a></li>
       <li><a href="#contact">Contact</a></li>
     </ul></div>
     <div><h4>Services</h4><ul>
-      <li>Logistique et supply chain</li><li>Gestion de la Supply Chain</li><li>Transit et dédouanement</li>
+      <li>Logistique et supply chain</li>
+      <li>Gestion de la Supply Chain</li>
+      <li>Transit et dédouanement</li>
     </ul></div>
     <div><h4>Contact</h4><ul class="footer-contact">
       <li><span>📞</span><span>+226 76 85 35 14<br>+226 70 82 32 17<br>+226 79 26 31 66</span></li>
@@ -353,7 +542,7 @@ document.addEventListener('DOMContentLoaded', () => {
   nav.querySelectorAll('a').forEach(a => a.addEventListener('click', closeNav));
 
   /* Apparition au scroll */
-  document.querySelectorAll('.services, .grid-3').forEach(g =>
+  document.querySelectorAll('.services, .grid-3, .why-grid, .testi-grid').forEach(g =>
     g.querySelectorAll('.reveal').forEach((el, i) => el.style.setProperty('--d', (i % 3) * .12 + 's')));
   const io = new IntersectionObserver(es => es.forEach(e => {
     if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
