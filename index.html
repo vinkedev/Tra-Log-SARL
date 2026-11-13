@@ -106,7 +106,6 @@ p{margin:0 0 1em}
   min-height:3em;
 }
 
-/* Partie dynamique = machine à écrire */
 .hero-dyn{
   color:var(--cyan);
   position:relative;
@@ -161,7 +160,7 @@ p{margin:0 0 1em}
 .image-marquee::after{content:"";position:absolute;top:0;bottom:0;width:120px;z-index:2;pointer-events:none}
 .image-marquee::before{left:0;background:linear-gradient(90deg,var(--navy) 0%,transparent 100%)}
 .image-marquee::after{right:0;background:linear-gradient(270deg,var(--navy) 0%,transparent 100%)}
-.marquee-track{display:flex;gap:24px;width:max-content;animation:scrollImages 30s linear infinite;will-change:transform}
+.marquee-track{display:flex;gap:24px;width:max-content;animation:scrollImages 35s linear infinite;will-change:transform}
 .marquee-track:hover{animation-play-state:paused}
 .marquee-item{flex:none;width:320px;height:200px;border-radius:var(--radius);overflow:hidden;position:relative;box-shadow:0 10px 30px rgba(0,0,0,.3);border:2px solid rgba(26,167,236,.35);transition:transform .4s var(--ease),border-color .4s,box-shadow .4s}
 .marquee-item:hover{transform:scale(1.06);border-color:var(--red);box-shadow:0 16px 40px rgba(214,40,40,.35)}
@@ -300,6 +299,7 @@ p{margin:0 0 1em}
   .split{grid-template-columns:1fr;gap:36px}
 
   .marquee-item{width:320px;height:220px}
+  .marquee-track{animation-duration:32s}
 }
 
 /* ================= MOBILE ================= */
@@ -308,12 +308,10 @@ p{margin:0 0 1em}
   .services,.grid-3,.testi-grid{grid-template-columns:1fr}
   .why-grid{grid-template-columns:1fr;gap:20px}
 
-  /* HERO — hauteur adaptée au vrai viewport mobile, sans min fixe */
   .hero{
     min-height: calc(100svh - var(--header-h));
     padding: 48px 0 90px;
   }
-  /* Overlay plus léger : photo visible + texte lisible */
   .hero::after{
     background: linear-gradient(180deg,
       rgba(10,37,64,.55) 0%,
@@ -321,22 +319,18 @@ p{margin:0 0 1em}
       rgba(10,37,64,.78) 100%);
   }
 
-  /* Logo hero réduit (déjà dans le header) */
   .hero-logo{padding:10px 18px;margin-bottom:18px}
   .hero-logo img{height:56px}
 
-  /* H1 : taille stable, pas de vide */
   .hero h1{font-size:clamp(1.45rem,5.6vw,1.9rem);min-height:4em}
   .hero p{font-size:1rem;margin-bottom:.8em}
   .hero-actions{margin-top:22px;gap:10px}
   .hero-actions .btn{padding:12px 22px;font-size:.9rem}
 
-  /* Dots remontés au-dessus de la zone safe */
   .hero-dots{bottom:24px}
   .hero-dot{width:11px;height:11px}
   .scroll-hint{display:none}
 
-  /* Zoom discret sur mobile */
   .hero-slide.is-active{transform:scale(1.04)}
 
   .cta-band{padding:38px 22px}
@@ -345,9 +339,8 @@ p{margin:0 0 1em}
   .footer-bottom{justify-content:center;text-align:center}
   .logo-img{height:50px}
 
-  /* Marquee mobile */
   .image-marquee{padding:42px 0}
-  .marquee-track{gap:20px;animation-duration:26s}
+  .marquee-track{gap:20px;animation-duration:30s}
   .marquee-item{width:300px;height:210px}
   .image-marquee::before,.image-marquee::after{width:50px}
 }
@@ -386,7 +379,7 @@ p{margin:0 0 1em}
   </div>
 </header>
 
-<!-- 1. ACCUEIL -->
+<!-- 1. ACCUEIL — im5 → IM2 → IM6 -->
 <section class="hero" id="accueil">
   <div class="hero-slides" aria-hidden="true">
     <div class="hero-slide is-active">
@@ -396,7 +389,7 @@ p{margin:0 0 1em}
       <img src="transport/IM2.jpg" alt="" style="object-position:center center">
     </div>
     <div class="hero-slide">
-      <img src="transport/acceuil.jpg" alt="" style="object-position:center center">
+      <img src="transport/IM6.jpg" alt="" style="object-position:center center">
     </div>
   </div>
   <div class="container">
@@ -429,21 +422,25 @@ p{margin:0 0 1em}
   </div>
 </section>
 
-<!-- BANDEAU D'IMAGES DÉFILANT — loading="lazy" ajouté -->
+<!-- BANDEAU D'IMAGES DÉFILANT — 7 images (IM6 ajouté) -->
 <div class="image-marquee" aria-hidden="true">
   <div class="marquee-track">
+    <!-- 1er cycle -->
     <div class="marquee-item"><img src="transport/IM2.jpg" alt="" loading="lazy" decoding="async" /></div>
     <div class="marquee-item"><img src="transport/IM3.jpg" alt="" loading="lazy" decoding="async" /></div>
     <div class="marquee-item"><img src="transport/acceuil.jpg" alt="" loading="lazy" decoding="async" /></div>
     <div class="marquee-item"><img src="transport/im1.jpg" alt="" loading="lazy" decoding="async" /></div>
     <div class="marquee-item"><img src="transport/im4.jpg" alt="" loading="lazy" decoding="async" /></div>
     <div class="marquee-item"><img src="transport/im5.jpg" alt="" loading="lazy" decoding="async" /></div>
+    <div class="marquee-item"><img src="transport/IM6.jpg" alt="" loading="lazy" decoding="async" /></div>
+    <!-- 2e cycle (dupliqué pour boucle infinie) -->
     <div class="marquee-item"><img src="transport/IM2.jpg" alt="" loading="lazy" decoding="async" /></div>
     <div class="marquee-item"><img src="transport/IM3.jpg" alt="" loading="lazy" decoding="async" /></div>
     <div class="marquee-item"><img src="transport/acceuil.jpg" alt="" loading="lazy" decoding="async" /></div>
     <div class="marquee-item"><img src="transport/im1.jpg" alt="" loading="lazy" decoding="async" /></div>
     <div class="marquee-item"><img src="transport/im4.jpg" alt="" loading="lazy" decoding="async" /></div>
     <div class="marquee-item"><img src="transport/im5.jpg" alt="" loading="lazy" decoding="async" /></div>
+    <div class="marquee-item"><img src="transport/IM6.jpg" alt="" loading="lazy" decoding="async" /></div>
   </div>
 </div>
 
@@ -463,7 +460,7 @@ p{margin:0 0 1em}
   </div>
 </section>
 
-<!-- 4. POURQUOI NOUS CHOISIR — 3 cartes -->
+<!-- 4. POURQUOI NOUS CHOISIR -->
 <section class="section" id="pourquoi">
   <div class="container">
     <div class="section-head reveal">
