@@ -11,6 +11,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="icon" type="image/jpeg" href="transport/logo.jpg">
+<link rel="preload" as="image" href="transport/acceuil.jpg">
 <style>
 :root{
   --cyan:#1AA7EC; --cyan-dark:#1287c0; --red:#D62828; --navy:#0A2540;
@@ -78,22 +79,45 @@ p{margin:0 0 1em}
 .nav-toggle.open span:nth-child(2){opacity:0}
 .nav-toggle.open span:nth-child(3){transform:translateY(-7.5px) rotate(-45deg)}
 
-/* Hero : image visible, zoom lent + parallaxe (--py) */
-.hero{position:relative;overflow:hidden;color:#fff;min-height:calc(100vh - var(--header-h));display:flex;align-items:center;padding:90px 0;background:var(--navy);scroll-margin-top:var(--header-h)}
-.hero::before{content:"";position:absolute;inset:-200px 0;background:url('transport/acceuil.jpg') center/cover no-repeat;transform:translateY(var(--py,0px));animation:zoom 22s ease-in-out infinite alternate;will-change:transform}
-.hero::after{content:"";position:absolute;inset:0;background:linear-gradient(95deg,rgba(10,37,64,.8) 0%,rgba(10,37,64,.45) 42%,rgba(10,37,64,.04) 100%)}
+/* ===== HERO avec DIAPORAMA ===== */
+.hero{
+  position:relative;overflow:hidden;color:#fff;
+  min-height:calc(100vh - var(--header-h));
+  min-height:calc(100dvh - var(--header-h)); /* viewport réel sur mobile (barre URL exclue) */
+  display:flex;align-items:center;padding:90px 0;background:var(--navy);scroll-margin-top:var(--header-h)
+}
+
+/* Conteneur des slides — sur desktop reçoit la parallaxe via --py */
+.hero-slides{position:absolute;inset:-200px 0;transform:translateY(var(--py,0px));will-change:transform;z-index:0}
+
+/* Chaque slide : fondu 1.1 s + zoom 1→1.06 sur 3 s (synchronisé avec le timer) */
+.hero-slide{
+  position:absolute;inset:0;opacity:0;transform:scale(1);
+  transition:opacity 1.1s ease, transform 3s ease-out;
+}
+.hero-slide img{width:100%;height:100%;object-fit:cover;object-position:center center;display:block}
+.hero-slide.is-active{opacity:1;transform:scale(1.06)}
+
+/* Voile dégradé par-dessus les slides */
+.hero::after{content:"";position:absolute;inset:0;background:linear-gradient(95deg,rgba(10,37,64,.8) 0%,rgba(10,37,64,.45) 42%,rgba(10,37,64,.04) 100%);z-index:1;pointer-events:none}
+
 .hero .container{position:relative;z-index:2}
 .hero-logo{display:inline-flex;background:#fff;border-radius:20px;padding:14px 26px;margin-bottom:30px;box-shadow:0 20px 44px rgba(0,0,0,.3);animation:float 5s ease-in-out infinite}
 .hero-logo img{height:104px;width:auto}
-/* Slogan : taille réduite car plus long */
 .hero h1{color:#fff;font-size:clamp(1.7rem,3.6vw,2.6rem);max-width:24ch;text-shadow:0 3px 18px rgba(0,0,0,.4)}
 .hero p{color:#fff;font-size:1.18rem;max-width:52ch;text-shadow:0 2px 10px rgba(0,0,0,.45)}
 .hero-actions{display:flex;flex-wrap:wrap;gap:14px;margin-top:30px}
 .hero .in-seq{opacity:0;animation:rise .9s var(--ease) forwards}
 .hero .d1{animation-delay:.1s}.hero .d2{animation-delay:.3s}.hero .d3{animation-delay:.5s}.hero .d4{animation-delay:.7s}
-.scroll-hint{position:absolute;left:50%;bottom:24px;z-index:2;width:26px;height:42px;border:2px solid rgba(255,255,255,.8);border-radius:20px;transform:translateX(-50%)}
+.scroll-hint{position:absolute;left:50%;bottom:24px;z-index:3;width:26px;height:42px;border:2px solid rgba(255,255,255,.8);border-radius:20px;transform:translateX(-50%)}
 .scroll-hint::after{content:"";position:absolute;left:50%;top:7px;width:4px;height:8px;margin-left:-2px;background:#fff;border-radius:2px;animation:wheel 1.8s infinite}
-@keyframes zoom{from{transform:translateY(var(--py,0px)) scale(1)}to{transform:translateY(var(--py,0px)) scale(1.1)}}
+
+/* Indicateurs du diaporama */
+.hero-dots{position:absolute;left:50%;bottom:82px;transform:translateX(-50%);z-index:3;display:flex;gap:10px}
+.hero-dot{width:10px;height:10px;padding:0;border-radius:50%;border:0;background:rgba(255,255,255,.45);cursor:pointer;transition:transform .25s,background .25s}
+.hero-dot:hover{background:rgba(255,255,255,.8)}
+.hero-dot.is-active{background:#fff;transform:scale(1.35)}
+
 @keyframes rise{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:none}}
 @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
 @keyframes wheel{0%{opacity:0;transform:translateY(0)}30%{opacity:1}100%{opacity:0;transform:translateY(14px)}}
@@ -109,7 +133,7 @@ p{margin:0 0 1em}
 .split-words .w{display:inline-block;opacity:0;transform:translateY(22px);transition:opacity .6s var(--ease),transform .6s var(--ease);transition-delay:calc(var(--i) * .09s)}
 .split-words.in .w{opacity:1;transform:none}
 
-/* Services : grille de cartes à accent + tilt 3D */
+/* Services */
 .services{display:grid;grid-template-columns:repeat(3,1fr);gap:26px}
 .svc{position:relative;overflow:hidden;background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:34px 28px 28px;display:flex;flex-direction:column;transition:transform .4s var(--ease),box-shadow .4s,border-color .4s;will-change:transform}
 .svc.tilting{transition:transform .08s linear,box-shadow .4s,border-color .4s}
@@ -202,20 +226,21 @@ p{margin:0 0 1em}
 .reveal{opacity:0;transform:translateY(30px);transition:opacity .8s var(--ease),transform .8s var(--ease);transition-delay:var(--d,0s)}
 .reveal.in{opacity:1;transform:none}
 
-/* Ajustement nav : 6 liens, tient entre 1080 et 901px */
+/* Nav compacte entre 1080 et 901px */
 @media (max-width:1080px) and (min-width:901px){
   .main-nav{gap:15px;font-size:.86rem}
   .phone-link{display:none}
   .header-actions{gap:10px}
 }
 
-@media (max-width:980px){
-  .services,.grid-3,.why-grid,.testi-grid{grid-template-columns:repeat(2,1fr)}
-  .footer-grid{grid-template-columns:1fr 1fr}
-  .split{grid-template-columns:1fr;gap:36px}
-}
+/* ========= MOBILE / TABLETTE ========= */
 @media (max-width:900px){
   :root{--header-h:80px}
+
+  /* ==== Images : plus de "zoom excessif" grâce à inset:0 ==== */
+  .hero-slides{inset:0}             /* supprime le buffer parallaxe */
+  .hero-slide img{object-position:center center}  /* centrage parfait sur mobile */
+
   .main-nav{position:absolute;top:var(--header-h);left:0;right:0;background:#fff;flex-direction:column;gap:0;padding:10px 20px 20px;border-bottom:1px solid var(--line);box-shadow:var(--shadow);display:none}
   .main-nav.open{display:flex}
   .main-nav a{padding:13px 0;border-bottom:1px solid var(--line);font-size:.95rem}
@@ -226,24 +251,40 @@ p{margin:0 0 1em}
   .logo-img{height:58px}
   .site-header.scrolled .header-inner{height:70px}
   .site-header.scrolled .logo-img{height:50px}
+
+  .services,.grid-3,.why-grid,.testi-grid{grid-template-columns:repeat(2,1fr)}
+  .footer-grid{grid-template-columns:1fr 1fr}
+  .split{grid-template-columns:1fr;gap:36px}
 }
+
 @media (max-width:640px){
   .section{padding:58px 0}
   .services,.grid-3,.why-grid,.testi-grid{grid-template-columns:1fr}
-  .hero{padding:64px 0 80px}
+
+  /* Hero mobile : plus de padding bas pour loger les points + zoom subtil */
+  .hero{padding:64px 0 90px}
   .hero::after{background:linear-gradient(180deg,rgba(10,37,64,.72),rgba(10,37,64,.5))}
   .hero-logo img{height:76px}
   .hero h1{font-size:clamp(1.45rem,5.6vw,1.9rem)}
+  .hero-dots{bottom:30px}
+  .scroll-hint{display:none}        /* swype naturel sur mobile, on libère la place */
+  .hero-slide.is-active{transform:scale(1.04)}  /* zoom plus discret en portrait */
+
   .cta-band{padding:38px 22px}
   .form-row{grid-template-columns:1fr}
   .footer-grid{grid-template-columns:1fr;gap:28px}
   .footer-bottom{justify-content:center;text-align:center}
   .logo-img{height:50px}
 }
+
+/* ===== Reduced-motion : on retire les anims, SAUF le diaporama qui continue ===== */
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
   *,*::before,*::after{animation:none!important;transition:none!important}
   .reveal,.hero .in-seq,.split-words .w{opacity:1;transform:none}
+  /* Le diaporama tourne quand même : fondu doux, sans zoom */
+  .hero-slide{transition:opacity .9s ease !important;transform:none !important}
+  .hero-slide.is-active{opacity:1;transform:none !important}
 }
 </style>
 </head>
@@ -271,8 +312,13 @@ p{margin:0 0 1em}
   </div>
 </header>
 
-<!-- 1. ACCUEIL -->
+<!-- 1. ACCUEIL (diaporama sans aucune pause) -->
 <section class="hero" id="accueil">
+  <div class="hero-slides" aria-hidden="true">
+    <div class="hero-slide is-active"><img src="transport/acceuil.jpg" alt=""></div>
+    <div class="hero-slide"><img src="transport/IM2.jpg" alt="" loading="lazy"></div>
+    <div class="hero-slide"><img src="transport/im5.jpg" alt="" loading="lazy"></div>
+  </div>
   <div class="container">
     <div class="hero-logo in-seq d1"><img src="transport/logo.jpg" alt="CTL – Compagnie Tra-Log SARL"></div>
     <h1 class="in-seq d2">Un partenaire stratégique pour une Supply Chain plus intégrée</h1>
@@ -281,6 +327,11 @@ p{margin:0 0 1em}
       <a href="#contact" class="btn btn-accent">Demander un devis</a>
       <a href="#services" class="btn btn-light">Découvrir nos services</a>
     </div>
+  </div>
+  <div class="hero-dots" role="tablist" aria-label="Navigation du diaporama">
+    <button class="hero-dot is-active" type="button" aria-label="Image 1" aria-selected="true"></button>
+    <button class="hero-dot" type="button" aria-label="Image 2" aria-selected="false"></button>
+    <button class="hero-dot" type="button" aria-label="Image 3" aria-selected="false"></button>
   </div>
   <span class="scroll-hint" aria-hidden="true"></span>
 </section>
@@ -323,36 +374,12 @@ p{margin:0 0 1em}
       <p>Un partenaire engagé, réactif et transparent pour sécuriser vos flux.</p>
     </div>
     <div class="why-grid">
-      <article class="why reveal">
-        <div class="why-num">01</div>
-        <h3>Réactivité & disponibilité</h3>
-        <p>Une équipe joignable et des réponses rapides à chaque étape de votre dossier.</p>
-      </article>
-      <article class="why reveal">
-        <div class="why-num">02</div>
-        <h3>Expertise douanière</h3>
-        <p>Maîtrise des procédures et conformité réglementaire à l'import comme à l'export.</p>
-      </article>
-      <article class="why reveal">
-        <div class="why-num">03</div>
-        <h3>Réseau international</h3>
-        <p>Des partenaires fiables en Afrique et dans le monde pour vos expéditions.</p>
-      </article>
-      <article class="why reveal">
-        <div class="why-num">04</div>
-        <h3>Solutions sur mesure</h3>
-        <p>Des prestations adaptées à votre activité, vos volumes et vos contraintes.</p>
-      </article>
-      <article class="why reveal">
-        <div class="why-num">05</div>
-        <h3>Suivi transparent</h3>
-        <p>Une visibilité continue sur vos marchandises, vos délais et vos coûts.</p>
-      </article>
-      <article class="why reveal">
-        <div class="why-num">06</div>
-        <h3>Équipe expérimentée</h3>
-        <p>Des professionnels du transit et de la supply chain à votre écoute.</p>
-      </article>
+      <article class="why reveal"><div class="why-num">01</div><h3>Réactivité & disponibilité</h3><p>Une équipe joignable et des réponses rapides à chaque étape de votre dossier.</p></article>
+      <article class="why reveal"><div class="why-num">02</div><h3>Expertise douanière</h3><p>Maîtrise des procédures et conformité réglementaire à l'import comme à l'export.</p></article>
+      <article class="why reveal"><div class="why-num">03</div><h3>Réseau international</h3><p>Des partenaires fiables en Afrique et dans le monde pour vos expéditions.</p></article>
+      <article class="why reveal"><div class="why-num">04</div><h3>Solutions sur mesure</h3><p>Des prestations adaptées à votre activité, vos volumes et vos contraintes.</p></article>
+      <article class="why reveal"><div class="why-num">05</div><h3>Suivi transparent</h3><p>Une visibilité continue sur vos marchandises, vos délais et vos coûts.</p></article>
+      <article class="why reveal"><div class="why-num">06</div><h3>Équipe expérimentée</h3><p>Des professionnels du transit et de la supply chain à votre écoute.</p></article>
     </div>
   </div>
 </section>
@@ -369,32 +396,23 @@ p{margin:0 0 1em}
       <article class="testi reveal">
         <div class="testi-stars" aria-label="5 étoiles sur 5">★★★★★</div>
         <blockquote>« Compagnie Tra-Log a assuré le dédouanement de nos équipements dans les délais. Un partenaire fiable et professionnel. »</blockquote>
-        <div class="testi-who">
-          <div class="testi-avatar">A</div>
-          <div><strong>Responsable Logistique</strong><span>Société minière · Ouagadougou</span></div>
-        </div>
+        <div class="testi-who"><div class="testi-avatar">A</div><div><strong>Responsable Logistique</strong><span>Société minière · Ouagadougou</span></div></div>
       </article>
       <article class="testi reveal">
         <div class="testi-stars" aria-label="5 étoiles sur 5">★★★★★</div>
         <blockquote>« Grâce à leur réseau, nos expéditions arrivent à temps. Le suivi est impeccable et l'équipe très à l'écoute. »</blockquote>
-        <div class="testi-who">
-          <div class="testi-avatar">B</div>
-          <div><strong>Directrice Achats</strong><span>Agro-industrie · Bobo-Dioulasso</span></div>
-        </div>
+        <div class="testi-who"><div class="testi-avatar">B</div><div><strong>Directrice Achats</strong><span>Agro-industrie · Bobo-Dioulasso</span></div></div>
       </article>
       <article class="testi reveal">
         <div class="testi-stars" aria-label="5 étoiles sur 5">★★★★★</div>
         <blockquote>« Une équipe réactive et de bon conseil. Nos approvisionnements sont mieux coordonnés depuis que nous travaillons avec eux. »</blockquote>
-        <div class="testi-who">
-          <div class="testi-avatar">C</div>
-          <div><strong>Gérant</strong><span>PME Import · Ouagadougou</span></div>
-        </div>
+        <div class="testi-who"><div class="testi-avatar">C</div><div><strong>Gérant</strong><span>PME Import · Ouagadougou</span></div></div>
       </article>
     </div>
   </div>
 </section>
 
-<!-- Bande CTA de transition -->
+<!-- Bande CTA -->
 <section class="section" id="besoin" style="padding-top:0">
   <div class="container">
     <div class="cta-band reveal">
@@ -419,18 +437,9 @@ p{margin:0 0 1em}
     <div class="split">
       <div class="reveal">
         <ul class="contact-list">
-          <li>
-            <div class="ci">📞</div>
-            <div><strong>Téléphone</strong><span>+226 76 85 35 14<br>+226 70 82 32 17<br>+226 79 26 31 66</span></div>
-          </li>
-          <li>
-            <div class="ci">✉️</div>
-            <div><strong>Email</strong><span>Compagnietralog@gmail.com</span></div>
-          </li>
-          <li>
-            <div class="ci">📍</div>
-            <div><strong>Adresse</strong><span>Ouagadougou, Burkina Faso</span></div>
-          </li>
+          <li><div class="ci">📞</div><div><strong>Téléphone</strong><span>+226 76 85 35 14<br>+226 70 82 32 17<br>+226 79 26 31 66</span></div></li>
+          <li><div class="ci">✉️</div><div><strong>Email</strong><span>Compagnietralog@gmail.com</span></div></li>
+          <li><div class="ci">📍</div><div><strong>Adresse</strong><span>Ouagadougou, Burkina Faso</span></div></li>
         </ul>
         <div class="map-wrap">
           <iframe src="https://www.google.com/maps?q=Ouagadougou,Burkina Faso&output=embed" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Localisation CTL – Ouagadougou"></iframe>
@@ -439,19 +448,10 @@ p{margin:0 0 1em}
       <div class="reveal">
         <form class="form" data-mailto="Demande depuis le site">
           <div class="form-row">
-            <div class="field">
-              <label for="c-nom">Nom complet *</label>
-              <input type="text" id="c-nom" name="nom" required>
-            </div>
-            <div class="field">
-              <label for="c-tel">Téléphone</label>
-              <input type="tel" id="c-tel" name="telephone">
-            </div>
+            <div class="field"><label for="c-nom">Nom complet *</label><input type="text" id="c-nom" name="nom" required></div>
+            <div class="field"><label for="c-tel">Téléphone</label><input type="tel" id="c-tel" name="telephone"></div>
           </div>
-          <div class="field">
-            <label for="c-email">Email *</label>
-            <input type="email" id="c-email" name="email" required>
-          </div>
+          <div class="field"><label for="c-email">Email *</label><input type="email" id="c-email" name="email" required></div>
           <div class="field">
             <label for="c-sujet">Sujet</label>
             <select id="c-sujet" name="sujet">
@@ -461,10 +461,7 @@ p{margin:0 0 1em}
               <option value="Autre demande">Autre demande</option>
             </select>
           </div>
-          <div class="field">
-            <label for="c-msg">Votre message *</label>
-            <textarea id="c-msg" name="message" required placeholder="Décrivez votre marchandise, votre origine et votre destination…"></textarea>
-          </div>
+          <div class="field"><label for="c-msg">Votre message *</label><textarea id="c-msg" name="message" required placeholder="Décrivez votre marchandise, votre origine et votre destination…"></textarea></div>
           <div class="form-actions">
             <button type="submit" class="btn btn-primary">Envoyer par email</button>
             <button type="button" class="btn btn-accent" data-wa>Envoyer via WhatsApp</button>
@@ -484,17 +481,11 @@ p{margin:0 0 1em}
       <p style="margin-top:16px;font-size:.92rem">Transit, logistique et supply chain à Ouagadougou.</p>
     </div>
     <div><h4>Navigation</h4><ul>
-      <li><a href="#accueil">Accueil</a></li>
-      <li><a href="#a-propos">À propos</a></li>
-      <li><a href="#services">Services</a></li>
-      <li><a href="#pourquoi">Pourquoi nous</a></li>
-      <li><a href="#temoignages">Témoignages</a></li>
-      <li><a href="#contact">Contact</a></li>
+      <li><a href="#accueil">Accueil</a></li><li><a href="#a-propos">À propos</a></li><li><a href="#services">Services</a></li>
+      <li><a href="#pourquoi">Pourquoi nous</a></li><li><a href="#temoignages">Témoignages</a></li><li><a href="#contact">Contact</a></li>
     </ul></div>
     <div><h4>Services</h4><ul>
-      <li>Logistique et supply chain</li>
-      <li>Gestion de la Supply Chain</li>
-      <li>Transit et dédouanement</li>
+      <li>Logistique et supply chain</li><li>Gestion de la Supply Chain</li><li>Transit et dédouanement</li>
     </ul></div>
     <div><h4>Contact</h4><ul class="footer-contact">
       <li><span>📞</span><span>+226 76 85 35 14<br>+226 70 82 32 17<br>+226 79 26 31 66</span></li>
@@ -520,12 +511,41 @@ document.addEventListener('DOMContentLoaded', () => {
   const reduce = matchMedia('(prefers-reduced-motion:reduce)').matches;
   const canHover = matchMedia('(hover:hover) and (pointer:fine)').matches;
 
-  /* Scroll : header, progression, parallaxe du hero */
+  /* ============================================================
+     DIAPORAMA DU HERO — TOUJOURS ACTIF, AUCUNE PAUSE
+     • Pas de pause quand l'onglet est masqué
+     • Pas de pause sur hover/touch
+     • Pas de pause même en mode "réduire les animations"
+     • Clic sur les points = changement immédiat, timer inchangé
+     ============================================================ */
+  const slides = [...document.querySelectorAll('.hero-slide')];
+  const dots = [...document.querySelectorAll('.hero-dot')];
+  let slideIdx = 0;
+
+  const showSlide = i => {
+    slideIdx = (i + slides.length) % slides.length;
+    slides.forEach((s, k) => s.classList.toggle('is-active', k === slideIdx));
+    dots.forEach((d, k) => {
+      d.classList.toggle('is-active', k === slideIdx);
+      d.setAttribute('aria-selected', k === slideIdx);
+    });
+  };
+
+  showSlide(0);
+  if (slides.length > 1) {
+    setInterval(() => showSlide(slideIdx + 1), 3000); /* jamais interrompu */
+  }
+  dots.forEach((d, i) => d.addEventListener('click', () => showSlide(i)));
+
+  /* ============================================================
+     Scroll : header, progression, parallaxe (desktop uniquement)
+     ============================================================ */
   const onScroll = () => {
     header.classList.toggle('scrolled', window.scrollY > 40);
     const h = document.documentElement.scrollHeight - innerHeight;
     bar.style.width = (h > 0 ? scrollY / h * 100 : 0) + '%';
-    if (hero && !reduce && scrollY < innerHeight * 1.2) {
+    /* Parallaxe SEULEMENT sur desktop — pas de décalage sur mobile (centrage préservé) */
+    if (hero && !reduce && window.matchMedia('(min-width:901px)').matches && scrollY < innerHeight * 1.2) {
       hero.style.setProperty('--py', Math.min(scrollY * 0.3, 190) + 'px');
     }
   };
@@ -559,7 +579,7 @@ document.addEventListener('DOMContentLoaded', () => {
     wio.observe(h);
   });
 
-  /* Tilt 3D des cartes et boutons magnétiques (souris uniquement) */
+  /* Tilt 3D + boutons magnétiques (souris uniquement) */
   if (canHover && !reduce) {
     document.querySelectorAll('.svc').forEach(card => {
       card.addEventListener('mousemove', e => {
@@ -580,14 +600,14 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  /* Menu actif selon la section */
+  /* Menu actif */
   const links = document.querySelectorAll('.main-nav a');
   const spy = new IntersectionObserver(es => es.forEach(e => {
     if (e.isIntersecting) links.forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#' + e.target.id));
   }), { rootMargin: '-40% 0px -55% 0px' });
   document.querySelectorAll('section[id]').forEach(s => spy.observe(s));
 
-  /* Formulaires (mailto / WhatsApp) */
+  /* Formulaires */
   const labelOf = (form, name) => {
     const f = form.querySelector(`[name="${name}"]`), l = f && f.closest('.field') && f.closest('.field').querySelector('label');
     return l ? l.textContent.replace('*', '').trim() : name;
