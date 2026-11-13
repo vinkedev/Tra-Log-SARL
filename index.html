@@ -7,10 +7,20 @@
 <meta name="description" content="Compagnie Tra-Log SARL : transit, dédouanement, logistique et supply chain à Ouagadougou. Demandez votre devis.">
 <meta name="robots" content="noindex, nofollow">
 <meta name="theme-color" content="#1287c0">
+<script>
+  // Si l'image hero est déjà en cache, on masque le preloader immédiatement (2e visite = 0 chargement)
+  (function(){
+    var i = new Image();
+    i.src = 'transport/im5.jpg';
+    if (i.complete && i.naturalWidth) document.documentElement.classList.add('no-pre');
+  })();
+</script>
+<noscript><style>.preloader{display:none!important}body.is-loading{overflow:auto!important}</style></noscript>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="icon" type="image/jpeg" href="transport/logo.jpg">
+<link rel="preload" as="image" href="transport/logo.jpg">
 <link rel="preload" as="image" href="transport/im5.jpg" fetchpriority="high">
 <style>
 :root{
@@ -38,6 +48,28 @@ p{margin:0 0 1em}
 .eyebrow{display:inline-block;font-size:.9rem;font-weight:700;color:var(--cyan-dark);margin-bottom:10px;padding-left:36px;position:relative}
 .eyebrow::before{content:"";position:absolute;left:0;top:50%;width:26px;height:3px;border-radius:2px;background:var(--red)}
 :focus-visible{outline:3px solid var(--cyan);outline-offset:3px}
+
+/* ===== PRELOADER ===== */
+body.is-loading{overflow:hidden}
+.preloader{
+  position:fixed;inset:0;z-index:999;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:28px;
+  background:linear-gradient(135deg,var(--navy) 0%,#0d3a5f 60%,var(--cyan-dark) 100%);
+  transition:opacity .35s ease, visibility .35s ease;
+}
+.preloader.done{opacity:0;visibility:hidden;pointer-events:none}
+.pre-logo{
+  background:#fff;border-radius:22px;padding:16px 28px;
+  box-shadow:0 20px 50px rgba(0,0,0,.35);
+  animation:preBreath 1.8s ease-in-out infinite;
+}
+.pre-logo img{height:84px;width:auto}
+.pre-bar{width:180px;height:4px;border-radius:4px;background:rgba(255,255,255,.2);overflow:hidden}
+.pre-bar span{display:block;height:100%;width:40%;border-radius:4px;background:linear-gradient(90deg,var(--cyan),var(--red));animation:preSlide 1.2s ease-in-out infinite}
+@keyframes preBreath{0%,100%{transform:scale(1)}50%{transform:scale(1.07)}}
+@keyframes preSlide{0%{transform:translateX(-100%)}100%{transform:translateX(450%)}}
+.no-pre .preloader{display:none}
+.no-pre body.is-loading{overflow:auto}
 
 /* Barre de progression */
 .progress{position:fixed;top:0;left:0;height:3px;width:0;background:linear-gradient(90deg,var(--cyan),var(--red));z-index:100}
@@ -91,14 +123,17 @@ p{margin:0 0 1em}
 .hero-slides{
   position:absolute;inset:-200px 0;transform:translateY(var(--py,0px));
   will-change:transform;z-index:0;
-  opacity:0;transition:opacity .9s ease;
 }
-.hero.img-ready .hero-slides{opacity:1}
 .hero-slide{
   position:absolute;inset:0;opacity:0;transform:scale(1);
   transition:opacity 1.1s ease, transform 3s ease-out;
 }
-.hero-slide img{width:100%;height:100%;object-fit:cover;object-position:center center;display:block}
+/* Fondu d'apparition de chaque image (évite le "flash" sur connexion lente) */
+.hero-slide img{
+  width:100%;height:100%;object-fit:cover;object-position:center center;display:block;
+  opacity:0;transition:opacity .6s ease;
+}
+.hero-slide img.loaded{opacity:1}
 .hero-slide.is-active{opacity:1;transform:scale(1.06)}
 .hero::after{content:"";position:absolute;inset:0;background:linear-gradient(95deg,rgba(10,37,64,.8) 0%,rgba(10,37,64,.45) 42%,rgba(10,37,64,.04) 100%);z-index:1;pointer-events:none}
 
@@ -220,16 +255,14 @@ p{margin:0 0 1em}
 .testi-who strong{display:block;color:var(--navy);font-size:.93rem}
 .testi-who span{color:var(--muted);font-size:.82rem}
 
-/* ===== ACTUALITÉS (état vide) ===== */
+/* Actualités (état vide) */
 .news-empty{
   max-width:520px;margin:0 auto;text-align:center;
   padding:56px 32px;
   background:#fff;
   border:2px dashed var(--line);
   border-radius:var(--radius);
-  transition:border-color .3s var(--ease),transform .3s var(--ease);
 }
-.news-empty:hover{border-color:var(--cyan);transform:translateY(-4px)}
 .news-empty-icon{
   width:80px;height:80px;margin:0 auto 20px;
   border-radius:50%;
@@ -238,9 +271,7 @@ p{margin:0 0 1em}
   background:linear-gradient(135deg,rgba(26,167,236,.12),rgba(214,40,40,.08));
   animation:float 4s ease-in-out infinite;
 }
-.news-empty h3{
-  font-size:1.25rem;color:var(--navy);margin-bottom:10px;
-}
+.news-empty h3{font-size:1.25rem;color:var(--navy);margin-bottom:10px}
 .news-empty p{color:var(--muted);font-size:1rem;margin-bottom:0}
 
 /* Bande CTA */
@@ -293,11 +324,18 @@ p{margin:0 0 1em}
 /* Apparition au scroll */
 .reveal{opacity:0;transform:translateY(30px);transition:opacity .8s var(--ease),transform .8s var(--ease);transition-delay:var(--d,0s)}
 .reveal.in{opacity:1;transform:none}
+/* Fix hover .news-empty une fois révélé (sinon .reveal.in écrase) */
+.news-empty.reveal.in{transition:transform .35s var(--ease), border-color .35s var(--ease), opacity .8s var(--ease)}
+.news-empty.reveal.in:hover{transform:translateY(-4px);border-color:var(--cyan)}
+
+/* Header : masquer le téléphone dès 1280px pour éviter le débordement */
+@media (max-width:1280px){
+  .phone-link{display:none}
+}
 
 /* Nav compacte entre 1080 et 901px (7 liens) */
 @media (max-width:1080px) and (min-width:901px){
   .main-nav{gap:12px;font-size:.82rem}
-  .phone-link{display:none}
   .header-actions{gap:8px}
   .header-actions .btn-sm{padding:9px 14px;font-size:.8rem}
 }
@@ -319,7 +357,6 @@ p{margin:0 0 1em}
   .main-nav a{padding:13px 0;border-bottom:1px solid var(--line);font-size:.95rem}
   .main-nav a::after{display:none}
   .nav-toggle{display:inline-flex}
-  .phone-link{display:none}
   .header-actions .btn-sm{padding:9px 16px;font-size:.85rem}
   .logo-img{height:58px}
   .site-header.scrolled .header-inner{height:70px}
@@ -370,6 +407,9 @@ p{margin:0 0 1em}
   .news-empty h3{font-size:1.1rem}
   .news-empty p{font-size:.94rem}
 
+  .pre-logo img{height:64px}
+  .pre-bar{width:140px}
+
   .cta-band{padding:38px 22px}
   .form-row{grid-template-columns:1fr}
   .footer-grid{grid-template-columns:1fr;gap:28px}
@@ -389,10 +429,19 @@ p{margin:0 0 1em}
   .hero-slide{transition:opacity .9s ease !important;transform:none !important}
   .hero-slide.is-active{opacity:1;transform:none !important}
   .marquee-track{animation:none !important;transform:none !important}
+  .pre-logo{animation:none !important}
+  .pre-bar span{animation:none !important;width:100%}
 }
 </style>
 </head>
-<body>
+<body class="is-loading">
+
+<!-- ===== PRELOADER ===== -->
+<div class="preloader" id="preloader" role="status" aria-label="Chargement">
+  <div class="pre-logo"><img src="transport/logo.jpg" alt="CTL – Compagnie Tra-Log SARL"></div>
+  <div class="pre-bar"><span></span></div>
+</div>
+
 <div class="progress" id="progress"></div>
 
 <header class="site-header" id="header">
@@ -552,7 +601,7 @@ p{margin:0 0 1em}
   </div>
 </section>
 
-<!-- ===== 6. ACTUALITÉS (état vide pour le moment) ===== -->
+<!-- 6. ACTUALITÉS (état vide) -->
 <section class="section" id="actualites">
   <div class="container">
     <div class="section-head reveal">
@@ -672,6 +721,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const slides = [...document.querySelectorAll('.hero-slide')];
   const dots = [...document.querySelectorAll('.hero-dot')];
   const dynEl = document.querySelector('.hero-dyn');
+  const pre = document.getElementById('preloader');
   let slideIdx = 0;
 
   const SLOGANS = [
@@ -704,23 +754,39 @@ document.addEventListener('DOMContentLoaded', () => {
     typeSlogan(SLOGANS[slideIdx]);
   };
 
-  showSlide(0);
-
   const firstImg = slides[0].querySelector('img');
+
+  /* Fondu d'apparition de chaque image (évite le "flash" sur réseau lent) */
+  slides.forEach(s => {
+    const im = s.querySelector('img');
+    if (!im) return;
+    const ok = () => im.classList.add('loaded');
+    if (im.complete && im.naturalWidth) ok();
+    else im.addEventListener('load', ok, { once: true });
+  });
+
   let started = false;
 
   const startHero = () => {
     if (started) return;
     started = true;
-    hero.classList.add('img-ready');
 
+    pre.classList.add('done');
+    document.body.classList.remove('is-loading');
+
+    /* Charge les slides 2 et 3 maintenant (data-src → src) */
     slides.slice(1).forEach(s => {
       const im = s.querySelector('img');
       if (im && im.dataset.src) {
         im.src = im.dataset.src;
         im.removeAttribute('data-src');
+        const ok = () => im.classList.add('loaded');
+        if (im.complete && im.naturalWidth) ok();
+        else im.addEventListener('load', ok, { once: true });
       }
     });
+
+    showSlide(0);
 
     if (slides.length > 1) {
       setInterval(() => {
@@ -737,9 +803,10 @@ document.addEventListener('DOMContentLoaded', () => {
   } else {
     firstImg.addEventListener('load', startHero, { once: true });
     firstImg.addEventListener('error', startHero, { once: true });
-    setTimeout(startHero, 3500);
+    setTimeout(startHero, 1500);
   }
 
+  /* Clic sur les points */
   dots.forEach((d, i) => d.addEventListener('click', () => {
     const im = slides[i].querySelector('img');
     if (!im) return;
@@ -840,6 +907,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
   document.querySelectorAll('[data-year]').forEach(el => el.textContent = new Date().getFullYear());
 });
+
+/* Sécurité : si le script principal plante, le preloader disparaît quand même */
+window.addEventListener('load', () => setTimeout(() => {
+  const pre = document.getElementById('preloader');
+  if (pre && !pre.classList.contains('done')) {
+    pre.classList.add('done');
+    document.body.classList.remove('is-loading');
+  }
+}, 2500));
 </script>
 </body>
 </html>
