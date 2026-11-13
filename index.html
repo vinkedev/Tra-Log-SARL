@@ -85,7 +85,8 @@ p{margin:0 0 1em}
 .hero .container{position:relative;z-index:2}
 .hero-logo{display:inline-flex;background:#fff;border-radius:20px;padding:14px 26px;margin-bottom:30px;box-shadow:0 20px 44px rgba(0,0,0,.3);animation:float 5s ease-in-out infinite}
 .hero-logo img{height:104px;width:auto}
-.hero h1{color:#fff;max-width:22ch;text-shadow:0 3px 18px rgba(0,0,0,.4)}
+/* Slogan : taille réduite car plus long */
+.hero h1{color:#fff;font-size:clamp(1.7rem,3.6vw,2.6rem);max-width:24ch;text-shadow:0 3px 18px rgba(0,0,0,.4)}
 .hero p{color:#fff;font-size:1.18rem;max-width:52ch;text-shadow:0 2px 10px rgba(0,0,0,.45)}
 .hero-actions{display:flex;flex-wrap:wrap;gap:14px;margin-top:30px}
 .hero .in-seq{opacity:0;animation:rise .9s var(--ease) forwards}
@@ -204,6 +205,7 @@ p{margin:0 0 1em}
   .hero{padding:64px 0 80px}
   .hero::after{background:linear-gradient(180deg,rgba(10,37,64,.72),rgba(10,37,64,.5))}
   .hero-logo img{height:76px}
+  .hero h1{font-size:clamp(1.45rem,5.6vw,1.9rem)}
   .cta-band{padding:38px 22px}
   .form-row{grid-template-columns:1fr}
   .footer-grid{grid-template-columns:1fr;gap:28px}
