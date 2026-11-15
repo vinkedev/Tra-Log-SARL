@@ -412,6 +412,7 @@ body.is-loading{overflow:hidden}
       <a href="#pourquoi">Pourquoi nous</a>
       <a href="#temoignages">Témoignages</a>
       <a href="#actualites">Actualités</a>
+      <a href="#carriere">Carrière</a>
       <a href="#contact">Contact</a>
     </nav>
     <div class="header-actions">
@@ -566,6 +567,17 @@ body.is-loading{overflow:hidden}
   </div>
 </section>
 
+<!-- 6.5 CARRIÈRE — section vide, contenu à définir avec le client -->
+<section class="section section--soft" id="carriere">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="eyebrow">Carrière</span>
+      <h2>Rejoignez notre équipe</h2>
+    </div>
+    <!-- À COMPLÉTER : offres d'emploi / candidature spontanée / présentation RH -->
+  </div>
+</section>
+
 <section class="section" id="besoin" style="padding-top:0">
   <div class="container">
     <div class="cta-band reveal">
@@ -591,10 +603,10 @@ body.is-loading{overflow:hidden}
         <ul class="contact-list">
           <li><div class="ci">📞</div><div><strong>Téléphone</strong><span>+226 76 85 35 14<br>+226 70 82 32 17<br>+226 79 26 31 66</span></div></li>
           <li><div class="ci">✉️</div><div><strong>Email</strong><span>Compagnietralog@gmail.com</span></div></li>
-          <li><div class="ci">📍</div><div><strong>Adresse</strong><span>Ouagadougou, Burkina Faso</span></div></li>
+          <li><div class="ci">📍</div><div><strong>Adresse</strong><span>Patte d'Oie, Ouagadougou, Burkina Faso</span></div></li>
         </ul>
         <div class="map-wrap">
-          <iframe src="https://www.google.com/maps?q=Ouagadougou,Burkina Faso&output=embed" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Localisation CTL – Ouagadougou"></iframe>
+          <iframe src="https://www.google.com/maps?q=Patte+d%27Oie,+Ouagadougou,+Burkina+Faso&output=embed" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Localisation CTL – Patte d'Oie, Ouagadougou"></iframe>
         </div>
       </div>
       <div class="reveal">
@@ -614,6 +626,7 @@ body.is-loading{overflow:hidden}
               <option value="Devis Aérien">Devis Aérien</option>
               <option value="Devis Transport Terrestre">Devis Transport Terrestre</option>
               <option value="Devis Livraison">Devis Livraison</option>
+              <option value="Candidature">Candidature</option>
               <option value="Autre demande">Autre demande</option>
             </select>
           </div>
@@ -638,7 +651,8 @@ body.is-loading{overflow:hidden}
     <div><h4>Navigation</h4><ul>
       <li><a href="#accueil">Accueil</a></li><li><a href="#a-propos">À propos</a></li><li><a href="#services">Services</a></li>
       <li><a href="#pourquoi">Pourquoi nous</a></li><li><a href="#temoignages">Témoignages</a></li>
-      <li><a href="#actualites">Actualités</a></li><li><a href="#contact">Contact</a></li>
+      <li><a href="#actualites">Actualités</a></li><li><a href="#carriere">Carrière</a></li>
+      <li><a href="#contact">Contact</a></li>
     </ul></div>
     <div><h4>Services</h4><ul>
       <li>Logistique et supply chain</li><li>Gestion de la Supply Chain</li><li>Transit et dédouanement</li>
@@ -646,7 +660,7 @@ body.is-loading{overflow:hidden}
     <div><h4>Contact</h4><ul class="footer-contact">
       <li><span>📞</span><span>+226 76 85 35 14<br>+226 70 82 32 17<br>+226 79 26 31 66</span></li>
       <li><span>✉️</span><span>Compagnietralog@gmail.com</span></li>
-      <li><span>📍</span><span>Ouagadougou, Burkina Faso</span></li>
+      <li><span>📍</span><span>Patte d'Oie, Ouagadougou, Burkina Faso</span></li>
     </ul></div>
   </div>
   <div class="container footer-bottom">
@@ -839,7 +853,15 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
   document.querySelectorAll('[data-wa]').forEach(btn => btn.addEventListener('click', () => {
-    const form = btn.closest('form'), lines = form ? collect(form) : [];
+    const form = btn.closest('form');
+
+    /* Vérifie les champs obligatoires (nom, email, message) avant d'ouvrir WhatsApp */
+    if (form && !form.checkValidity()) {
+      form.reportValidity();
+      return;
+    }
+
+    const lines = form ? collect(form) : [];
     const msg = lines.length ? 'Bonjour CTL,\n' + lines.join('\n') : 'Bonjour CTL, je vous contacte depuis le site.';
     window.open('https://wa.me/22676853514?text=' + encodeURIComponent(msg), '_blank');
   }));
