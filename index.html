@@ -71,7 +71,7 @@ body.is-loading{overflow:hidden}
 
 .progress{position:fixed;top:0;left:0;height:3px;width:0;background:linear-gradient(90deg,var(--cyan),var(--red));z-index:100}
 
-.btn{position:relative;overflow:hidden;display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:14px 28px;border-radius:999px;font-weight:600;font-size:.98rem;border:2px solid transparent;cursor:pointer;transition:transform .25s var(--ease),box-shadow .25s,background .25s,color .25s,border-color .25s;white-space:nowrap}
+.btn{position:relative;overflow:hidden;display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:14px 28px;border-radius:999px;font-weight:600;font-size:.98rem;border:2px solid transparent;cursor:pointer;transition:transform .25s var(--ease),box-shadow .25s,background .25s,color .25s,border-color .25s;white-space:nowrap;font-family:inherit}
 .btn::after{content:"";position:absolute;top:0;left:-80%;width:50%;height:100%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.45),transparent);transform:skewX(-20deg);transition:left .6s var(--ease)}
 .btn:hover::after{left:130%}
 .btn:hover{transform:translateY(-3px)}
@@ -88,7 +88,7 @@ body.is-loading{overflow:hidden}
 .site-header{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.96);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);transition:box-shadow .3s,height .3s}
 .site-header.scrolled{box-shadow:0 8px 24px rgba(10,37,64,.1)}
 .header-inner{display:flex;align-items:center;justify-content:space-between;height:var(--header-h);gap:20px;transition:height .3s var(--ease)}
-.logo{display:inline-flex;align-items:center;flex-shrink:0}
+.logo{display:inline-flex;align-items:center;flex-shrink:0;cursor:pointer;user-select:none}
 .logo-img{height:70px;width:auto;object-fit:contain;transition:height .3s var(--ease),transform .3s var(--ease)}
 .logo:hover .logo-img{transform:scale(1.05)}
 .site-header.scrolled .header-inner{height:76px}
@@ -240,6 +240,80 @@ body.is-loading{overflow:hidden}
 .news-empty h3{font-size:1.25rem;color:var(--navy);margin-bottom:10px}
 .news-empty p{color:var(--muted);font-size:1rem;margin-bottom:0}
 
+/* ========== ACTUALITÉS DYNAMIQUES ========== */
+.actu-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:26px}
+.actu-card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;display:flex;flex-direction:column;cursor:pointer;opacity:0;animation:cardIn .6s var(--ease) forwards;transition:transform .3s var(--ease),box-shadow .3s,border-color .3s}
+.actu-card:hover{transform:translateY(-6px);box-shadow:var(--shadow);border-color:rgba(26,167,236,.35)}
+.actu-card__img{aspect-ratio:16/10;overflow:hidden;background:var(--bg-soft)}
+.actu-card__img img{width:100%;height:100%;object-fit:cover;transition:transform .5s var(--ease)}
+.actu-card:hover .actu-card__img img{transform:scale(1.06)}
+.actu-card__body{padding:22px 24px;display:flex;flex-direction:column;gap:10px;flex:1}
+.actu-card__cat{display:inline-block;font-size:.72rem;font-weight:700;color:var(--red);text-transform:uppercase;letter-spacing:.06em}
+.actu-card h3{font-size:1.15rem;color:var(--navy);line-height:1.35;margin:0}
+.actu-card p{color:var(--muted);font-size:.92rem;margin:0;flex:1}
+.actu-card__meta{display:flex;gap:14px;font-size:.8rem;color:var(--muted);flex-wrap:wrap}
+.actu-card__more{margin-top:auto;align-self:flex-start;font-weight:600;font-size:.88rem;color:var(--cyan-dark);border-bottom:2px solid transparent;transition:border-color .2s}
+.actu-card:hover .actu-card__more{border-color:var(--red)}
+@keyframes cardIn{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
+
+/* ========== CARRIÈRE DYNAMIQUE ========== */
+.carriere-filters{display:flex;justify-content:center;flex-wrap:wrap;gap:10px;margin-bottom:36px}
+.carriere-filters button{padding:9px 20px;border-radius:999px;border:1.5px solid var(--line);background:#fff;color:var(--navy);font:inherit;font-family:inherit;font-size:.88rem;font-weight:600;cursor:pointer;transition:.2s var(--ease)}
+.carriere-filters button:hover{border-color:var(--cyan);color:var(--cyan-dark)}
+.carriere-filters button.active{background:var(--cyan-dark);color:#fff;border-color:var(--cyan-dark);box-shadow:0 6px 16px rgba(18,135,192,.25)}
+.carriere-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:26px}
+.carriere-card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:26px;display:flex;flex-direction:column;gap:12px;cursor:pointer;opacity:0;animation:cardIn .6s var(--ease) forwards;transition:transform .3s var(--ease),box-shadow .3s,border-color .3s}
+.carriere-card:hover{transform:translateY(-6px);box-shadow:var(--shadow);border-color:rgba(26,167,236,.35)}
+.carriere-card__head{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.carriere-card__badge{display:inline-block;padding:5px 12px;border-radius:999px;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em}
+.carriere-card__badge--carriere{background:rgba(10,37,64,.12);color:var(--navy)}
+.carriere-card__badge--emploi{background:rgba(214,40,40,.12);color:var(--red)}
+.carriere-card__badge--stage{background:rgba(34,197,94,.15);color:#16a34a}
+.carriere-card__contrat{font-size:.78rem;color:var(--muted);font-weight:600}
+.carriere-card h3{font-size:1.1rem;color:var(--navy);line-height:1.35;margin:0}
+.carriere-card p{color:var(--muted);font-size:.9rem;flex:1;margin:0}
+.carriere-card__meta{display:flex;flex-wrap:wrap;gap:10px;font-size:.8rem;color:var(--muted);padding:12px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.carriere-card__more{margin-top:auto;align-self:flex-start;font-weight:600;font-size:.88rem;color:var(--cyan-dark);border-bottom:2px solid transparent;transition:border-color .2s}
+.carriere-card:hover .carriere-card__more{border-color:var(--red)}
+
+/* ========== MODALS ========== */
+.modal-overlay{position:fixed;inset:0;background:rgba(10,37,64,.78);backdrop-filter:blur(8px);z-index:200;display:none;align-items:center;justify-content:center;padding:20px}
+.modal-overlay.open{display:flex}
+.modal-card{background:#fff;border-radius:20px;width:100%;max-width:480px;max-height:92vh;overflow-y:auto;box-shadow:0 30px 80px rgba(0,0,0,.4);position:relative;animation:modalIn .35s var(--ease);border-top:5px solid var(--cyan-dark)}
+.modal-card--wide{max-width:760px}
+@keyframes modalIn{from{opacity:0;transform:translateY(24px) scale(.97)}to{opacity:1;transform:none}}
+.modal-close{position:absolute;top:14px;right:14px;width:36px;height:36px;border-radius:50%;background:var(--bg-soft);border:none;cursor:pointer;font-size:1.1rem;color:var(--navy);display:grid;place-items:center;transition:.2s;z-index:2;font-weight:700;font-family:inherit}
+.modal-close:hover{background:var(--red);color:#fff;transform:rotate(90deg)}
+.modal-header{padding:32px 28px 20px;text-align:center;border-bottom:1px solid var(--line)}
+.modal-header .modal-icon{width:64px;height:64px;margin:0 auto 16px;border-radius:50%;background:linear-gradient(135deg,rgba(26,167,236,.15),rgba(214,40,40,.1));display:grid;place-items:center;font-size:1.8rem}
+.modal-header h3{font-size:1.3rem;color:var(--navy);margin:0 0 6px}
+.modal-header p{font-size:.88rem;color:var(--muted);margin:0}
+.modal-body{padding:24px 28px 28px;display:grid;gap:14px}
+.modal-body .field{display:flex;flex-direction:column;gap:6px}
+.modal-body .field label{font-size:.85rem;font-weight:600;color:var(--navy)}
+.modal-body .field input{font:inherit;padding:12px 14px;border:1.5px solid var(--line);border-radius:10px;background:#fff;color:var(--ink);transition:.2s;font-family:inherit}
+.modal-body .field input:focus{outline:none;border-color:var(--cyan);box-shadow:0 0 0 4px rgba(26,167,236,.15)}
+.login-error{color:var(--red);font-size:.82rem;text-align:center;min-height:18px;margin:0}
+.modal-body .btn{width:100%}
+
+.detail-content{padding:32px 32px 28px}
+.detail-img{width:100%;border-radius:12px;margin-bottom:20px;aspect-ratio:16/10;object-fit:cover;background:var(--bg-soft)}
+.detail-meta{display:flex;flex-wrap:wrap;gap:14px;font-size:.82rem;color:var(--muted);margin-bottom:16px;align-items:center}
+.detail-cat{display:inline-block;padding:4px 12px;border-radius:999px;background:rgba(214,40,40,.12);color:var(--red);font-weight:700;text-transform:uppercase;letter-spacing:.05em;font-size:.72rem}
+.detail-content h2{color:var(--navy);font-size:1.5rem;margin:0 0 16px;line-height:1.25}
+.detail-content h3{color:var(--navy);font-size:1.1rem;margin:24px 0 10px}
+.detail-body{color:var(--muted);font-size:.98rem;line-height:1.7}
+.detail-body p{margin:0 0 14px}
+.detail-body ul{list-style:none;padding:0;margin:0 0 14px}
+.detail-body li{padding:6px 0 6px 24px;position:relative;color:var(--muted);font-size:.95rem}
+.detail-body li::before{content:"✓";position:absolute;left:0;top:6px;color:var(--cyan-dark);font-weight:700}
+.detail-info-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:20px;padding:16px;background:var(--bg-soft);border-radius:12px}
+.detail-info-grid div{display:flex;flex-direction:column;gap:2px}
+.detail-info-grid strong{font-size:.78rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:600}
+.detail-info-grid span{font-size:.92rem;color:var(--navy);font-weight:600}
+.detail-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px;padding-top:20px;border-top:1px solid var(--line)}
+.detail-actions .btn{flex:1;min-width:160px}
+
 .cta-band{background:linear-gradient(120deg,var(--navy),var(--cyan-dark),var(--navy));background-size:200% 100%;animation:shift 10s ease-in-out infinite alternate;color:#fff;border-radius:22px;padding:58px;text-align:center}
 .cta-band h2{color:#fff}
 .cta-band p{color:rgba(255,255,255,.9);max-width:52ch;margin:0 auto 28px}
@@ -249,7 +323,7 @@ body.is-loading{overflow:hidden}
 .form-row{display:grid;grid-template-columns:1fr 1fr;gap:18px}
 .field{display:flex;flex-direction:column;gap:6px}
 .field label{font-size:.88rem;font-weight:600;color:var(--navy)}
-.field input,.field select,.field textarea{font:inherit;padding:12px 14px;border:1.5px solid var(--line);border-radius:10px;background:#fff;color:var(--ink);transition:border-color .25s,box-shadow .25s}
+.field input,.field select,.field textarea{font:inherit;padding:12px 14px;border:1.5px solid var(--line);border-radius:10px;background:#fff;color:var(--ink);transition:border-color .25s,box-shadow .25s;font-family:inherit}
 .field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--cyan);box-shadow:0 0 0 4px rgba(26,167,236,.15)}
 .field textarea{resize:vertical;min-height:130px}
 .form-note{font-size:.85rem;color:var(--muted)}
@@ -299,6 +373,7 @@ body.is-loading{overflow:hidden}
   .grid-3,.testi-grid{grid-template-columns:repeat(2,1fr)}
   .svc{flex:0 1 calc((100% - 26px) / 2)}
   .why-grid{grid-template-columns:repeat(2,1fr)}
+  .actu-grid,.carriere-grid{grid-template-columns:repeat(2,1fr)}
   .footer-grid{grid-template-columns:1fr 1fr}
   .split{grid-template-columns:1fr;gap:36px}
 }
@@ -321,6 +396,7 @@ body.is-loading{overflow:hidden}
   .grid-3,.testi-grid{grid-template-columns:repeat(2,1fr)}
   .svc{flex:0 1 calc((100% - 26px) / 2)}
   .why-grid{grid-template-columns:repeat(2,1fr)}
+  .actu-grid,.carriere-grid{grid-template-columns:repeat(2,1fr)}
   .footer-grid{grid-template-columns:1fr 1fr}
   .split{grid-template-columns:1fr;gap:36px}
 
@@ -333,6 +409,7 @@ body.is-loading{overflow:hidden}
   .grid-3,.testi-grid{grid-template-columns:1fr}
   .svc{flex:0 1 100%}
   .why-grid{grid-template-columns:1fr;gap:20px}
+  .actu-grid,.carriere-grid{grid-template-columns:1fr}
 
   .hero{
     min-height: calc(100svh - var(--header-h));
@@ -377,6 +454,12 @@ body.is-loading{overflow:hidden}
   .marquee-track{gap:20px;animation-duration:30s}
   .marquee-item{width:300px;height:210px}
   .image-marquee::before,.image-marquee::after{width:50px}
+
+  .detail-content{padding:24px 20px}
+  .detail-content h2{font-size:1.25rem}
+  .detail-info-grid{grid-template-columns:1fr}
+  .modal-header{padding:28px 20px 16px}
+  .modal-body{padding:20px}
 }
 
 @media (prefers-reduced-motion:reduce){
@@ -388,6 +471,7 @@ body.is-loading{overflow:hidden}
   .marquee-track{animation:none !important;transform:none !important}
   .pre-logo{animation:none !important}
   .pre-bar span{animation:none !important;width:100%}
+  .actu-card,.carriere-card{opacity:1 !important}
 }
 </style>
 </head>
@@ -402,7 +486,7 @@ body.is-loading{overflow:hidden}
 
 <header class="site-header" id="header">
   <div class="container header-inner">
-    <a href="#accueil" class="logo" aria-label="CTL Accueil">
+    <a href="#accueil" class="logo" id="siteLogo" aria-label="CTL Accueil">
       <img src="transport/logo.jpg" alt="CTL – Compagnie Tra-Log SARL" class="logo-img">
     </a>
     <nav class="main-nav" id="mainNav">
@@ -559,23 +643,36 @@ body.is-loading{overflow:hidden}
     <div class="section-head reveal">
       <span class="eyebrow">Actualités</span>
       <h2>Nos dernières actualités</h2>
+      <p>Suivez les nouvelles de Compagnie Tra-Log SARL.</p>
     </div>
-    <div class="news-empty reveal">
-      <div class="news-empty-icon">📰</div>
-      <h3>Aucune actualité pour le moment</h3>
-      
+    <div id="actualitesContainer">
+      <div class="news-empty">
+        <div class="news-empty-icon">📰</div>
+        <h3>Chargement des actualités…</h3>
+      </div>
     </div>
   </div>
 </section>
 
-<!-- 6.5 CARRIÈRE — section vide, contenu à définir avec le client -->
 <section class="section section--soft" id="carriere">
   <div class="container">
     <div class="section-head reveal">
       <span class="eyebrow">Carrière</span>
-
+      <h2>Rejoignez notre équipe</h2>
+      <p>Découvrez nos offres de carrière, d'emploi et de stage.</p>
     </div>
-    <!-- À COMPLÉTER : offres d'emploi / candidature spontanée / présentation RH -->
+    <div class="carriere-filters" id="carriereFilters">
+      <button data-cfilter="all" class="active" type="button">Toutes les offres</button>
+      <button data-cfilter="carriere" type="button">Offres de carrière</button>
+      <button data-cfilter="emploi" type="button">Offres d'emploi</button>
+      <button data-cfilter="stage" type="button">Offres de stage</button>
+    </div>
+    <div id="carrieresContainer">
+      <div class="news-empty">
+        <div class="news-empty-icon">💼</div>
+        <h3>Chargement des offres…</h3>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -675,8 +772,46 @@ body.is-loading{overflow:hidden}
   <svg viewBox="0 0 24 24"><path d="M20.5 3.5A11 11 0 0 0 3.2 17.3L2 22l4.8-1.2A11 11 0 0 0 20.5 3.5zM12 20a8 8 0 0 1-4.1-1.1l-.3-.2-2.8.7.7-2.7-.2-.3A8 8 0 1 1 12 20zm4.5-6c-.2-.1-1.4-.7-1.6-.8s-.4-.1-.5.1-.6.8-.8 1-.3.2-.5.1a6.5 6.5 0 0 1-3.2-2.8c-.2-.4.2-.4.5-1.2.1-.2 0-.4 0-.5l-.8-1.9c-.2-.5-.4-.4-.5-.4h-.5a1 1 0 0 0-.7.3A3 3 0 0 0 7 10.9a5.3 5.3 0 0 0 1.1 2.8 12 12 0 0 0 4.6 4c2.1.8 2.1.6 2.5.6a2.7 2.7 0 0 0 1.8-1.3 2.2 2.2 0 0 0 .1-1.3c0-.1-.2-.2-.4-.3z"/></svg>
 </a>
 
+<!-- ===== MODAL LOGIN ADMIN ===== -->
+<div class="modal-overlay" id="loginModal" role="dialog" aria-modal="true" aria-labelledby="loginTitle">
+  <div class="modal-card">
+    <button class="modal-close" id="loginClose" aria-label="Fermer">✕</button>
+    <div class="modal-header">
+      <div class="modal-icon">🔐</div>
+      <h3 id="loginTitle">Espace Administration</h3>
+      <p>Compagnie Tra-Log SARL</p>
+    </div>
+    <div class="modal-body">
+      <div class="field">
+        <label for="adminPassword">Mot de passe</label>
+        <input type="password" id="adminPassword" placeholder="••••••••" autocomplete="current-password">
+      </div>
+      <button class="btn btn-primary" id="loginSubmit" type="button">Se connecter</button>
+      <p class="login-error" id="loginError"></p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MODAL DÉTAIL ACTUALITÉ ===== -->
+<div class="modal-overlay" id="actualiteDetailModal" role="dialog" aria-modal="true">
+  <div class="modal-card modal-card--wide">
+    <button class="modal-close" data-close-detail aria-label="Fermer">✕</button>
+    <div class="detail-content"></div>
+  </div>
+</div>
+
+<!-- ===== MODAL DÉTAIL CARRIÈRE ===== -->
+<div class="modal-overlay" id="carriereDetailModal" role="dialog" aria-modal="true">
+  <div class="modal-card modal-card--wide">
+    <button class="modal-close" data-close-detail aria-label="Fermer">✕</button>
+    <div class="detail-content"></div>
+  </div>
+</div>
+
+<script src="https://unpkg.com/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', () => {
+  // ============ HEADER / HERO / NAV ============
   const header = document.getElementById('header');
   const bar = document.getElementById('progress');
   const hero = document.querySelector('.hero');
@@ -834,28 +969,134 @@ document.addEventListener('DOMContentLoaded', () => {
   });
   document.querySelectorAll('[data-wa]').forEach(btn => btn.addEventListener('click', () => {
     const form = btn.closest('form');
-
-    /* Vérifie les champs obligatoires (nom, email, message) avant d'ouvrir WhatsApp */
     if (form && !form.checkValidity()) {
       form.reportValidity();
       return;
     }
-
     const lines = form ? collect(form) : [];
     const msg = lines.length ? 'Bonjour CTL,\n' + lines.join('\n') : 'Bonjour CTL, je vous contacte depuis le site.';
     window.open('https://wa.me/22676853514?text=' + encodeURIComponent(msg), '_blank');
   }));
 
   document.querySelectorAll('[data-year]').forEach(el => el.textContent = new Date().getFullYear());
-});
 
-window.addEventListener('load', () => setTimeout(() => {
-  const pre = document.getElementById('preloader');
-  if (pre && !pre.classList.contains('done')) {
-    pre.classList.add('done');
-    document.body.classList.remove('is-loading');
+  // ============ SUPABASE + CONTENU DYNAMIQUE ============
+  const SUPABASE_URL = "https://otdiywrvzappbmjfkkyi.supabase.co";
+  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im90ZGl5d3J2emFwcGJtamZra3lpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk2MTQyMDcsImV4cCI6MjA4NTE5MDIwN30.O5gHqJF1SCvpu19Z0OFHhQsT_ZmeIFbuEu-bpBZXXtY";
+  const ADMIN_PASSWORD = "tralog2026";
+  const SESSION_KEY = "tralog_admin";
+  const CARRIERE_LABELS = { carriere: "Offre de carrière", emploi: "Offre d'emploi", stage: "Offre de stage" };
+
+  let db = null;
+  try {
+    if (window.supabase && window.supabase.createClient) {
+      db = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    } else {
+      console.error('Supabase SDK non chargé');
+    }
+  } catch (e) {
+    console.error('Init Supabase échouée:', e);
   }
-}, 2500));
-</script>
-</body>
-</html>
+
+  const escapeHTML = (s) => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+  let ACTUALITES = [];
+  let CARRIERES = [];
+  let carriereFilter = 'all';
+
+  async function loadDynamicContent(){
+    if (!db) {
+      renderActualites();
+      renderCarrieres();
+      return;
+    }
+    try {
+      const [a, c] = await Promise.all([
+        db.from('actualites').select('*').eq('published', true).order('created_at', { ascending: false }),
+        db.from('carrieres').select('*').eq('published', true).order('created_at', { ascending: false })
+      ]);
+      if (a.error) console.error('Erreur actualités:', a.error);
+      else ACTUALITES = a.data || [];
+      if (c.error) console.error('Erreur carrières:', c.error);
+      else CARRIERES = c.data || [];
+    } catch (e) {
+      console.error('Erreur chargement dynamique:', e);
+    }
+    renderActualites();
+    renderCarrieres();
+  }
+
+  function renderActualites(){
+    const container = document.getElementById('actualitesContainer');
+    if (!container) return;
+    if (ACTUALITES.length === 0) {
+      container.innerHTML = `
+        <div class="news-empty">
+          <div class="news-empty-icon">📰</div>
+          <h3>Aucune actualité pour le moment</h3>
+          <p>Revenez bientôt pour découvrir nos dernières nouvelles.</p>
+        </div>`;
+      return;
+    }
+    container.innerHTML = `<div class="actu-grid">${ACTUALITES.map((a, i) => `
+      <article class="actu-card" data-actualite-id="${a.id}" style="animation-delay:${(i * .08).toFixed(2)}s">
+        <div class="actu-card__img">
+          <img src="${escapeHTML(a.img)}" alt="${escapeHTML(a.title)}" loading="lazy" onerror="this.style.opacity=.3">
+        </div>
+        <div class="actu-card__body">
+          ${a.category ? `<span class="actu-card__cat">${escapeHTML(a.category)}</span>` : ''}
+          <h3>${escapeHTML(a.title)}</h3>
+          ${a.excerpt ? `<p>${escapeHTML(a.excerpt)}</p>` : ''}
+          <div class="actu-card__meta">
+            ${a.date_publication ? `<span>📅 ${escapeHTML(a.date_publication)}</span>` : ''}
+            ${a.author ? `<span>✍ ${escapeHTML(a.author)}</span>` : ''}
+          </div>
+          <span class="actu-card__more">Lire la suite →</span>
+        </div>
+      </article>
+    `).join('')}</div>`;
+  }
+
+  function renderCarrieres(){
+    const container = document.getElementById('carrieresContainer');
+    if (!container) return;
+    const list = carriereFilter === 'all' ? CARRIERES : CARRIERES.filter(c => c.type === carriereFilter);
+    if (list.length === 0) {
+      container.innerHTML = `
+        <div class="news-empty">
+          <div class="news-empty-icon">💼</div>
+          <h3>Aucune offre ${carriereFilter === 'all' ? 'disponible' : 'pour ce filtre'}</h3>
+          <p>Revenez bientôt pour découvrir nos nouvelles opportunités.</p>
+        </div>`;
+      return;
+    }
+    container.innerHTML = `<div class="carriere-grid">${list.map((c, i) => `
+      <article class="carriere-card" data-carriere-id="${c.id}" style="animation-delay:${(i * .08).toFixed(2)}s">
+        <div class="carriere-card__head">
+          <span class="carriere-card__badge carriere-card__badge--${c.type}">${escapeHTML(CARRIERE_LABELS[c.type] || c.type)}</span>
+          ${c.type_contrat ? `<span class="carriere-card__contrat">${escapeHTML(c.type_contrat)}</span>` : ''}
+        </div>
+        <h3>${escapeHTML(c.title)}</h3>
+        <p>${escapeHTML((c.description || '').slice(0, 160))}${(c.description || '').length > 160 ? '…' : ''}</p>
+        <div class="carriere-card__meta">
+          ${c.location ? `<span>📍 ${escapeHTML(c.location)}</span>` : ''}
+          ${c.department ? `<span>🏢 ${escapeHTML(c.department)}</span>` : ''}
+          ${c.date_limite ? `<span>⏰ ${escapeHTML(c.date_limite)}</span>` : ''}
+        </div>
+        <span class="carriere-card__more">Voir l'offre →</span>
+      </article>
+    `).join('')}</div>`;
+  }
+
+  function openActualiteModal(id){
+    const a = ACTUALITES.find(x => x.id === Number(id));
+    if (!a) return;
+    const modal = document.getElementById('actualiteDetailModal');
+    const content = modal.querySelector('.detail-content');
+    content.innerHTML = `
+      <img src="${escapeHTML(a.img)}" alt="${escapeHTML(a.title)}" class="detail-img" onerror="this.style.opacity=.3">
+      <div class="detail-meta">
+        ${a.category ? `<span class="detail-cat">${escapeHTML(a.category)}</span>` : ''}
+        ${a.date_publication ? `<span>📅 ${escapeHTML(a.date_publication)}</span>` : ''}
+        ${a.author ? `<span>✍ ${escapeHTML(a.author)}</span>` : ''}
+     
