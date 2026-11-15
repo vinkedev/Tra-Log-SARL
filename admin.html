@@ -139,19 +139,66 @@ tbody tr:hover{background:rgba(26,167,236,.03)}
 .empty-state{text-align:center;padding:60px 20px;color:var(--muted)}
 .empty-state h3{color:var(--navy);margin-bottom:8px}
 
+/* ===== RESPONSIVE TABLETTE (≤900px) ===== */
 @media(max-width:900px){
   .layout{grid-template-columns:1fr}
-  .sidebar{position:static;height:auto;flex-direction:row;align-items:center;padding:12px 16px;gap:16px;overflow-x:auto;overflow-y:hidden}
-  .sidebar__brand{padding:0;border:none;margin:0;flex-shrink:0}
-  .sidebar__brand h2{font-size:.9rem}
-  .sidebar__brand img{width:36px;height:36px}
-  .side-nav{flex-direction:row;padding:0;flex:0;overflow-x:auto}
-  .side-nav button{padding:8px 14px;white-space:nowrap}
-  .sidebar__footer{padding:0;border:none;flex-direction:row}
-  .main{padding:20px 16px}
+  .main{padding:18px 14px;min-width:0}
   .view__header h1{font-size:1.4rem}
-  .modal__content{max-height:96vh}
-  .form-row{grid-template-columns:1fr}
+
+  /* Barre du haut : logo + boutons, puis 3 onglets en dessous */
+  .sidebar{position:sticky;top:0;z-index:50;height:auto;flex-direction:row;flex-wrap:wrap;align-items:center;padding:10px 14px;gap:10px;overflow:visible}
+  .sidebar__brand{order:1;flex:1;padding:0;margin:0;border:none}
+  .sidebar__brand img{width:34px;height:34px}
+  .sidebar__brand h2{font-size:.9rem}
+  .sidebar__footer{order:2;padding:0;border:none;flex-direction:row;gap:6px}
+  .sidebar__footer a,.sidebar__footer button{font-size:0;gap:0;padding:9px 11px}
+  .sidebar__footer .ico{font-size:1.05rem}
+  .side-nav{order:3;flex:0 0 100%;flex-direction:row;padding:0;gap:6px;overflow:visible}
+  .side-nav button{flex:1;flex-direction:column;justify-content:center;gap:2px;padding:8px 4px;font-size:.72rem;text-align:center;white-space:nowrap}
+}
+
+/* ===== RESPONSIVE MOBILE (≤700px) ===== */
+@media(max-width:700px){
+  .view__header .btn{width:100%}
+  .stats-grid{grid-template-columns:repeat(2,1fr);gap:12px}
+  .stat-card{padding:16px}
+  .stat-card__value{font-size:1.7rem}
+  .stats-grid .stat-card:last-child{grid-column:1/-1}
+
+  .filter-tabs,#carrieresFilter{flex-wrap:nowrap;overflow-x:auto;padding-bottom:6px}
+  .filter-tabs button{white-space:nowrap;flex-shrink:0}
+
+  /* Tableaux -> cartes */
+  .table-wrapper{background:none;box-shadow:none;overflow:visible}
+  table,tbody,tr,td{display:block;width:100%}
+  thead{display:none}
+  tbody tr{background:#fff;border-radius:12px;box-shadow:var(--shadow);margin-bottom:14px;padding:10px 14px}
+  tbody tr:hover{background:#fff}
+  td{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:9px 0;border-bottom:1px solid var(--line);text-align:right}
+  td:last-child{border-bottom:none}
+  td::before{content:attr(data-label);flex-shrink:0;font-size:.7rem;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);text-align:left}
+  td[colspan]:not(.loader)::before{content:none}
+  td[colspan]{justify-content:center}
+  td[data-label="Image"]{display:block;padding:0 0 10px}
+  td[data-label="Image"]::before{content:none}
+  td[data-label="Image"] .table-thumb{width:100%;height:150px}
+  td[data-label="Actions"]::before{content:none}
+  .table-actions{width:100%;gap:10px}
+  .table-actions .btn{flex:1;padding:11px}
+
+  /* Modales en bas d'écran */
+  .modal{padding:0;align-items:flex-end}
+  .modal__content{max-width:none!important;max-height:94vh;border-radius:16px 16px 0 0}
+  .modal__header{padding:18px 18px 12px}
+  .modal__body{padding:16px 18px}
+  .modal__footer{position:sticky;bottom:0;background:#fff;padding:12px 18px 18px}
+  .modal__footer .btn{flex:1}
+
+  /* 16px évite le zoom automatique d'iOS dans les champs */
+  .field input,.field select,.field textarea{font-size:16px}
+
+  .toasts{left:14px;right:14px;bottom:14px}
+  .toast{min-width:0}
 }
 </style>
 </head>
@@ -373,6 +420,19 @@ function toast(msg, type='success'){
 }
 
 const carriereLabels = { carriere:'Offre de carrière', emploi:"Offre d'emploi", stage:'Offre de stage' };
+
+// ===== ÉTIQUETTES CELLULES (mobile) =====
+function labelCells(){
+  $$('table').forEach(t => {
+    const heads = [...t.querySelectorAll('thead th')].map(th => th.textContent.trim());
+    t.querySelectorAll('tbody tr').forEach(tr => {
+      [...tr.children].forEach((td, i) => {
+        if (td.colSpan > 1 || !heads[i]) return;
+        td.setAttribute('data-label', heads[i]);
+      });
+    });
+  });
+}
 
 // ===== DATA =====
 async function loadData(){
@@ -691,6 +751,8 @@ function bindEvents(){
 // ===== INIT =====
 async function initAdmin(){
   bindEvents();
+  // Relance l'étiquetage à chaque re-rendu (filtre carrière, ajout/suppression, etc.)
+  new MutationObserver(labelCells).observe($('.main'), { childList:true, subtree:true });
   await loadData();
   renderAll();
 }
