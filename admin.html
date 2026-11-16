@@ -163,15 +163,16 @@ tbody tr:hover{background:rgba(26,167,236,.03)}
   .sidebar__footer a,.sidebar__footer button{font-size:0;gap:0;padding:9px 11px}
   .sidebar__footer .ico{font-size:1.05rem}
   .side-nav{order:3;flex:0 0 100%;flex-direction:row;padding:0;gap:6px;overflow:visible}
-  .side-nav button{flex:1;flex-direction:column;justify-content:center;gap:2px;padding:8px 4px;font-size:.72rem;text-align:center;white-space:nowrap}
+  .side-nav button{flex:1;flex-direction:column;justify-content:center;gap:2px;padding:8px 4px;font-size:.72rem;text-align:center;white-space:normal;line-height:1.15;word-break:break-word}
 }
 
 @media(max-width:700px){
   .view__header .btn{width:100%}
   .stats-grid{grid-template-columns:repeat(2,1fr);gap:12px}
   .stat-card{padding:16px}
+  .stat-card__label{font-size:.7rem}
   .stat-card__value{font-size:1.7rem}
-  .stats-grid .stat-card:last-child{grid-column:1/-1}
+  .stat-card__hint{font-size:.74rem}
   .filter-tabs,#carrieresFilter{flex-wrap:nowrap;overflow-x:auto;padding-bottom:6px}
   .filter-tabs button{white-space:nowrap;flex-shrink:0}
   .table-wrapper{background:none;box-shadow:none;overflow:visible}
@@ -179,26 +180,34 @@ tbody tr:hover{background:rgba(26,167,236,.03)}
   thead{display:none}
   tbody tr{background:#fff;border-radius:12px;box-shadow:var(--shadow);margin-bottom:14px;padding:10px 14px}
   tbody tr:hover{background:#fff}
-  td{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:9px 0;border-bottom:1px solid var(--line);text-align:right}
+  td{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:9px 0;border-bottom:1px solid var(--line);text-align:right;word-break:break-word;overflow-wrap:anywhere}
   td:last-child{border-bottom:none}
   td::before{content:attr(data-label);flex-shrink:0;font-size:.7rem;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);text-align:left}
   td[colspan]:not(.loader)::before{content:none}
   td[colspan]{justify-content:center}
   td[data-label="Image"]{display:block;padding:0 0 10px}
   td[data-label="Image"]::before{content:none}
-  td[data-label="Image"] .table-thumb{width:100%;height:150px}
+  td[data-label="Image"] .table-thumb{width:100%;height:auto;aspect-ratio:16/9;min-height:60px}
   td[data-label="Actions"]::before{content:none}
   .table-actions{width:100%;gap:10px}
   .table-actions .btn{flex:1;padding:11px}
+  .form-row{grid-template-columns:1fr}
   .modal{padding:0;align-items:flex-end}
   .modal__content{max-width:none!important;max-height:94vh;border-radius:16px 16px 0 0}
   .modal__header{padding:18px 18px 12px}
-  .modal__body{padding:16px 18px}
+  .modal__body{padding:16px 18px;gap:14px}
   .modal__footer{position:sticky;bottom:0;background:#fff;padding:12px 18px 18px}
   .modal__footer .btn{flex:1}
   .field input,.field select,.field textarea{font-size:16px}
+  .dos-row input[type=text]{min-width:0;font-size:16px}
+  .dos-row select{font-size:16px}
   .toasts{left:14px;right:14px;bottom:14px}
   .toast{min-width:0}
+}
+
+@media(max-width:400px){
+  .side-nav button{font-size:.64rem;padding:8px 2px}
+  .stat-card__value{font-size:1.5rem}
 }
 </style>
 </head>
@@ -260,8 +269,8 @@ tbody tr:hover{background:rgba(26,167,236,.03)}
       </div>
       <div class="table-wrapper">
         <table>
-          <thead><tr><th>Image</th><th>Titre</th><th>Date</th><th>Auteur</th><th>Publié</th><th>Actions</th></tr></thead>
-          <tbody id="actualitesTbody"><tr><td colspan="6" class="loader"></td></tr></tbody>
+          <thead><tr><th>Image</th><th>Titre</th><th>Date</th><th>Publié</th><th>Actions</th></tr></thead>
+          <tbody id="actualitesTbody"><tr><td colspan="5" class="loader"></td></tr></tbody>
         </table>
       </div>
     </section>
@@ -304,20 +313,16 @@ tbody tr:hover{background:rgba(26,167,236,.03)}
     <form id="actualiteForm">
       <div class="modal__body">
         <div class="field"><label>Titre *</label><input type="text" name="title" required></div>
-        <div class="field"><label>Résumé (excerpt)</label><textarea name="excerpt" style="min-height:60px" placeholder="Bref résumé affiché dans la liste"></textarea></div>
         <div class="field"><label>Contenu complet *</label><textarea name="content" required style="min-height:160px" placeholder="Utilisez des sauts de ligne pour séparer les paragraphes"></textarea></div>
-        <div class="form-row">
-          <div class="field">
-            <label>Image *</label>
-            <input type="file" name="img_file" accept="image/*">
-            <input type="hidden" name="img">
-            <div id="actualiteImgPreview" style="margin-top:8px"></div>
-            <small>JPG, PNG ou WebP — max 5 Mo</small>
-          </div>
-          <div class="field"><label>Catégorie</label><input type="text" name="category" placeholder="Ex : Annonce, Événement..."></div>
+        <div class="field">
+          <label>Image *</label>
+          <input type="file" name="img_file" accept="image/*">
+          <input type="hidden" name="img">
+          <div id="actualiteImgPreview" style="margin-top:8px"></div>
+          <small>JPG, PNG ou WebP — max 5 Mo</small>
         </div>
         <div class="form-row">
-          <div class="field"><label>Auteur</label><input type="text" name="author"></div>
+          <div class="field"><label>Catégorie</label><input type="text" name="category" placeholder="Ex : Annonce, Événement..."></div>
           <div class="field"><label>Date de publication</label><input type="text" name="date_publication" placeholder="Ex : 15 Janvier 2026"></div>
         </div>
         <div class="checkbox-field">
@@ -500,15 +505,25 @@ async function loadData(){
 }
 
 function renderDashboard(){
-  const publishedA = ACTUALITES.filter(a => a.published).length;
-  const publishedC = CARRIERES.filter(c => c.published).length;
-  const byType = { carriere:0, emploi:0, stage:0 };
-  CARRIERES.forEach(c => { if(byType[c.type] !== undefined) byType[c.type]++; });
+  // 4 stats séparées : actualités, carrière, emploi, stage
+  const stats = {
+    actus:    { total: ACTUALITES.length, published: ACTUALITES.filter(x => x.published).length },
+    carriere: { total: 0, published: 0 },
+    emploi:   { total: 0, published: 0 },
+    stage:    { total: 0, published: 0 }
+  };
+  CARRIERES.forEach(c => {
+    if(stats[c.type]){
+      stats[c.type].total++;
+      if(c.published) stats[c.type].published++;
+    }
+  });
 
   $('#statsGrid').innerHTML = `
-    <div class="stat-card"><div class="stat-card__label">Actualités</div><div class="stat-card__value">${ACTUALITES.length}</div><div class="stat-card__hint">${publishedA} publiées</div></div>
-    <div class="stat-card"><div class="stat-card__label">Offres carrière</div><div class="stat-card__value">${CARRIERES.length}</div><div class="stat-card__hint">${publishedC} publiées</div></div>
-    <div class="stat-card"><div class="stat-card__label">Offres d'emploi</div><div class="stat-card__value">${byType.emploi}</div><div class="stat-card__hint">${byType.carriere} carrière · ${byType.stage} stage</div></div>
+    <div class="stat-card"><div class="stat-card__label">Actualités</div><div class="stat-card__value">${stats.actus.total}</div><div class="stat-card__hint">${stats.actus.published} publiée${stats.actus.published > 1 ? 's' : ''}</div></div>
+    <div class="stat-card"><div class="stat-card__label">Offres de carrière</div><div class="stat-card__value">${stats.carriere.total}</div><div class="stat-card__hint">${stats.carriere.published} publiée${stats.carriere.published > 1 ? 's' : ''}</div></div>
+    <div class="stat-card"><div class="stat-card__label">Offres d'emploi</div><div class="stat-card__value">${stats.emploi.total}</div><div class="stat-card__hint">${stats.emploi.published} publiée${stats.emploi.published > 1 ? 's' : ''}</div></div>
+    <div class="stat-card"><div class="stat-card__label">Offres de stage</div><div class="stat-card__value">${stats.stage.total}</div><div class="stat-card__hint">${stats.stage.published} publiée${stats.stage.published > 1 ? 's' : ''}</div></div>
   `;
 
   const recentA = ACTUALITES.slice(0,5);
@@ -537,7 +552,7 @@ function renderDashboard(){
 function renderActualites(){
   const tbody = $('#actualitesTbody');
   if(ACTUALITES.length === 0){
-    tbody.innerHTML = '<tr><td colspan="6" class="empty-state"><h3>Aucune actualité</h3><p>Cliquez sur "+ Nouvelle actualité".</p></td></tr>';
+    tbody.innerHTML = '<tr><td colspan="5" class="empty-state"><h3>Aucune actualité</h3><p>Cliquez sur "+ Nouvelle actualité".</p></td></tr>';
     return;
   }
   tbody.innerHTML = ACTUALITES.map(a => `
@@ -545,7 +560,6 @@ function renderActualites(){
       <td><img src="${escapeHTML(a.img)}" class="table-thumb" alt="" onerror="this.style.opacity=0.3"></td>
       <td class="table-title">${escapeHTML(a.title)}</td>
       <td>${escapeHTML(a.date_publication || '—')}</td>
-      <td>${escapeHTML(a.author || '—')}</td>
       <td><span class="badge ${a.published ? 'badge--published' : 'badge--draft'}">${a.published ? 'Publié' : 'Brouillon'}</span></td>
       <td><div class="table-actions">
         <button class="btn btn--ghost btn--sm" data-edit-actualite="${a.id}">✏️</button>
@@ -685,11 +699,9 @@ function openActualiteModal(actualite = null){
   const prev = document.getElementById('actualiteImgPreview');
   if(actualite){
     form.elements.title.value = actualite.title || '';
-    form.elements.excerpt.value = actualite.excerpt || '';
     form.elements.content.value = actualite.content || '';
     form.elements.img.value = actualite.img || '';
     form.elements.category.value = actualite.category || '';
-    form.elements.author.value = actualite.author || '';
     form.elements.date_publication.value = actualite.date_publication || '';
     $('#actualitePublie').checked = actualite.published !== false;
     prev.innerHTML = actualite.img
@@ -723,11 +735,9 @@ async function submitActualite(e){
 
     const data = {
       title: form.elements.title.value.trim(),
-      excerpt: form.elements.excerpt.value.trim() || null,
       content: form.elements.content.value.trim(),
       img: imgUrl,
       category: form.elements.category.value.trim() || null,
-      author: form.elements.author.value.trim() || null,
       date_publication: form.elements.date_publication.value.trim() || null,
       published: $('#actualitePublie').checked
     };
