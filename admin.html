@@ -140,7 +140,6 @@ tbody tr:hover{background:rgba(26,167,236,.03)}
 .empty-state{text-align:center;padding:60px 20px;color:var(--muted)}
 .empty-state h3{color:var(--navy);margin-bottom:8px}
 
-/* ===== RESPONSIVE TABLETTE (≤900px) ===== */
 @media(max-width:900px){
   .layout{grid-template-columns:1fr}
   .main{padding:18px 14px;min-width:0}
@@ -156,7 +155,6 @@ tbody tr:hover{background:rgba(26,167,236,.03)}
   .side-nav button{flex:1;flex-direction:column;justify-content:center;gap:2px;padding:8px 4px;font-size:.72rem;text-align:center;white-space:nowrap}
 }
 
-/* ===== RESPONSIVE MOBILE (≤700px) ===== */
 @media(max-width:700px){
   .view__header .btn{width:100%}
   .stats-grid{grid-template-columns:repeat(2,1fr);gap:12px}
@@ -401,6 +399,12 @@ const SUPABASE_URL = "https://otdiywrvzappbmjfkkyi.supabase.co";
 const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im90ZGl5d3J2emFwcGJtamZra3lpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk2MTQyMDcsImV4cCI6MjA4NTE5MDIwN30.O5gHqJF1SCvpu19Z0OFHhQsT_ZmeIFbuEu-bpBZXXtY";
 const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+// ===== INVALIDATION CACHE SITE PUBLIC =====
+// Supprime le cache du site (index.html) pour que la prochaine visite affiche les données fraîches
+function invalidateSiteCache(){
+  try { localStorage.removeItem('ctl_cache_v1'); } catch(e) {}
+}
+
 // ===== UPLOAD IMAGE VERS SUPABASE STORAGE =====
 async function uploadImage(file, folder){
   if(!file) return null;
@@ -444,7 +448,6 @@ function toast(msg, type='success'){
 
 const carriereLabels = { carriere:'Offre de carrière', emploi:"Offre d'emploi", stage:'Offre de stage' };
 
-// ===== ÉTIQUETTES CELLULES (mobile) =====
 function labelCells(){
   $$('table').forEach(t => {
     const heads = [...t.querySelectorAll('thead th')].map(th => th.textContent.trim());
@@ -457,7 +460,6 @@ function labelCells(){
   });
 }
 
-// ===== DATA =====
 async function loadData(){
   const [a,c] = await Promise.all([
     db.from('actualites').select('*').order('created_at',{ascending:false}),
@@ -467,7 +469,6 @@ async function loadData(){
   if(c.error){ console.error(c.error); toast('Erreur carrières : '+c.error.message,'error'); } else CARRIERES = c.data || [];
 }
 
-// ===== RENDER DASHBOARD =====
 function renderDashboard(){
   const publishedA = ACTUALITES.filter(a => a.published).length;
   const publishedC = CARRIERES.filter(c => c.published).length;
@@ -503,7 +504,6 @@ function renderDashboard(){
       </tr>`).join('');
 }
 
-// ===== RENDER ACTUALITÉS =====
 function renderActualites(){
   const tbody = $('#actualitesTbody');
   if(ACTUALITES.length === 0){
@@ -524,7 +524,6 @@ function renderActualites(){
     </tr>`).join('');
 }
 
-// ===== RENDER CARRIÈRES =====
 function renderCarrieres(){
   const tbody = $('#carrieresTbody');
   const list = currentCarriereFilter === 'all' ? CARRIERES : CARRIERES.filter(c => c.type === currentCarriereFilter);
@@ -547,11 +546,9 @@ function renderCarrieres(){
     </tr>`).join('');
 }
 
-// ===== MODALS =====
 function openModal(id){ document.getElementById(id).classList.add('open'); document.body.style.overflow='hidden'; }
 function closeModal(id){ document.getElementById(id).classList.remove('open'); document.body.style.overflow=''; }
 
-// ===== ARRAY FIELDS =====
 const arrayValues = { missions:[], requirements:[] };
 
 function renderArrayField(type){
@@ -587,7 +584,6 @@ document.addEventListener('input', e => {
   }
 });
 
-// ===== APERÇU IMAGE À LA SÉLECTION =====
 document.addEventListener('change', e => {
   if(e.target.name !== 'img_file') return;
   const form = e.target.closest('form');
@@ -598,7 +594,6 @@ document.addEventListener('change', e => {
   preview.innerHTML = `<img src="${URL.createObjectURL(file)}" style="width:100%;max-width:220px;border-radius:10px;border:1px solid var(--line)">`;
 });
 
-// ===== ACTUALITÉ FORM =====
 function openActualiteModal(actualite = null){
   editingActualiteId = actualite ? actualite.id : null;
   $('#actualiteModalTitle').textContent = actualite ? 'Modifier l\'actualité' : 'Nouvelle actualité';
@@ -661,6 +656,7 @@ async function submitActualite(e){
     if(result.error) throw result.error;
 
     toast(editingActualiteId ? 'Actualité modifiée' : 'Actualité créée');
+    invalidateSiteCache();   // 👈 vide le cache du site public
     closeModal('actualiteModal');
     await loadData(); renderAll();
   } catch(err){
@@ -670,7 +666,6 @@ async function submitActualite(e){
   }
 }
 
-// ===== CARRIÈRE FORM =====
 function openCarriereModal(carriere = null){
   editingCarriereId = carriere ? carriere.id : null;
   $('#carriereModalTitle').textContent = carriere ? 'Modifier l\'offre' : 'Nouvelle offre';
@@ -737,6 +732,7 @@ async function submitCarriere(e){
     if(result.error) throw result.error;
 
     toast(editingCarriereId ? 'Offre modifiée' : 'Offre créée');
+    invalidateSiteCache();   // 👈 vide le cache du site public
     closeModal('carriereModal');
     await loadData(); renderAll();
   } catch(err){
@@ -746,7 +742,6 @@ async function submitCarriere(e){
   }
 }
 
-// ===== DELETE =====
 function openConfirmDelete(type, id, title){
   pendingDelete = { type, id, title };
   $('#confirmMessage').textContent = `Voulez-vous vraiment supprimer "${title}" ?`;
@@ -761,15 +756,14 @@ async function confirmDelete(){
   btn.disabled = false; btn.textContent = 'Supprimer';
   if(result.error){ toast('Erreur : '+result.error.message,'error'); return; }
   toast('Élément supprimé');
+  invalidateSiteCache();   // 👈 vide le cache du site public
   closeModal('confirmModal');
   pendingDelete = null;
   await loadData(); renderAll();
 }
 
-// ===== RENDER ALL =====
 function renderAll(){ renderDashboard(); renderActualites(); renderCarrieres(); }
 
-// ===== EVENTS =====
 function bindEvents(){
   $$('.side-nav button').forEach(btn => {
     btn.addEventListener('click', () => {
@@ -831,7 +825,6 @@ function bindEvents(){
   $('#confirmDeleteBtn').addEventListener('click', confirmDelete);
 }
 
-// ===== INIT =====
 async function initAdmin(){
   bindEvents();
   new MutationObserver(labelCells).observe($('.main'), { childList:true, subtree:true });
