@@ -243,6 +243,24 @@ body.is-loading{overflow:hidden}
 .login-error{color:var(--red);font-size:.82rem;text-align:center;min-height:18px;margin:0}
 .modal-body .btn{width:100%}
 
+/* Login : champ mot de passe avec bouton œil */
+.pwd-field{position:relative}
+.modal-body .field .pwd-field input{padding-right:52px}
+.pwd-toggle{
+  position:absolute;right:6px;top:50%;transform:translateY(-50%);
+  width:40px;height:40px;border:0;background:transparent;cursor:pointer;
+  display:grid;place-items:center;border-radius:8px;color:var(--muted);
+  transition:background .2s,color .2s;font-family:inherit;
+  -webkit-tap-highlight-color:transparent;
+}
+.pwd-toggle:hover{background:var(--bg-soft);color:var(--cyan-dark)}
+.pwd-toggle:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
+.pwd-toggle:active{background:var(--bg-soft)}
+.pwd-toggle svg{display:block;pointer-events:none}
+.pwd-toggle .eye-off{display:none}
+.pwd-toggle[aria-pressed="true"] .eye-on{display:none}
+.pwd-toggle[aria-pressed="true"] .eye-off{display:block}
+
 .detail-content{padding:32px 32px 28px}
 .detail-img{width:100%;border-radius:12px;margin-bottom:20px;aspect-ratio:16/10;object-fit:cover;background:var(--bg-soft)}
 .detail-meta{display:flex;flex-wrap:wrap;gap:14px;font-size:.82rem;color:var(--muted);margin-bottom:16px;align-items:center}
@@ -261,6 +279,7 @@ body.is-loading{overflow:hidden}
 .detail-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px;padding-top:20px;border-top:1px solid var(--line)}
 .detail-actions .btn{flex:1;min-width:160px}
 
+/* Formulaires candidature (textarea/select/file) */
 .modal-body .field textarea,.modal-body .field select{font:inherit;padding:12px 14px;border:1.5px solid var(--line);border-radius:10px;background:#fff;color:var(--ink);font-family:inherit;transition:.2s}
 .modal-body .field textarea{min-height:100px;resize:vertical}
 .modal-body .field textarea:focus,.modal-body .field select:focus{outline:none;border-color:var(--cyan);box-shadow:0 0 0 4px rgba(26,167,236,.15)}
@@ -389,6 +408,12 @@ body.is-loading{overflow:hidden}
   .detail-info-grid{grid-template-columns:1fr}
   .modal-header{padding:28px 20px 16px}
   .modal-body{padding:20px}
+
+  /* Login mobile : anti-zoom iOS + cibles tactiles */
+  #loginModal .modal-body .field input{font-size:16px;padding:14px 52px 14px 14px}
+  #loginModal .modal-body .field label{font-size:.9rem}
+  #loginModal .modal-body .field .pwd-field input{padding-right:52px}
+  #loginModal .modal-body .btn{padding:14px 20px;font-size:1rem}
 }
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
@@ -697,18 +722,35 @@ body.is-loading{overflow:hidden}
 </a>
 
 <!-- MODAL LOGIN ADMIN -->
-<div class="modal-overlay" id="loginModal" role="dialog" aria-modal="true">
+<div class="modal-overlay" id="loginModal" role="dialog" aria-modal="true" aria-labelledby="loginTitle">
   <div class="modal-card">
     <button class="modal-close" id="loginClose" aria-label="Fermer">✕</button>
     <div class="modal-header">
       <div class="modal-icon">🔐</div>
-      <h3>Espace Administration</h3>
+      <h3 id="loginTitle">Espace Administration</h3>
       <p>Compagnie Tra-Log SARL</p>
     </div>
     <div class="modal-body">
       <div class="field">
         <label for="adminPassword">Mot de passe</label>
-        <input type="password" id="adminPassword" placeholder="••••••••" autocomplete="current-password">
+        <div class="pwd-field">
+          <input type="password" id="adminPassword" placeholder="••••••••"
+                 autocomplete="current-password" spellcheck="false"
+                 autocapitalize="none" autocorrect="off" inputmode="text">
+          <button type="button" class="pwd-toggle" id="pwdToggle"
+                  aria-label="Afficher le mot de passe" aria-pressed="false">
+            <svg class="eye-on" viewBox="0 0 24 24" width="20" height="20" fill="none"
+                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+              <circle cx="12" cy="12" r="3"/>
+            </svg>
+            <svg class="eye-off" viewBox="0 0 24 24" width="20" height="20" fill="none"
+                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/>
+              <line x1="1" y1="1" x2="23" y2="23"/>
+            </svg>
+          </button>
+        </div>
       </div>
       <button class="btn btn-primary" id="loginSubmit" type="button">Se connecter</button>
       <p class="login-error" id="loginError"></p>
@@ -761,7 +803,7 @@ body.is-loading{overflow:hidden}
   const $$ = (s, ctx) => Array.from((ctx || document).querySelectorAll(s));
   const escapeHTML = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
-  // ===== ACCÈS DONNÉES : REST direct (sans SDK Supabase) =====
+  // ===== ACCÈS DONNÉES : REST direct =====
   const REST = SUPABASE_URL + '/rest/v1/';
   const HEADERS = { apikey: SUPABASE_ANON_KEY, Authorization: 'Bearer ' + SUPABASE_ANON_KEY };
 
@@ -968,7 +1010,7 @@ body.is-loading{overflow:hidden}
 
   $$('[data-year]').forEach(el => el.textContent = new Date().getFullYear());
 
-  // ===== ACTUALITÉS & CARRIÈRES (fetch REST + cache) =====
+  // ===== ACTUALITÉS & CARRIÈRES =====
   let ACTUALITES = [];
   let CARRIERES = [];
   let carriereFilter = 'all';
@@ -984,7 +1026,9 @@ body.is-loading{overflow:hidden}
       </div>`;
       return;
     }
-    container.innerHTML = '<div class="actu-grid">' + ACTUALITES.map((a, i) => `
+    container.innerHTML = '<div class="actu-grid">' + ACTUALITES.map((a, i) => {
+      const preview = (a.content || '').slice(0, 140);
+      return `
       <article class="actu-card" data-actualite-id="${a.id}" style="animation-delay:${(i * 0.08).toFixed(2)}s">
         <div class="actu-card__img">
           <img src="${escapeHTML(a.img)}" alt="${escapeHTML(a.title)}" loading="lazy" onerror="this.style.opacity=.3">
@@ -992,15 +1036,14 @@ body.is-loading{overflow:hidden}
         <div class="actu-card__body">
           ${a.category ? `<span class="actu-card__cat">${escapeHTML(a.category)}</span>` : ''}
           <h3>${escapeHTML(a.title)}</h3>
-          ${a.excerpt ? `<p>${escapeHTML(a.excerpt)}</p>` : ''}
+          ${preview ? `<p>${escapeHTML(preview)}${(a.content || '').length > 140 ? '…' : ''}</p>` : ''}
           <div class="actu-card__meta">
             ${a.date_publication ? `<span>📅 ${escapeHTML(a.date_publication)}</span>` : ''}
-            ${a.author ? `<span>✍ ${escapeHTML(a.author)}</span>` : ''}
           </div>
           <span class="actu-card__more">Lire la suite →</span>
         </div>
       </article>
-    `).join('') + '</div>';
+    `}).join('') + '</div>';
   }
 
   function renderCarrieres() {
@@ -1036,9 +1079,9 @@ body.is-loading{overflow:hidden}
     `).join('') + '</div>';
   }
 
-  // ===== CACHE AVEC TTL 60 SECONDES =====
+  // ===== CACHE TTL 60 SECONDES =====
   const CACHE_KEY = 'ctl_cache_v1';
-  const CACHE_TTL = 60 * 1000; // 60 secondes
+  const CACHE_TTL = 60 * 1000;
 
   async function loadDynamicContent() {
     let cacheAge = Infinity;
@@ -1062,7 +1105,7 @@ body.is-loading{overflow:hidden}
 
     try {
       const [a, c] = await withTimeout(
-        Promise.all([fetchTable('actualites'), fetchTable('carrieres')]), 10000
+        Promise.all([fetchTable('tralog_actualites'), fetchTable('tralog_carrieres')]), 10000
       );
       ACTUALITES = a;
       CARRIERES = c;
@@ -1101,7 +1144,6 @@ body.is-loading{overflow:hidden}
       <div class="detail-meta">
         ${a.category ? `<span class="detail-cat">${escapeHTML(a.category)}</span>` : ''}
         ${a.date_publication ? `<span>📅 ${escapeHTML(a.date_publication)}</span>` : ''}
-        ${a.author ? `<span>✍ ${escapeHTML(a.author)}</span>` : ''}
       </div>
       <h2>${escapeHTML(a.title)}</h2>
       <div class="detail-body">${(a.content || '').split('\n').filter(p => p.trim()).map(p => `<p>${escapeHTML(p)}</p>`).join('')}</div>
@@ -1117,12 +1159,6 @@ body.is-loading{overflow:hidden}
     if (!c) return;
     const modal = $('#carriereDetailModal');
     const content = $('.detail-content', modal);
-    const waMsg = encodeURIComponent(
-      'Bonjour CTL,\n\nJe souhaite postuler à l\'offre :\n💼 ' + c.title +
-      '\nType : ' + (CARRIERE_LABELS[c.type] || c.type) +
-      '\nRéf : #' + c.id +
-      '\n\nMerci de me recontacter.'
-    );
     content.innerHTML = `
       ${c.img ? `<img src="${escapeHTML(c.img)}" alt="${escapeHTML(c.title)}" class="detail-img" onerror="this.style.display='none'">` : ''}
       <div class="detail-meta">
@@ -1213,7 +1249,7 @@ body.is-loading{overflow:hidden}
           reponses.push({ label: d.label, type: d.type, value: input.value.trim() });
         }
       }
-      const r = await fetch(REST + 'candidatures', {
+      const r = await fetch(REST + 'tralog_candidatures', {
         method: 'POST',
         headers: { ...HEADERS, 'Content-Type': 'application/json', Prefer: 'return=minimal' },
         body: JSON.stringify({
@@ -1279,14 +1315,25 @@ body.is-loading{overflow:hidden}
   function openLogin() {
     if (!loginModal) return;
     if (loginError) loginError.textContent = '';
-    if (adminPassword) adminPassword.value = '';
+    if (adminPassword) {
+      adminPassword.value = '';
+      adminPassword.type = 'password';
+    }
+    const toggle = $('#pwdToggle');
+    if (toggle) {
+      toggle.setAttribute('aria-pressed', 'false');
+      toggle.setAttribute('aria-label', 'Afficher le mot de passe');
+    }
     openModalEl(loginModal);
     setTimeout(() => adminPassword && adminPassword.focus(), 250);
   }
 
   function closeLogin() {
     closeModalEl(loginModal);
-    if (adminPassword) adminPassword.value = '';
+    if (adminPassword) {
+      adminPassword.value = '';
+      adminPassword.type = 'password';
+    }
     if (loginError) loginError.textContent = '';
   }
 
@@ -1322,7 +1369,19 @@ body.is-loading{overflow:hidden}
     });
   }
 
-  // ===== BOOT : on charge tout de suite, sans attendre l'événement load =====
+  // Bouton œil : afficher / masquer le mot de passe
+  const pwdToggle = $('#pwdToggle');
+  if (pwdToggle && adminPassword) {
+    pwdToggle.addEventListener('click', () => {
+      const isHidden = adminPassword.type === 'password';
+      adminPassword.type = isHidden ? 'text' : 'password';
+      pwdToggle.setAttribute('aria-pressed', String(isHidden));
+      pwdToggle.setAttribute('aria-label', isHidden ? 'Masquer le mot de passe' : 'Afficher le mot de passe');
+      adminPassword.focus();
+    });
+  }
+
+  // ===== BOOT =====
   loadDynamicContent();
 })();
 
