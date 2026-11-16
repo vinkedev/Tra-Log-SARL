@@ -3,1329 +3,932 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CTL – Compagnie Tra-Log SARL | Transit, Logistique & Douane</title>
-<meta name="description" content="Compagnie Tra-Log SARL : transit, dédouanement, logistique et supply chain à Ouagadougou. Demandez votre devis.">
+<title>Administration — CTL Tra-Log</title>
 <meta name="robots" content="noindex, nofollow">
-<meta name="theme-color" content="#1287c0">
-<script>
-  (function(){
-    var i = new Image();
-    i.src = 'transport/im5.jpg';
-    if (i.complete && i.naturalWidth) document.documentElement.classList.add('no-pre');
-  })();
-</script>
-<noscript><style>.preloader{display:none!important}body.is-loading{overflow:auto!important}</style></noscript>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preconnect" href="https://otdiywrvzappbmjfkkyi.supabase.co" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" media="print" onload="this.media='all'">
-<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"></noscript>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="icon" type="image/jpeg" href="transport/logo.jpg">
 <style>
 :root{
   --cyan:#1AA7EC; --cyan-dark:#1287c0; --red:#D62828; --navy:#0A2540;
   --ink:#1f2933; --muted:#5a6b7b; --line:#e3e9ef; --bg-soft:#f4f8fb;
-  --radius:16px; --shadow:0 14px 34px rgba(10,37,64,.12);
-  --container:1160px; --header-h:92px;
-  --ease:cubic-bezier(.2,.7,.2,1);
+  --success:#16a34a; --danger:#dc2626; --warning:#f59e0b;
+  --radius:14px; --shadow:0 4px 16px rgba(10,37,64,.08); --shadow-lg:0 16px 48px rgba(10,37,64,.15);
+  --transition:.2s ease;
 }
-*,*::before,*::after{box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{margin:0;font-family:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;color:var(--ink);background:#fff;line-height:1.6;-webkit-font-smoothing:antialiased}
-img{max-width:100%;display:block}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',system-ui,sans-serif;color:var(--ink);background:var(--bg-soft);line-height:1.5;font-size:15px;-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4{line-height:1.2;color:var(--navy);font-weight:800}
+button,input,select,textarea{font-family:inherit;font-size:inherit}
 a{color:inherit;text-decoration:none}
-h1,h2,h3{line-height:1.2;margin:0 0 .5em;color:var(--navy);font-weight:800}
-h1{font-size:clamp(2.1rem,4.8vw,3.4rem)}
-h2{font-size:clamp(1.6rem,3vw,2.3rem)}
-h3{font-size:1.15rem}
-p{margin:0 0 1em}
-.container{width:100%;max-width:var(--container);margin:0 auto;padding:0 20px}
-.section{padding:84px 0;scroll-margin-top:var(--header-h)}
-.section--soft{background:var(--bg-soft)}
-.section-head{max-width:700px;margin:0 auto 48px;text-align:center}
-.section-head p{color:var(--muted);font-size:1.05rem}
-.eyebrow{display:inline-block;font-size:.9rem;font-weight:700;color:var(--cyan-dark);margin-bottom:10px;padding-left:36px;position:relative}
-.eyebrow::before{content:"";position:absolute;left:0;top:50%;width:26px;height:3px;border-radius:2px;background:var(--red)}
-:focus-visible{outline:3px solid var(--cyan);outline-offset:3px}
+img{max-width:100%;display:block}
 
-body.is-loading{overflow:hidden}
-.preloader{
-  position:fixed;inset:0;z-index:999;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:28px;
-  background:linear-gradient(135deg,var(--navy) 0%,#0d3a5f 60%,var(--cyan-dark) 100%);
-  transition:opacity .35s ease, visibility .35s ease;
-}
-.preloader.done{opacity:0;visibility:hidden;pointer-events:none}
-.pre-logo{background:#fff;border-radius:22px;padding:16px 28px;box-shadow:0 20px 50px rgba(0,0,0,.35);animation:preBreath 1.8s ease-in-out infinite}
-.pre-logo img{height:84px;width:auto}
-.pre-bar{width:180px;height:4px;border-radius:4px;background:rgba(255,255,255,.2);overflow:hidden}
-.pre-bar span{display:block;height:100%;width:40%;border-radius:4px;background:linear-gradient(90deg,var(--cyan),var(--red));animation:preSlide 1.2s ease-in-out infinite}
-@keyframes preBreath{0%,100%{transform:scale(1)}50%{transform:scale(1.07)}}
-@keyframes preSlide{0%{transform:translateX(-100%)}100%{transform:translateX(450%)}}
-.no-pre .preloader{display:none}
-.no-pre body.is-loading{overflow:auto}
+.auth-check{position:fixed;inset:0;background:linear-gradient(135deg,var(--navy) 0%,#0d3a5f 60%,var(--cyan-dark) 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;gap:20px;z-index:9999;padding:30px;text-align:center}
+.auth-check__spinner{width:44px;height:44px;border:3px solid rgba(255,255,255,.15);border-top-color:var(--cyan);border-radius:50%;animation:spin .8s linear infinite}
+.auth-check__msg{font-size:.9rem;opacity:.8}
+@keyframes spin{to{transform:rotate(360deg)}}
 
-.progress{position:fixed;top:0;left:0;height:3px;width:0;background:linear-gradient(90deg,var(--cyan),var(--red));z-index:100}
+.layout{display:grid;grid-template-columns:260px 1fr;min-height:100vh}
+.sidebar{background:linear-gradient(180deg,var(--navy) 0%,#0d3a5f 100%);color:rgba(255,255,255,.85);padding:24px 0;display:flex;flex-direction:column;position:sticky;top:0;height:100vh;overflow-y:auto}
+.sidebar__brand{padding:0 24px 24px;border-bottom:1px solid rgba(255,255,255,.1);margin-bottom:16px;display:flex;align-items:center;gap:12px}
+.sidebar__brand img{width:48px;height:48px;border-radius:10px;background:#fff;padding:4px}
+.sidebar__brand h2{color:#fff;font-size:1.05rem;font-weight:800;letter-spacing:-.02em;line-height:1.1}
+.sidebar__brand h2 span{color:var(--cyan);display:block;font-size:.7rem;text-transform:uppercase;letter-spacing:.1em;opacity:.8;margin-top:2px;font-weight:600}
+.side-nav{display:flex;flex-direction:column;gap:4px;padding:0 12px;flex:1}
+.side-nav button{display:flex;align-items:center;gap:12px;padding:12px 16px;border-radius:10px;background:transparent;border:none;color:inherit;font-family:inherit;font-size:.88rem;font-weight:500;cursor:pointer;transition:var(--transition);text-align:left;width:100%}
+.side-nav button:hover{background:rgba(255,255,255,.06);color:#fff}
+.side-nav button.active{background:var(--cyan-dark);color:#fff;box-shadow:0 4px 12px rgba(18,135,192,.4)}
+.side-nav button .ico{font-size:1.1rem;width:20px;text-align:center}
+.sidebar__footer{padding:16px 12px 0;border-top:1px solid rgba(255,255,255,.1);display:flex;flex-direction:column;gap:8px}
+.sidebar__footer a,.sidebar__footer button{display:flex;align-items:center;gap:10px;padding:10px 16px;border-radius:8px;background:transparent;border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.7);font-family:inherit;font-size:.82rem;font-weight:500;cursor:pointer;transition:var(--transition);text-decoration:none}
+.sidebar__footer a:hover,.sidebar__footer button:hover{background:rgba(255,255,255,.08);color:#fff}
+.sidebar__footer button{color:#ff8f8f;border-color:rgba(255,143,143,.3)}
+.sidebar__footer button:hover{background:rgba(214,40,40,.2);color:#fff;border-color:rgba(214,40,40,.5)}
 
-.btn{position:relative;overflow:hidden;display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:14px 28px;border-radius:999px;font-weight:600;font-size:.98rem;border:2px solid transparent;cursor:pointer;transition:transform .25s var(--ease),box-shadow .25s,background .25s,color .25s,border-color .25s;white-space:nowrap;font-family:inherit}
-.btn::after{content:"";position:absolute;top:0;left:-80%;width:50%;height:100%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.45),transparent);transform:skewX(-20deg);transition:left .6s var(--ease)}
-.btn:hover::after{left:130%}
-.btn:hover{transform:translateY(-3px)}
-.btn-sm{padding:10px 20px;font-size:.9rem}
-.btn-primary{background:var(--cyan-dark);color:#fff}
-.btn-primary:hover{background:#0f6f9c;box-shadow:0 10px 22px rgba(18,135,192,.35)}
-.btn-accent{background:var(--red);color:#fff}
-.btn-accent:hover{background:#b91f1f;box-shadow:0 10px 22px rgba(214,40,40,.35)}
-.btn-outline{background:transparent;color:var(--navy);border-color:var(--line)}
-.btn-outline:hover{border-color:var(--cyan);color:var(--cyan-dark)}
-.btn-light{background:#fff;color:var(--navy)}
-.btn-light:hover{box-shadow:0 12px 26px rgba(0,0,0,.2)}
+.main{padding:32px 40px;overflow-x:hidden}
+.view__header{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px;gap:20px;flex-wrap:wrap}
+.view__header h1{font-size:1.8rem;color:var(--navy)}
+.view__header p{color:var(--muted);font-size:.9rem;margin-top:6px}
 
-.site-header{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.96);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);transition:box-shadow .3s,height .3s}
-.site-header.scrolled{box-shadow:0 8px 24px rgba(10,37,64,.1)}
-.header-inner{display:flex;align-items:center;justify-content:space-between;height:var(--header-h);gap:20px;transition:height .3s var(--ease)}
-.logo{display:inline-flex;align-items:center;flex-shrink:0;cursor:pointer;user-select:none}
-.logo-img{height:70px;width:auto;object-fit:contain;transition:height .3s var(--ease),transform .3s var(--ease)}
-.logo:hover .logo-img{transform:scale(1.05)}
-.site-header.scrolled .header-inner{height:76px}
-.site-header.scrolled .logo-img{height:56px}
-.main-nav{display:flex;gap:20px;font-weight:500;font-size:.9rem}
-.main-nav a{position:relative;padding:6px 0;transition:color .2s;white-space:nowrap}
-.main-nav a::after{content:"";position:absolute;left:0;bottom:-2px;height:3px;width:100%;background:var(--red);border-radius:2px;transform:scaleX(0);transform-origin:left;transition:transform .35s var(--ease)}
-.main-nav a:hover,.main-nav a.active{color:var(--cyan-dark)}
-.main-nav a:hover::after,.main-nav a.active::after{transform:scaleX(1)}
-.header-actions{display:flex;align-items:center;gap:16px}
-.phone-link{font-weight:600;font-size:.92rem;color:var(--navy)}
-.nav-toggle{display:none;flex-direction:column;gap:5px;background:none;border:0;padding:8px;cursor:pointer}
-.nav-toggle span{width:24px;height:2.5px;background:var(--navy);border-radius:2px;transition:.25s}
-.nav-toggle.open span:nth-child(1){transform:translateY(7.5px) rotate(45deg)}
-.nav-toggle.open span:nth-child(2){opacity:0}
-.nav-toggle.open span:nth-child(3){transform:translateY(-7.5px) rotate(-45deg)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:10px 20px;border-radius:999px;font-weight:600;font-size:.88rem;border:none;cursor:pointer;transition:var(--transition);font-family:'Inter',sans-serif;white-space:nowrap}
+.btn--primary{background:var(--cyan-dark);color:#fff;box-shadow:0 4px 12px rgba(18,135,192,.3)}
+.btn--primary:hover{background:#0f6f9c;transform:translateY(-1px);box-shadow:0 6px 16px rgba(18,135,192,.4)}
+.btn--accent{background:var(--red);color:#fff}
+.btn--accent:hover{background:#b91f1f}
+.btn--ghost{background:transparent;color:var(--navy);border:1.5px solid var(--line)}
+.btn--ghost:hover{border-color:var(--navy);background:var(--bg-soft)}
+.btn--danger{background:var(--danger);color:#fff}
+.btn--danger:hover{background:#b91c1c}
+.btn--sm{padding:7px 14px;font-size:.8rem}
+.btn:disabled{opacity:.5;cursor:not-allowed}
 
-.hero{position:relative;overflow:hidden;color:#fff;min-height:calc(100vh - var(--header-h));min-height:calc(100svh - var(--header-h));display:flex;align-items:center;padding:90px 0;background:linear-gradient(135deg,var(--navy) 0%,#0d3a5f 55%,var(--cyan-dark) 100%);scroll-margin-top:var(--header-h)}
-.hero-slides{position:absolute;inset:-200px 0;transform:translateY(var(--py,0px));will-change:transform;z-index:0}
-.hero-slide{position:absolute;inset:0;opacity:0;transform:scale(1);transition:opacity 1.1s ease, transform 3s ease-out}
-.hero-slide img{width:100%;height:100%;object-fit:cover;object-position:center center;display:block;opacity:0;transition:opacity .6s ease}
-.hero-slide img.loaded{opacity:1}
-.hero-slide.is-active{opacity:1;transform:scale(1.06)}
-.hero::after{content:"";position:absolute;inset:0;background:linear-gradient(95deg,rgba(10,37,64,.8) 0%,rgba(10,37,64,.45) 42%,rgba(10,37,64,.04) 100%);z-index:1;pointer-events:none}
-.hero .container{position:relative;z-index:2}
-.hero-logo{display:inline-flex;background:#fff;border-radius:20px;padding:14px 26px;margin-bottom:30px;box-shadow:0 20px 44px rgba(0,0,0,.3);animation:float 5s ease-in-out infinite}
-.hero-logo img{height:104px;width:auto}
-.hero h1{color:#fff;font-size:clamp(1.7rem,3.6vw,2.6rem);max-width:30ch;text-shadow:0 3px 18px rgba(0,0,0,.4)}
-.hero-dyn{color:var(--cyan)}
-.hero p{color:#fff;font-size:1.18rem;max-width:52ch;text-shadow:0 2px 10px rgba(0,0,0,.45)}
-.hero-actions{display:flex;flex-wrap:wrap;gap:14px;margin-top:30px}
-.hero .in-seq{opacity:0;animation:rise .9s var(--ease) forwards}
-.hero .d1{animation-delay:.1s}.hero .d2{animation-delay:.3s}.hero .d3{animation-delay:.5s}.hero .d4{animation-delay:.7s}
-.scroll-hint{position:absolute;left:50%;bottom:24px;z-index:3;width:26px;height:42px;border:2px solid rgba(255,255,255,.8);border-radius:20px;transform:translateX(-50%)}
-.scroll-hint::after{content:"";position:absolute;left:50%;top:7px;width:4px;height:8px;margin-left:-2px;background:#fff;border-radius:2px;animation:wheel 1.8s infinite}
-.hero-dots{position:absolute;left:50%;bottom:82px;transform:translateX(-50%);z-index:3;display:flex;gap:10px}
-.hero-dot{width:10px;height:10px;padding:0;border-radius:50%;border:0;background:rgba(255,255,255,.45);cursor:pointer;transition:transform .25s,background .25s}
-.hero-dot:hover{background:rgba(255,255,255,.8)}
-.hero-dot.is-active{background:#fff;transform:scale(1.35)}
-@keyframes rise{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:none}}
-@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
-@keyframes wheel{0%{opacity:0;transform:translateY(0)}30%{opacity:1}100%{opacity:0;transform:translateY(14px)}}
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px;margin-bottom:32px}
+.stat-card{background:#fff;border-radius:var(--radius);padding:24px;box-shadow:var(--shadow);border-left:4px solid var(--cyan-dark);transition:var(--transition)}
+.stat-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-lg)}
+.stat-card__label{font-size:.78rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:600;margin-bottom:8px}
+.stat-card__value{font-size:2.2rem;font-weight:800;color:var(--navy);line-height:1}
+.stat-card__hint{font-size:.8rem;color:var(--muted);margin-top:6px}
 
-.about{max-width:760px}
-.about p{font-size:1.08rem;color:var(--muted)}
-.modes{display:flex;flex-wrap:wrap;gap:12px;margin-top:24px}
-.modes span{padding:10px 20px;border-radius:999px;background:var(--bg-soft);border:1px solid var(--line);font-weight:600;color:var(--navy);transition:.3s var(--ease)}
-.modes span:hover{background:var(--cyan-dark);color:#fff;transform:translateY(-3px)}
+.table-wrapper{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
+table{width:100%;border-collapse:collapse;font-size:.9rem}
+thead{background:var(--bg-soft)}
+th{padding:14px 16px;text-align:left;font-weight:600;color:var(--muted);font-size:.78rem;text-transform:uppercase;letter-spacing:.06em;border-bottom:1px solid var(--line)}
+td{padding:14px 16px;border-bottom:1px solid var(--line);vertical-align:middle}
+tbody tr:last-child td{border-bottom:none}
+tbody tr:hover{background:rgba(26,167,236,.03)}
+.table-thumb{width:60px;height:44px;border-radius:6px;object-fit:cover;background:var(--bg-soft)}
+.table-title{font-weight:600;color:var(--navy)}
+.table-actions{display:flex;gap:6px}
 
-@keyframes scrollImages{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
-.image-marquee{background:var(--navy);padding:46px 0;overflow:hidden;position:relative;border-top:1px solid rgba(255,255,255,.08);border-bottom:1px solid rgba(255,255,255,.08)}
-.image-marquee::before,.image-marquee::after{content:"";position:absolute;top:0;bottom:0;width:120px;z-index:2;pointer-events:none}
-.image-marquee::before{left:0;background:linear-gradient(90deg,var(--navy) 0%,transparent 100%)}
-.image-marquee::after{right:0;background:linear-gradient(270deg,var(--navy) 0%,transparent 100%)}
-.marquee-track{display:flex;gap:24px;width:max-content;animation:scrollImages 35s linear infinite;will-change:transform}
-.marquee-track:hover{animation-play-state:paused}
-.marquee-item{flex:none;width:320px;height:200px;border-radius:var(--radius);overflow:hidden;position:relative;box-shadow:0 10px 30px rgba(0,0,0,.3);border:2px solid rgba(26,167,236,.35);transition:transform .4s var(--ease),border-color .4s,box-shadow .4s}
-.marquee-item:hover{transform:scale(1.06);border-color:var(--red);box-shadow:0 16px 40px rgba(214,40,40,.35)}
-.marquee-item img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s var(--ease)}
-.marquee-item:hover img{transform:scale(1.08)}
+.badge{display:inline-block;padding:4px 10px;border-radius:999px;font-size:.72rem;font-weight:600;text-transform:uppercase;letter-spacing:.04em}
+.badge--carriere{background:rgba(10,37,64,.15);color:var(--navy)}
+.badge--emploi{background:rgba(214,40,40,.15);color:var(--red)}
+.badge--stage{background:rgba(34,197,94,.15);color:#16a34a}
+.badge--published{background:rgba(34,197,94,.15);color:#16a34a}
+.badge--draft{background:rgba(90,107,123,.15);color:var(--muted)}
 
-.split-words .w{display:inline-block;opacity:0;transform:translateY(22px);transition:opacity .6s var(--ease),transform .6s var(--ease);transition-delay:calc(var(--i) * .09s)}
-.split-words.in .w{opacity:1;transform:none}
+.filter-tabs{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap}
+.filter-tabs button{padding:8px 16px;border-radius:999px;border:1.5px solid var(--line);background:#fff;color:var(--navy);font-size:.85rem;font-weight:500;cursor:pointer;transition:var(--transition);font-family:inherit}
+.filter-tabs button:hover{border-color:var(--cyan-dark);color:var(--cyan-dark)}
+.filter-tabs button.active{background:var(--cyan-dark);color:#fff;border-color:var(--cyan-dark)}
 
-.services{display:flex;flex-wrap:wrap;justify-content:center;gap:26px}
-.svc{position:relative;flex:0 1 calc((100% - 52px) / 3);overflow:hidden;background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:34px 28px 28px;display:flex;flex-direction:column;transition:transform .4s var(--ease),box-shadow .4s,border-color .4s;will-change:transform}
-.svc.tilting{transition:transform .08s linear,box-shadow .4s,border-color .4s}
-.svc::before{content:"";position:absolute;left:0;top:0;height:5px;width:100%;background:linear-gradient(90deg,var(--cyan),var(--red));transform:scaleX(.18);transform-origin:left;transition:transform .5s var(--ease)}
-.svc:hover{transform:translateY(-8px);box-shadow:var(--shadow);border-color:transparent}
-.svc:hover::before{transform:scaleX(1)}
-.svc-icon{width:64px;height:64px;border-radius:50%;display:grid;place-items:center;font-size:1.8rem;background:var(--bg-soft);margin-bottom:20px;transition:transform .5s var(--ease),background .3s}
-.svc:hover .svc-icon{transform:rotate(-8deg) scale(1.12);background:#e3f4fd}
-.svc p{color:var(--muted);flex:1}
-.svc a{font-weight:600;color:var(--cyan-dark);align-self:flex-start;border-bottom:2px solid transparent;transition:.25s}
-.svc a:hover{border-color:var(--red)}
+.modal{position:fixed;inset:0;background:rgba(10,37,64,.75);backdrop-filter:blur(6px);display:none;align-items:center;justify-content:center;z-index:1000;padding:24px}
+.modal.open{display:flex}
+.modal__content{background:#fff;border-radius:16px;width:100%;max-width:680px;max-height:92vh;overflow-y:auto;box-shadow:0 30px 80px rgba(0,0,0,.4);animation:modalIn .3s cubic-bezier(.2,.7,.3,1);border-top:5px solid var(--cyan-dark)}
+@keyframes modalIn{from{opacity:0;transform:translateY(20px) scale(.97)}to{opacity:1;transform:none}}
+.modal__header{padding:24px 28px 16px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between}
+.modal__header h3{font-size:1.25rem;color:var(--navy)}
+.modal__close{width:34px;height:34px;border-radius:50%;background:var(--bg-soft);border:none;font-size:1.1rem;cursor:pointer;transition:var(--transition);color:var(--navy)}
+.modal__close:hover{background:var(--red);color:#fff}
+.modal__body{padding:24px 28px;display:grid;gap:16px}
+.modal__footer{padding:16px 28px 24px;display:flex;gap:10px;justify-content:flex-end;border-top:1px solid var(--line)}
 
-.why-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
-.why{position:relative;background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:36px 30px;transition:transform .35s var(--ease),box-shadow .35s,border-color .35s;overflow:hidden}
-.why::before{content:"";position:absolute;inset:0;background:linear-gradient(135deg,rgba(26,167,236,.05),transparent 60%);opacity:0;transition:opacity .4s;pointer-events:none}
-.why:hover{transform:translateY(-6px);box-shadow:var(--shadow);border-color:rgba(26,167,236,.35)}
-.why:hover::before{opacity:1}
-.why-num{font-size:2.2rem;font-weight:800;line-height:1;margin-bottom:16px;background:linear-gradient(120deg,var(--cyan),var(--red));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
-.why h3{font-size:1.15rem;margin-bottom:10px;color:var(--navy)}
-.why p{color:var(--muted);font-size:.98rem;margin:0}
-
-.testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
-.testi{position:relative;background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:32px 28px 24px;transition:transform .35s var(--ease),box-shadow .35s;overflow:hidden}
-.testi:hover{transform:translateY(-6px);box-shadow:var(--shadow)}
-.testi::before{content:"\201C";position:absolute;top:-10px;right:16px;font-size:6rem;line-height:1;color:var(--cyan);opacity:.12;font-family:Georgia,serif;pointer-events:none}
-.testi-stars{color:#f5a623;font-size:.95rem;letter-spacing:2px;margin-bottom:12px}
-.testi blockquote{margin:0 0 20px;color:var(--ink);font-size:.98rem;line-height:1.65;font-style:italic}
-.testi-who{display:flex;align-items:center;gap:12px;border-top:1px solid var(--line);padding-top:16px}
-.testi-avatar{width:44px;height:44px;flex:0 0 44px;border-radius:50%;background:linear-gradient(135deg,var(--cyan),var(--red));color:#fff;display:grid;place-items:center;font-weight:700;font-size:1rem}
-.testi-who strong{display:block;color:var(--navy);font-size:.93rem}
-.testi-who span{color:var(--muted);font-size:.82rem}
-
-.news-empty{max-width:520px;margin:0 auto;text-align:center;padding:56px 32px;background:#fff;border:2px dashed var(--line);border-radius:var(--radius)}
-.news-empty-icon{width:80px;height:80px;margin:0 auto 20px;border-radius:50%;display:grid;place-items:center;font-size:2.2rem;background:linear-gradient(135deg,rgba(26,167,236,.12),rgba(214,40,40,.08));animation:float 4s ease-in-out infinite}
-.news-empty h3{font-size:1.25rem;color:var(--navy);margin-bottom:10px}
-.news-empty p{color:var(--muted);font-size:1rem;margin-bottom:0}
-
-.actu-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:26px}
-.actu-card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;display:flex;flex-direction:column;cursor:pointer;transition:transform .3s var(--ease),box-shadow .3s,border-color .3s;animation:cardIn .5s var(--ease) backwards}
-.actu-card:hover{transform:translateY(-6px);box-shadow:var(--shadow);border-color:rgba(26,167,236,.35)}
-.actu-card__img{aspect-ratio:16/10;overflow:hidden;background:var(--bg-soft)}
-.actu-card__img img{width:100%;height:100%;object-fit:cover;transition:transform .5s var(--ease)}
-.actu-card:hover .actu-card__img img{transform:scale(1.06)}
-.actu-card__body{padding:22px 24px;display:flex;flex-direction:column;gap:10px;flex:1}
-.actu-card__cat{display:inline-block;font-size:.72rem;font-weight:700;color:var(--red);text-transform:uppercase;letter-spacing:.06em}
-.actu-card h3{font-size:1.15rem;color:var(--navy);line-height:1.35;margin:0}
-.actu-card p{color:var(--muted);font-size:.92rem;margin:0;flex:1}
-.actu-card__meta{display:flex;gap:14px;font-size:.8rem;color:var(--muted);flex-wrap:wrap}
-.actu-card__more{margin-top:auto;align-self:flex-start;font-weight:600;font-size:.88rem;color:var(--cyan-dark);border-bottom:2px solid transparent;transition:border-color .2s}
-.actu-card:hover .actu-card__more{border-color:var(--red)}
-@keyframes cardIn{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
-
-.carriere-filters{display:flex;justify-content:center;flex-wrap:wrap;gap:10px;margin-bottom:36px}
-.carriere-filters button{padding:9px 20px;border-radius:999px;border:1.5px solid var(--line);background:#fff;color:var(--navy);font:inherit;font-family:inherit;font-size:.88rem;font-weight:600;cursor:pointer;transition:.2s var(--ease)}
-.carriere-filters button:hover{border-color:var(--cyan);color:var(--cyan-dark)}
-.carriere-filters button.active{background:var(--cyan-dark);color:#fff;border-color:var(--cyan-dark);box-shadow:0 6px 16px rgba(18,135,192,.25)}
-.carriere-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:26px}
-.carriere-card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;display:flex;flex-direction:column;cursor:pointer;transition:transform .3s var(--ease),box-shadow .3s,border-color .3s;animation:cardIn .5s var(--ease) backwards}
-.carriere-card:hover{transform:translateY(-6px);box-shadow:var(--shadow);border-color:rgba(26,167,236,.35)}
-.carriere-card__img{aspect-ratio:16/10;overflow:hidden;background:var(--bg-soft)}
-.carriere-card__img img{width:100%;height:100%;object-fit:cover;transition:transform .5s var(--ease)}
-.carriere-card:hover .carriere-card__img img{transform:scale(1.06)}
-.carriere-card__body{padding:26px;display:flex;flex-direction:column;gap:12px;flex:1}
-.carriere-card__head{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
-.carriere-card__badge{display:inline-block;padding:5px 12px;border-radius:999px;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em}
-.carriere-card__badge--carriere{background:rgba(10,37,64,.12);color:var(--navy)}
-.carriere-card__badge--emploi{background:rgba(214,40,40,.12);color:var(--red)}
-.carriere-card__badge--stage{background:rgba(34,197,94,.15);color:#16a34a}
-.carriere-card__contrat{font-size:.78rem;color:var(--muted);font-weight:600}
-.carriere-card h3{font-size:1.1rem;color:var(--navy);line-height:1.35;margin:0}
-.carriere-card p{color:var(--muted);font-size:.9rem;flex:1;margin:0}
-.carriere-card__meta{display:flex;flex-wrap:wrap;gap:10px;font-size:.8rem;color:var(--muted);padding:12px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
-.carriere-card__more{margin-top:auto;align-self:flex-start;font-weight:600;font-size:.88rem;color:var(--cyan-dark);border-bottom:2px solid transparent;transition:border-color .2s}
-.carriere-card:hover .carriere-card__more{border-color:var(--red)}
-
-.modal-overlay{position:fixed;inset:0;background:rgba(10,37,64,.78);backdrop-filter:blur(8px);z-index:200;display:none;align-items:center;justify-content:center;padding:20px}
-.modal-overlay.open{display:flex}
-.modal-card{background:#fff;border-radius:20px;width:100%;max-width:480px;max-height:92vh;overflow-y:auto;box-shadow:0 30px 80px rgba(0,0,0,.4);position:relative;animation:modalIn .35s var(--ease);border-top:5px solid var(--cyan-dark)}
-.modal-card--wide{max-width:760px}
-@keyframes modalIn{from{opacity:0;transform:translateY(24px) scale(.97)}to{opacity:1;transform:none}}
-.modal-close{position:absolute;top:14px;right:14px;width:36px;height:36px;border-radius:50%;background:var(--bg-soft);border:none;cursor:pointer;font-size:1.1rem;color:var(--navy);display:grid;place-items:center;transition:.2s;z-index:2;font-weight:700;font-family:inherit}
-.modal-close:hover{background:var(--red);color:#fff;transform:rotate(90deg)}
-.modal-header{padding:32px 28px 20px;text-align:center;border-bottom:1px solid var(--line)}
-.modal-header .modal-icon{width:64px;height:64px;margin:0 auto 16px;border-radius:50%;background:linear-gradient(135deg,rgba(26,167,236,.15),rgba(214,40,40,.1));display:grid;place-items:center;font-size:1.8rem}
-.modal-header h3{font-size:1.3rem;color:var(--navy);margin:0 0 6px}
-.modal-header p{font-size:.88rem;color:var(--muted);margin:0}
-.modal-body{padding:24px 28px 28px;display:grid;gap:14px}
-.modal-body .field{display:flex;flex-direction:column;gap:6px}
-.modal-body .field label{font-size:.85rem;font-weight:600;color:var(--navy)}
-.modal-body .field input{font:inherit;padding:12px 14px;border:1.5px solid var(--line);border-radius:10px;background:#fff;color:var(--ink);transition:.2s;font-family:inherit}
-.modal-body .field input:focus{outline:none;border-color:var(--cyan);box-shadow:0 0 0 4px rgba(26,167,236,.15)}
-.login-error{color:var(--red);font-size:.82rem;text-align:center;min-height:18px;margin:0}
-.modal-body .btn{width:100%}
-
-.detail-content{padding:32px 32px 28px}
-.detail-img{width:100%;border-radius:12px;margin-bottom:20px;aspect-ratio:16/10;object-fit:cover;background:var(--bg-soft)}
-.detail-meta{display:flex;flex-wrap:wrap;gap:14px;font-size:.82rem;color:var(--muted);margin-bottom:16px;align-items:center}
-.detail-cat{display:inline-block;padding:4px 12px;border-radius:999px;background:rgba(214,40,40,.12);color:var(--red);font-weight:700;text-transform:uppercase;letter-spacing:.05em;font-size:.72rem}
-.detail-content h2{color:var(--navy);font-size:1.5rem;margin:0 0 16px;line-height:1.25}
-.detail-body{color:var(--muted);font-size:.98rem;line-height:1.7}
-.detail-body h3{color:var(--navy);font-size:1.05rem;margin:20px 0 10px}
-.detail-body p{margin:0 0 14px}
-.detail-body ul{list-style:none;padding:0;margin:0 0 14px}
-.detail-body li{padding:6px 0 6px 24px;position:relative;color:var(--muted);font-size:.95rem}
-.detail-body li::before{content:"✓";position:absolute;left:0;top:6px;color:var(--cyan-dark);font-weight:700}
-.detail-info-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:20px;padding:16px;background:var(--bg-soft);border-radius:12px}
-.detail-info-grid div{display:flex;flex-direction:column;gap:2px}
-.detail-info-grid strong{font-size:.78rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:600}
-.detail-info-grid span{font-size:.92rem;color:var(--navy);font-weight:600}
-.detail-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px;padding-top:20px;border-top:1px solid var(--line)}
-.detail-actions .btn{flex:1;min-width:160px}
-
-.modal-body .field textarea,.modal-body .field select{font:inherit;padding:12px 14px;border:1.5px solid var(--line);border-radius:10px;background:#fff;color:var(--ink);font-family:inherit;transition:.2s}
-.modal-body .field textarea{min-height:100px;resize:vertical}
-.modal-body .field textarea:focus,.modal-body .field select:focus{outline:none;border-color:var(--cyan);box-shadow:0 0 0 4px rgba(26,167,236,.15)}
-.modal-body .field input[type=file]{padding:10px 12px;font-size:.88rem;cursor:pointer}
-.cand-ok{text-align:center;padding:24px 0;color:var(--navy);font-weight:600;line-height:1.6}
-.cand-ok span{display:block;font-size:2.4rem;margin-bottom:8px}
-
-.cta-band{background:linear-gradient(120deg,var(--navy),var(--cyan-dark),var(--navy));background-size:200% 100%;animation:shift 10s ease-in-out infinite alternate;color:#fff;border-radius:22px;padding:58px;text-align:center}
-.cta-band h2{color:#fff}
-.cta-band p{color:rgba(255,255,255,.9);max-width:52ch;margin:0 auto 28px}
-@keyframes shift{from{background-position:0 0}to{background-position:100% 0}}
-
-.form{display:grid;gap:18px}
-.form-row{display:grid;grid-template-columns:1fr 1fr;gap:18px}
 .field{display:flex;flex-direction:column;gap:6px}
-.field label{font-size:.88rem;font-weight:600;color:var(--navy)}
-.field input,.field select,.field textarea{font:inherit;padding:12px 14px;border:1.5px solid var(--line);border-radius:10px;background:#fff;color:var(--ink);transition:border-color .25s,box-shadow .25s;font-family:inherit}
-.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--cyan);box-shadow:0 0 0 4px rgba(26,167,236,.15)}
-.field textarea{resize:vertical;min-height:130px}
-.form-note{font-size:.85rem;color:var(--muted)}
-.form-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:8px}
+.field label{font-size:.82rem;font-weight:600;color:var(--navy)}
+.field input,.field select,.field textarea{padding:10px 14px;border:1.5px solid var(--line);border-radius:8px;font-family:inherit;font-size:.9rem;color:var(--ink);background:#fff;transition:var(--transition)}
+.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--cyan);box-shadow:0 0 0 3px rgba(26,167,236,.12)}
+.field input[type=file]{padding:8px 10px;cursor:pointer;font-size:.85rem}
+.field textarea{resize:vertical;min-height:90px}
+.field small{font-size:.75rem;color:var(--muted)}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.form-section-title{font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--cyan-dark);margin-top:8px;padding-top:12px;border-top:1px solid var(--line)}
+.form-section-title:first-child{margin-top:0;padding-top:0;border-top:none}
 
-.split{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:start}
-.contact-list{list-style:none;padding:0;margin:0;display:grid;gap:18px}
-.contact-list li{display:flex;gap:14px;align-items:flex-start}
-.contact-list .ci{width:44px;height:44px;flex:0 0 44px;border-radius:12px;display:grid;place-items:center;background:var(--bg-soft);transition:transform .3s var(--ease);font-size:1.2rem}
-.contact-list li:hover .ci{transform:scale(1.12) rotate(-6deg)}
-.contact-list strong{display:block;color:var(--navy)}
-.contact-list span{color:var(--muted);font-size:.95rem}
-.map-wrap{border-radius:var(--radius);overflow:hidden;border:1px solid var(--line);min-height:340px;margin-top:28px}
-.map-wrap iframe{width:100%;height:100%;min-height:340px;border:0;display:block}
+.checkbox-field{display:flex;align-items:center;gap:10px;padding:10px 0}
+.checkbox-field input[type=checkbox]{width:18px;height:18px;cursor:pointer;accent-color:var(--cyan-dark)}
+.checkbox-field label{margin:0;cursor:pointer;font-weight:500}
 
-.site-footer{background:var(--navy);color:rgba(255,255,255,.8);padding:64px 0 0}
-.footer-grid{display:grid;grid-template-columns:1.6fr 1fr 1fr 1.4fr;gap:40px;padding-bottom:48px}
-.site-footer h4{color:#fff;font-size:.95rem;margin:0 0 16px}
-.site-footer ul{list-style:none;padding:0;margin:0;display:grid;gap:10px;font-size:.92rem}
-.site-footer a{transition:color .2s}
-.site-footer a:hover{color:#fff}
-.footer-logo{display:inline-flex;background:#fff;border-radius:12px;padding:8px 16px}
-.footer-logo img{height:48px;width:auto}
-.footer-contact li{display:flex;gap:10px;align-items:flex-start}
-.footer-bottom{border-top:1px solid rgba(255,255,255,.12);padding:22px 0;font-size:.85rem;color:rgba(255,255,255,.6);display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
-.footer-bottom a{color:#fff;font-weight:600}
+.array-field{display:flex;flex-direction:column;gap:8px}
+.array-item{display:flex;gap:6px}
+.array-item input{flex:1}
+.array-item button{width:36px;height:36px;border-radius:8px;border:1.5px solid var(--line);background:#fff;cursor:pointer;color:var(--muted);font-size:1rem}
+.array-item button:hover{border-color:var(--danger);color:var(--danger)}
+.array-add{align-self:flex-start;padding:6px 12px;border-radius:8px;border:1.5px dashed var(--line);background:transparent;color:var(--cyan-dark);font-weight:600;font-size:.82rem;cursor:pointer;transition:var(--transition)}
+.array-add:hover{border-color:var(--cyan-dark);background:rgba(26,167,236,.05)}
 
-.wa-float{position:fixed;right:20px;bottom:20px;z-index:60;width:58px;height:58px;border-radius:50%;background:#25D366;display:grid;place-items:center;box-shadow:0 10px 25px rgba(37,211,102,.45);transition:transform .25s;animation:pulse 2.6s infinite}
-.wa-float:hover{transform:scale(1.1)}
-.wa-float svg{width:32px;height:32px;fill:#fff}
-@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(37,211,102,.5)}70%{box-shadow:0 0 0 18px rgba(37,211,102,0)}100%{box-shadow:0 0 0 0 rgba(37,211,102,0)}}
+.dos-card{border:1px solid var(--line);border-radius:10px;padding:10px;display:grid;gap:8px;background:#fff}
+.dos-row{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.dos-row input[type=text]{flex:1;min-width:140px}
+.dos-row select{padding:9px 10px;border:1.5px solid var(--line);border-radius:8px;background:#fff}
+.dos-row label{display:flex;align-items:center;gap:4px;white-space:nowrap;font-size:.8rem;font-weight:500}
+.dos-row input[type=checkbox]{width:16px;height:16px;padding:0;border:0;flex:none;accent-color:var(--cyan-dark)}
+.dos-row button{width:36px;height:36px;border-radius:8px;border:1.5px solid var(--line);background:#fff;cursor:pointer;color:var(--muted)}
+.dos-row button:hover{border-color:var(--danger);color:var(--danger)}
+.dos-fixed{font-size:.8rem;color:var(--muted);background:var(--bg-soft);border-radius:8px;padding:8px 12px}
 
-.reveal{opacity:0;transform:translateY(30px);transition:opacity .8s var(--ease),transform .8s var(--ease);transition-delay:var(--d,0s)}
-.reveal.in{opacity:1;transform:none}
-.news-empty.reveal.in{transition:transform .35s var(--ease), border-color .35s var(--ease), opacity .8s var(--ease)}
-.news-empty.reveal.in:hover{transform:translateY(-4px);border-color:var(--cyan)}
+.toasts{position:fixed;bottom:24px;right:24px;display:flex;flex-direction:column;gap:10px;z-index:2000}
+.toast{background:#fff;border-radius:10px;box-shadow:0 10px 30px rgba(0,0,0,.15);padding:14px 20px;min-width:240px;border-left:4px solid var(--success);font-size:.88rem;font-weight:500;animation:toastIn .3s cubic-bezier(.2,.7,.3,1)}
+.toast--error{border-left-color:var(--danger)}
+.toast--info{border-left-color:var(--warning)}
+@keyframes toastIn{from{opacity:0;transform:translateX(40px)}to{opacity:1;transform:none}}
+.toast--removing{animation:toastOut .3s ease forwards}
+@keyframes toastOut{to{opacity:0;transform:translateX(40px)}}
 
-@media (max-width:1280px){.phone-link{display:none}}
-@media (max-width:1080px) and (min-width:901px){
-  .main-nav{gap:12px;font-size:.82rem}
-  .header-actions{gap:8px}
-  .header-actions .btn-sm{padding:9px 14px;font-size:.8rem}
+.loader{display:flex;align-items:center;justify-content:center;padding:60px 20px;color:var(--muted);font-size:.9rem}
+.loader::before{content:'';width:20px;height:20px;margin-right:12px;border:2.5px solid var(--line);border-top-color:var(--cyan-dark);border-radius:50%;animation:spin .8s linear infinite}
+.empty-state{text-align:center;padding:60px 20px;color:var(--muted)}
+.empty-state h3{color:var(--navy);margin-bottom:8px}
+
+@media(max-width:900px){
+  .layout{grid-template-columns:1fr}
+  .main{padding:18px 14px;min-width:0}
+  .view__header h1{font-size:1.4rem}
+  .sidebar{position:sticky;top:0;z-index:50;height:auto;flex-direction:row;flex-wrap:wrap;align-items:center;padding:10px 14px;gap:10px;overflow:visible}
+  .sidebar__brand{order:1;flex:1;padding:0;margin:0;border:none}
+  .sidebar__brand img{width:34px;height:34px}
+  .sidebar__brand h2{font-size:.9rem}
+  .sidebar__footer{order:2;padding:0;border:none;flex-direction:row;gap:6px}
+  .sidebar__footer a,.sidebar__footer button{font-size:0;gap:0;padding:9px 11px}
+  .sidebar__footer .ico{font-size:1.05rem}
+  .side-nav{order:3;flex:0 0 100%;flex-direction:row;padding:0;gap:6px;overflow:visible}
+  .side-nav button{flex:1;flex-direction:column;justify-content:center;gap:2px;padding:8px 4px;font-size:.72rem;text-align:center;white-space:normal;line-height:1.15;word-break:break-word}
 }
-@media (max-width:980px){
-  .testi-grid{grid-template-columns:repeat(2,1fr)}
-  .svc{flex:0 1 calc((100% - 26px) / 2)}
-  .why-grid{grid-template-columns:repeat(2,1fr)}
-  .actu-grid,.carriere-grid{grid-template-columns:repeat(2,1fr)}
-  .footer-grid{grid-template-columns:1fr 1fr}
-  .split{grid-template-columns:1fr;gap:36px}
-}
-@media (max-width:900px){
-  :root{--header-h:80px}
-  .hero-slides{inset:0}
-  .hero-slide img{object-position:center center}
-  .main-nav{position:absolute;top:var(--header-h);left:0;right:0;background:#fff;flex-direction:column;gap:0;padding:10px 20px 20px;border-bottom:1px solid var(--line);box-shadow:var(--shadow);display:none}
-  .main-nav.open{display:flex}
-  .main-nav a{padding:13px 0;border-bottom:1px solid var(--line);font-size:.95rem}
-  .main-nav a::after{display:none}
-  .nav-toggle{display:inline-flex}
-  .header-actions .btn-sm{padding:9px 16px;font-size:.85rem}
-  .logo-img{height:58px}
-  .site-header.scrolled .header-inner{height:70px}
-  .site-header.scrolled .logo-img{height:50px}
-  .testi-grid{grid-template-columns:repeat(2,1fr)}
-  .svc{flex:0 1 calc((100% - 26px) / 2)}
-  .why-grid{grid-template-columns:repeat(2,1fr)}
-  .actu-grid,.carriere-grid{grid-template-columns:repeat(2,1fr)}
-  .footer-grid{grid-template-columns:1fr 1fr}
-  .split{grid-template-columns:1fr;gap:36px}
-  .marquee-item{width:320px;height:220px}
-  .marquee-track{animation-duration:32s}
-}
-@media (max-width:640px){
-  .section{padding:58px 0}
-  .testi-grid{grid-template-columns:1fr}
-  .svc{flex:0 1 100%}
-  .why-grid{grid-template-columns:1fr;gap:20px}
-  .actu-grid,.carriere-grid{grid-template-columns:1fr}
-  .hero{min-height:calc(100svh - var(--header-h));padding:48px 0 90px}
-  .hero::after{background:linear-gradient(180deg,rgba(10,37,64,.55) 0%,rgba(10,37,64,.30) 40%,rgba(10,37,64,.78) 100%)}
-  .hero-logo{padding:10px 18px;margin-bottom:18px}
-  .hero-logo img{height:56px}
-  .hero h1{font-size:clamp(1.75rem,7.2vw,2.2rem)}
-  .hero p{font-size:1rem;margin-bottom:.8em}
-  .hero-actions{margin-top:22px;gap:10px}
-  .hero-actions .btn{padding:12px 22px;font-size:.9rem}
-  .hero-dots{bottom:24px}
-  .hero-dot{width:11px;height:11px}
-  .scroll-hint{display:none}
-  .hero-slide.is-active{transform:scale(1.04)}
-  .news-empty{padding:44px 24px}
-  .news-empty-icon{width:68px;height:68px;font-size:1.9rem}
-  .news-empty h3{font-size:1.1rem}
-  .news-empty p{font-size:.94rem}
-  .pre-logo img{height:64px}
-  .pre-bar{width:140px}
-  .cta-band{padding:38px 22px}
+
+@media(max-width:700px){
+  .view__header .btn{width:100%}
+  .stats-grid{grid-template-columns:repeat(2,1fr);gap:12px}
+  .stat-card{padding:16px}
+  .stat-card__label{font-size:.7rem}
+  .stat-card__value{font-size:1.7rem}
+  .stat-card__hint{font-size:.74rem}
+  .filter-tabs,#carrieresFilter{flex-wrap:nowrap;overflow-x:auto;padding-bottom:6px}
+  .filter-tabs button{white-space:nowrap;flex-shrink:0}
+  .table-wrapper{background:none;box-shadow:none;overflow:visible}
+  table,tbody,tr,td{display:block;width:100%}
+  thead{display:none}
+  tbody tr{background:#fff;border-radius:12px;box-shadow:var(--shadow);margin-bottom:14px;padding:10px 14px}
+  tbody tr:hover{background:#fff}
+  td{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:9px 0;border-bottom:1px solid var(--line);text-align:right;word-break:break-word;overflow-wrap:anywhere}
+  td:last-child{border-bottom:none}
+  td::before{content:attr(data-label);flex-shrink:0;font-size:.7rem;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);text-align:left}
+  td[colspan]:not(.loader)::before{content:none}
+  td[colspan]{justify-content:center}
+  td[data-label="Image"]{display:block;padding:0 0 10px}
+  td[data-label="Image"]::before{content:none}
+  td[data-label="Image"] .table-thumb{width:100%;height:auto;aspect-ratio:16/9;min-height:60px}
+  td[data-label="Actions"]::before{content:none}
+  .table-actions{width:100%;gap:10px}
+  .table-actions .btn{flex:1;padding:11px}
   .form-row{grid-template-columns:1fr}
-  .footer-grid{grid-template-columns:1fr;gap:28px}
-  .footer-bottom{justify-content:center;text-align:center}
-  .logo-img{height:50px}
-  .image-marquee{padding:42px 0}
-  .marquee-track{gap:20px;animation-duration:30s}
-  .marquee-item{width:300px;height:210px}
-  .image-marquee::before,.image-marquee::after{width:50px}
-  .detail-content{padding:24px 20px}
-  .detail-content h2{font-size:1.25rem}
-  .detail-info-grid{grid-template-columns:1fr}
-  .modal-header{padding:28px 20px 16px}
-  .modal-body{padding:20px}
+  .modal{padding:0;align-items:flex-end}
+  .modal__content{max-width:none!important;max-height:94vh;border-radius:16px 16px 0 0}
+  .modal__header{padding:18px 18px 12px}
+  .modal__body{padding:16px 18px;gap:14px}
+  .modal__footer{position:sticky;bottom:0;background:#fff;padding:12px 18px 18px}
+  .modal__footer .btn{flex:1}
+  .field input,.field select,.field textarea{font-size:16px}
+  .dos-row input[type=text]{min-width:0;font-size:16px}
+  .dos-row select{font-size:16px}
+  .toasts{left:14px;right:14px;bottom:14px}
+  .toast{min-width:0}
 }
-@media (prefers-reduced-motion:reduce){
-  html{scroll-behavior:auto}
-  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
-  .reveal,.hero .in-seq,.split-words .w{opacity:1;transform:none}
-  .hero-slide{transition:opacity .9s ease!important;transform:none!important}
-  .hero-slide.is-active{opacity:1;transform:none!important}
-  .marquee-track{animation:none!important;transform:none!important}
-  .pre-logo{animation:none!important}
-  .pre-bar span{animation:none!important;width:100%}
-  .actu-card,.carriere-card{opacity:1!important}
+
+@media(max-width:400px){
+  .side-nav button{font-size:.64rem;padding:8px 2px}
+  .stat-card__value{font-size:1.5rem}
 }
 </style>
 </head>
-<body class="is-loading">
+<body>
 
-<div class="preloader" id="preloader" role="status" aria-label="Chargement">
-  <div class="pre-logo"><img src="transport/logo.jpg" alt="CTL – Compagnie Tra-Log SARL"></div>
-  <div class="pre-bar"><span></span></div>
+<div class="auth-check" id="authCheck">
+  <div class="auth-check__spinner"></div>
+  <div class="auth-check__msg">Vérification de l'accès...</div>
 </div>
 
-<div class="progress" id="progress"></div>
-
-<header class="site-header" id="header">
-  <div class="container header-inner">
-    <a href="#accueil" class="logo" id="siteLogo" aria-label="CTL Accueil">
-      <img src="transport/logo.jpg" alt="CTL – Compagnie Tra-Log SARL" class="logo-img">
-    </a>
-    <nav class="main-nav" id="mainNav">
-      <a href="#accueil" class="active">Accueil</a>
-      <a href="#a-propos">À propos</a>
-      <a href="#services">Services</a>
-      <a href="#pourquoi">Pourquoi nous</a>
-      <a href="#temoignages">Témoignages</a>
-      <a href="#actualites">Actualités</a>
-      <a href="#carriere">Carrière</a>
-      <a href="#contact">Contact</a>
+<div class="layout" id="layout" style="display:none">
+  <aside class="sidebar">
+    <div class="sidebar__brand">
+      <img src="transport/logo.jpg" alt="CTL">
+      <h2>CTL Admin<span>Tra-Log SARL</span></h2>
+    </div>
+    <nav class="side-nav">
+      <button data-view="dashboard" class="active"><span class="ico">📊</span> Tableau de bord</button>
+      <button data-view="actualites"><span class="ico">📰</span> Actualités</button>
+      <button data-view="carrieres"><span class="ico">💼</span> Carrière</button>
+      <button data-view="candidatures"><span class="ico">📥</span> Candidatures</button>
     </nav>
-    <div class="header-actions">
-      <a href="tel:+22676853514" class="phone-link">+226 76 85 35 14</a>
-      <a href="#contact" class="btn btn-primary btn-sm">Demander un devis</a>
-      <button class="nav-toggle" id="navToggle" aria-label="Menu" aria-expanded="false"><span></span><span></span><span></span></button>
+    <div class="sidebar__footer">
+      <a href="index.html" target="_blank" rel="noopener"><span class="ico">🌐</span> Voir le site</a>
+      <button id="logoutBtn"><span class="ico">🚪</span> Déconnexion</button>
     </div>
-  </div>
-</header>
+  </aside>
 
-<section class="hero" id="accueil">
-  <div class="hero-slides" aria-hidden="true">
-    <div class="hero-slide is-active">
-      <img src="transport/im5.jpg" alt="" fetchpriority="high" decoding="async" style="object-position:center center">
-    </div>
-    <div class="hero-slide"><img data-src="transport/IM2.jpg" alt="" decoding="async" style="object-position:center center"></div>
-    <div class="hero-slide"><img data-src="transport/IM6.jpg" alt="" decoding="async" style="object-position:center center"></div>
-  </div>
-  <div class="container">
-    <div class="hero-logo in-seq d1"><img src="transport/logo.jpg" alt="CTL – Compagnie Tra-Log SARL"></div>
-    <h1 class="in-seq d2">Un partenaire stratégique pour <span class="hero-dyn">une Supply Chain plus intégrée</span></h1>
-    <p class="in-seq d3">Compagnie Tra-Log SARL accompagne ses clients dans le dédouanement, la logistique et la gestion de la supply chain depuis Ouagadougou.</p>
-    <div class="hero-actions in-seq d4">
-      <a href="#contact" class="btn btn-accent">Demander un devis</a>
-      <a href="#services" class="btn btn-light">Découvrir nos services</a>
-    </div>
-  </div>
-  <div class="hero-dots" role="tablist" aria-label="Navigation du diaporama">
-    <button class="hero-dot is-active" type="button" aria-label="Image 1" aria-selected="true"></button>
-    <button class="hero-dot" type="button" aria-label="Image 2" aria-selected="false"></button>
-    <button class="hero-dot" type="button" aria-label="Image 3" aria-selected="false"></button>
-  </div>
-  <span class="scroll-hint" aria-hidden="true"></span>
-</section>
-
-<section class="section" id="a-propos">
-  <div class="container about">
-    <div class="reveal">
-      <span class="eyebrow">À propos</span>
-      <h2>Compagnie Tra-Log SARL</h2>
-      <p>Compagnie Tra-Log SARL est une entreprise de transit et de logistique basée à Ouagadougou et a une porte internationale.</p>
-      <p>Elle accompagne ses clients dans le dédouanement, la logistique et la gestion de la supply chain, sur les modes Terrestre, Aérien et Maritime.</p>
-      <div class="modes"><span>Terre</span><span>Air</span><span>Mer</span></div>
-    </div>
-  </div>
-</section>
-
-<div class="image-marquee" aria-hidden="true">
-  <div class="marquee-track">
-    <div class="marquee-item"><img src="transport/IM2.jpg" alt="" loading="lazy" decoding="async"></div>
-    <div class="marquee-item"><img src="transport/IM3.jpg" alt="" loading="lazy" decoding="async"></div>
-    <div class="marquee-item"><img src="transport/acceuil.jpg" alt="" loading="lazy" decoding="async"></div>
-    <div class="marquee-item"><img src="transport/im1.jpg" alt="" loading="lazy" decoding="async"></div>
-    <div class="marquee-item"><img src="transport/im4.jpg" alt="" loading="lazy" decoding="async"></div>
-    <div class="marquee-item"><img src="transport/im5.jpg" alt="" loading="lazy" decoding="async"></div>
-    <div class="marquee-item"><img src="transport/IM6.jpg" alt="" loading="lazy" decoding="async"></div>
-    <div class="marquee-item"><img src="transport/IM2.jpg" alt="" loading="lazy" decoding="async"></div>
-    <div class="marquee-item"><img src="transport/IM3.jpg" alt="" loading="lazy" decoding="async"></div>
-    <div class="marquee-item"><img src="transport/acceuil.jpg" alt="" loading="lazy" decoding="async"></div>
-    <div class="marquee-item"><img src="transport/im1.jpg" alt="" loading="lazy" decoding="async"></div>
-    <div class="marquee-item"><img src="transport/im4.jpg" alt="" loading="lazy" decoding="async"></div>
-    <div class="marquee-item"><img src="transport/im5.jpg" alt="" loading="lazy" decoding="async"></div>
-    <div class="marquee-item"><img src="transport/IM6.jpg" alt="" loading="lazy" decoding="async"></div>
-  </div>
-</div>
-
-<section class="section section--soft" id="services">
-  <div class="container">
-    <div class="section-head reveal">
-      <span class="eyebrow">Nos services</span>
-      <h2>Notre offre de services</h2>
-      <p>Nos principales prestations en transit, logistique et supply chain.</p>
-    </div>
-    <div class="services">
-      <article class="svc reveal"><div class="svc-icon">📦</div><h3>Logistique et supply chain</h3><p>Collecte, expédition et livraison de marchandises.</p><a href="#contact">Demander un devis</a></article>
-      <article class="svc reveal"><div class="svc-icon">🌍</div><h3>Gestion de la Supply Chain</h3><p>Appui aux entreprises minières et agro-industrielles dans leurs opérations d'approvisionnement.</p><a href="#contact">Demander un devis</a></article>
-      <article class="svc reveal"><div class="svc-icon">🛃</div><h3>Transit et dédouanement</h3><p>Prise en charge des formalités douanières à l'import et à l'export.</p><a href="#contact">Demander un devis</a></article>
-      <article class="svc reveal"><div class="svc-icon">🧭</div><h3>Étude, Consulting, Assistance et Conseil</h3><p>En matière douanière, maritime et logistique.</p><a href="#contact">Demander un devis</a></article>
-      <article class="svc reveal"><div class="svc-icon">✅</div><h3>Audit et Certification de navigabilité des conteneurs</h3><p>Pour le transport maritime.</p><a href="#contact">Demander un devis</a></article>
-    </div>
-  </div>
-</section>
-
-<section class="section" id="pourquoi">
-  <div class="container">
-    <div class="section-head reveal">
-      <span class="eyebrow">Pourquoi nous choisir</span>
-      <h2>Ce qui fait la différence</h2>
-      <p>Un partenaire engagé, réactif et transparent pour sécuriser vos flux.</p>
-    </div>
-    <div class="why-grid">
-      <article class="why reveal">
-        <div class="why-num">01</div>
-        <h3>Expertise reconnue</h3>
-        <p>Maîtrise complète des procédures douanières et des opérations de transit, à l'import comme à l'export.</p>
-      </article>
-      <article class="why reveal">
-        <div class="why-num">02</div>
-        <h3>Réactivité & suivi</h3>
-        <p>Une équipe disponible et un suivi transparent à chaque étape de votre dossier, jusqu'à la livraison.</p>
-      </article>
-      <article class="why reveal">
-        <div class="why-num">03</div>
-        <h3>Solutions sur mesure</h3>
-        <p>Des prestations adaptées à votre activité, vos volumes et vos contraintes spécifiques.</p>
-      </article>
-    </div>
-  </div>
-</section>
-
-<section class="section section--soft" id="temoignages">
-  <div class="container">
-    <div class="section-head reveal">
-      <span class="eyebrow">Témoignages</span>
-      <h2>Ils nous font confiance</h2>
-      <p>Quelques retours de clients accompagnés par nos équipes.</p>
-    </div>
-    <div class="testi-grid">
-      <article class="testi reveal">
-        <div class="testi-stars" aria-label="5 étoiles sur 5">★★★★★</div>
-        <blockquote>« Compagnie Tra-Log a assuré le dédouanement de nos équipements dans les délais. Un partenaire fiable et professionnel. »</blockquote>
-        <div class="testi-who"><div class="testi-avatar">A</div><div><strong>Responsable Logistique</strong><span>Société minière · Ouagadougou</span></div></div>
-      </article>
-      <article class="testi reveal">
-        <div class="testi-stars" aria-label="5 étoiles sur 5">★★★★★</div>
-        <blockquote>« Grâce à leur réseau, nos expéditions arrivent à temps. Le suivi est impeccable et l'équipe très à l'écoute. »</blockquote>
-        <div class="testi-who"><div class="testi-avatar">B</div><div><strong>Directrice Achats</strong><span>Agro-industrie · Bobo-Dioulasso</span></div></div>
-      </article>
-      <article class="testi reveal">
-        <div class="testi-stars" aria-label="5 étoiles sur 5">★★★★★</div>
-        <blockquote>« Une équipe réactive et de bon conseil. Nos approvisionnements sont mieux coordonnés depuis que nous travaillons avec eux. »</blockquote>
-        <div class="testi-who"><div class="testi-avatar">C</div><div><strong>Gérant</strong><span>PME Import · Ouagadougou</span></div></div>
-      </article>
-    </div>
-  </div>
-</section>
-
-<section class="section" id="actualites">
-  <div class="container">
-    <div class="section-head reveal">
-      <span class="eyebrow">Actualités</span>
-      <h2>Nos dernières actualités</h2>
-      <p>Suivez les nouvelles de Compagnie Tra-Log SARL.</p>
-    </div>
-    <div id="actualitesContainer">
-      <div class="news-empty">
-        <div class="news-empty-icon">📰</div>
-        <h3>Chargement des actualités…</h3>
+  <main class="main">
+    <section class="view" data-view-content="dashboard">
+      <div class="view__header">
+        <div><h1>Tableau de bord</h1><p>Vue d'ensemble du site CTL Tra-Log</p></div>
       </div>
-    </div>
-  </div>
-</section>
-
-<section class="section section--soft" id="carriere">
-  <div class="container">
-    <div class="section-head reveal">
-      <span class="eyebrow">Carrière</span>
-      <h2>Rejoignez notre équipe</h2>
-      <p>Découvrez nos offres de carrière, d'emploi et de stage.</p>
-    </div>
-    <div class="carriere-filters" id="carriereFilters">
-      <button data-cfilter="all" class="active" type="button">Toutes les offres</button>
-      <button data-cfilter="carriere" type="button">Offres de carrière</button>
-      <button data-cfilter="emploi" type="button">Offres d'emploi</button>
-      <button data-cfilter="stage" type="button">Offres de stage</button>
-    </div>
-    <div id="carrieresContainer">
-      <div class="news-empty">
-        <div class="news-empty-icon">💼</div>
-        <h3>Chargement des offres…</h3>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="section" id="besoin" style="padding-top:0">
-  <div class="container">
-    <div class="cta-band reveal">
-      <h2>Un besoin de transit ou de logistique ?</h2>
-      <p>Décrivez-nous votre marchandise, votre origine et votre destination. Nous revenons vers vous rapidement.</p>
-      <div class="hero-actions" style="justify-content:center">
-        <a href="tel:+22676853514" class="btn btn-accent">Appeler maintenant</a>
-        <a href="https://wa.me/22676853514?text=Bonjour%20CTL" target="_blank" rel="noopener" class="btn btn-light">Écrire sur WhatsApp</a>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="section section--soft" id="contact">
-  <div class="container">
-    <div class="section-head reveal">
-      <span class="eyebrow">Contact</span>
-      <h2>Parlons de votre projet</h2>
-      <p>Une question, une demande de devis ou d'information ? Notre équipe vous répond rapidement.</p>
-    </div>
-    <div class="split">
-      <div class="reveal">
-        <ul class="contact-list">
-          <li><div class="ci">📞</div><div><strong>Téléphone</strong><span>+226 76 85 35 14<br>+226 70 82 32 17<br>+226 79 26 31 66</span></div></li>
-          <li><div class="ci">✉️</div><div><strong>Email</strong><span>Compagnietralog@gmail.com</span></div></li>
-          <li><div class="ci">📍</div><div><strong>Adresse</strong><span>Patte d'Oie, Ouagadougou, Burkina Faso</span></div></li>
-        </ul>
-        <div class="map-wrap">
-          <iframe src="https://www.google.com/maps?q=Patte+d%27Oie,+Ouagadougou,+Burkina+Faso&output=embed" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Localisation CTL"></iframe>
+      <div class="stats-grid" id="statsGrid"></div>
+      <div style="margin-top:32px">
+        <h2 style="font-size:1.2rem;margin-bottom:16px;color:var(--navy)">Dernières actualités</h2>
+        <div class="table-wrapper">
+          <table>
+            <thead><tr><th>Image</th><th>Titre</th><th>Date</th><th>Publié</th></tr></thead>
+            <tbody id="recentActualitesTbody"><tr><td colspan="4" class="loader"></td></tr></tbody>
+          </table>
         </div>
       </div>
-      <div class="reveal">
-        <form class="form" data-mailto="Demande depuis le site">
-          <div class="form-row">
-            <div class="field"><label for="c-nom">Nom complet *</label><input type="text" id="c-nom" name="nom" required></div>
-            <div class="field"><label for="c-tel">Téléphone</label><input type="tel" id="c-tel" name="telephone"></div>
-          </div>
-          <div class="field"><label for="c-email">Email *</label><input type="email" id="c-email" name="email" required></div>
-          <div class="field">
-            <label for="c-sujet">Sujet</label>
-            <select id="c-sujet" name="sujet">
-              <option value="Devis transit / dédouanement">Devis transit / dédouanement</option>
-              <option value="Devis logistique / supply chain">Devis de collecte de documents</option>
-              <option value="Gestion de la Supply Chain">Devis de conseils et d'assistance</option>
-              <option value="Devis Maritime">Devis Maritime</option>
-              <option value="Devis Aérien">Devis Aérien</option>
-              <option value="Devis Transport Terrestre">Devis Transport Terrestre</option>
-              <option value="Devis Livraison">Devis Livraison</option>
-              <option value="Candidature">Candidature</option>
-              <option value="Autre demande">Autre demande</option>
-            </select>
-          </div>
-          <div class="field"><label for="c-msg">Votre message *</label><textarea id="c-msg" name="message" required placeholder="Décrivez votre marchandise, votre origine et votre destination…"></textarea></div>
-          <div class="form-actions">
-            <button type="submit" class="btn btn-primary">Envoyer par email</button>
-            <button type="button" class="btn btn-accent" data-wa>Envoyer via WhatsApp</button>
-          </div>
-          <p class="form-note">* Champs requis. Nous vous répondons dans les meilleurs délais.</p>
-        </form>
+      <div style="margin-top:32px">
+        <h2 style="font-size:1.2rem;margin-bottom:16px;color:var(--navy)">Dernières offres carrière</h2>
+        <div class="table-wrapper">
+          <table>
+            <thead><tr><th>Titre</th><th>Type</th><th>Lieu</th><th>Publié</th></tr></thead>
+            <tbody id="recentCarrieresTbody"><tr><td colspan="4" class="loader"></td></tr></tbody>
+          </table>
+        </div>
       </div>
-    </div>
-  </div>
-</section>
+    </section>
 
-<footer class="site-footer">
-  <div class="container footer-grid">
-    <div>
-      <a href="#accueil" class="footer-logo" aria-label="CTL Accueil"><img src="transport/logo.jpg" alt="CTL" loading="lazy"></a>
-      <p style="margin-top:16px;font-size:.92rem">Transit, logistique et supply chain à Ouagadougou.</p>
-    </div>
-    <div><h4>Navigation</h4><ul>
-      <li><a href="#accueil">Accueil</a></li><li><a href="#a-propos">À propos</a></li><li><a href="#services">Services</a></li>
-      <li><a href="#pourquoi">Pourquoi nous</a></li><li><a href="#temoignages">Témoignages</a></li>
-      <li><a href="#actualites">Actualités</a></li><li><a href="#carriere">Carrière</a></li>
-      <li><a href="#contact">Contact</a></li>
-    </ul></div>
-    <div><h4>Services</h4><ul>
-      <li>Logistique et supply chain</li><li>Gestion de la Supply Chain</li><li>Transit et dédouanement</li>
-      <li>Étude, Consulting, Assistance et Conseil</li><li>Audit et Certification de conteneurs</li>
-    </ul></div>
-    <div><h4>Contact</h4><ul class="footer-contact">
-      <li><span>📞</span><span>+226 76 85 35 14<br>+226 70 82 32 17<br>+226 79 26 31 66</span></li>
-      <li><span>✉️</span><span>Compagnietralog@gmail.com</span></li>
-      <li><span>📍</span><span>Patte d'Oie, Ouagadougou, Burkina Faso</span></li>
-    </ul></div>
-  </div>
-  <div class="container footer-bottom">
-    <span>© <span data-year>2026</span> Compagnie Tra-Log SARL. Tous droits réservés.</span>
-    <span>Site réalisé par <a href="https://vinkedev.github.io/kevinportofolio/" target="_blank" rel="noopener">Sion Tech Solution</a></span>
-  </div>
-</footer>
-
-<a href="https://wa.me/22676853514?text=Bonjour%20CTL" class="wa-float" target="_blank" rel="noopener" aria-label="WhatsApp">
-  <svg viewBox="0 0 24 24"><path d="M20.5 3.5A11 11 0 0 0 3.2 17.3L2 22l4.8-1.2A11 11 0 0 0 20.5 3.5zM12 20a8 8 0 0 1-4.1-1.1l-.3-.2-2.8.7.7-2.7-.2-.3A8 8 0 1 1 12 20zm4.5-6c-.2-.1-1.4-.7-1.6-.8s-.4-.1-.5.1-.6.8-.8 1-.3.2-.5.1a6.5 6.5 0 0 1-3.2-2.8c-.2-.4.2-.4.5-1.2.1-.2 0-.4 0-.5l-.8-1.9c-.2-.5-.4-.4-.5-.4h-.5a1 1 0 0 0-.7.3A3 3 0 0 0 7 10.9a5.3 5.3 0 0 0 1.1 2.8 12 12 0 0 0 4.6 4c2.1.8 2.1.6 2.5.6a2.7 2.7 0 0 0 1.8-1.3 2.2 2.2 0 0 0 .1-1.3c0-.1-.2-.2-.4-.3z"/></svg>
-</a>
-
-<!-- MODAL LOGIN ADMIN -->
-<div class="modal-overlay" id="loginModal" role="dialog" aria-modal="true">
-  <div class="modal-card">
-    <button class="modal-close" id="loginClose" aria-label="Fermer">✕</button>
-    <div class="modal-header">
-      <div class="modal-icon">🔐</div>
-      <h3>Espace Administration</h3>
-      <p>Compagnie Tra-Log SARL</p>
-    </div>
-    <div class="modal-body">
-      <div class="field">
-        <label for="adminPassword">Mot de passe</label>
-        <input type="password" id="adminPassword" placeholder="••••••••" autocomplete="current-password">
+    <section class="view" data-view-content="actualites" style="display:none">
+      <div class="view__header">
+        <div><h1>Actualités</h1><p>Publier et gérer les articles d'actualité</p></div>
+        <button class="btn btn--primary" id="addActualiteBtn">+ Nouvelle actualité</button>
       </div>
-      <button class="btn btn-primary" id="loginSubmit" type="button">Se connecter</button>
-      <p class="login-error" id="loginError"></p>
+      <div class="table-wrapper">
+        <table>
+          <thead><tr><th>Image</th><th>Titre</th><th>Date</th><th>Publié</th><th>Actions</th></tr></thead>
+          <tbody id="actualitesTbody"><tr><td colspan="5" class="loader"></td></tr></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="view" data-view-content="carrieres" style="display:none">
+      <div class="view__header">
+        <div><h1>Carrière</h1><p>Publier et gérer les offres (carrière, emploi, stage)</p></div>
+        <button class="btn btn--primary" id="addCarriereBtn">+ Nouvelle offre</button>
+      </div>
+      <div class="filter-tabs" id="carrieresFilter">
+        <button data-cfilter="all" class="active">Toutes</button>
+        <button data-cfilter="carriere">Offres de carrière</button>
+        <button data-cfilter="emploi">Offres d'emploi</button>
+        <button data-cfilter="stage">Offres de stage</button>
+      </div>
+      <div class="table-wrapper">
+        <table>
+          <thead><tr><th>Image</th><th>Titre</th><th>Type</th><th>Lieu</th><th>Date limite</th><th>Publié</th><th>Actions</th></tr></thead>
+          <tbody id="carrieresTbody"><tr><td colspan="7" class="loader"></td></tr></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="view" data-view-content="candidatures" style="display:none">
+      <div class="view__header"><div><h1>Candidatures</h1><p>Dossiers reçus depuis le site</p></div></div>
+      <div class="table-wrapper">
+        <table>
+          <thead><tr><th>Date</th><th>Offre</th><th>Candidat</th><th>Contact</th><th>Réponses</th><th>Actions</th></tr></thead>
+          <tbody id="candidaturesTbody"><tr><td colspan="6" class="loader"></td></tr></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+</div>
+
+<!-- MODAL ACTUALITÉ -->
+<div class="modal" id="actualiteModal">
+  <div class="modal__content">
+    <div class="modal__header"><h3 id="actualiteModalTitle">Nouvelle actualité</h3><button class="modal__close" data-close="actualiteModal">✕</button></div>
+    <form id="actualiteForm">
+      <div class="modal__body">
+        <div class="field"><label>Titre *</label><input type="text" name="title" required></div>
+        <div class="field"><label>Contenu complet *</label><textarea name="content" required style="min-height:160px" placeholder="Utilisez des sauts de ligne pour séparer les paragraphes"></textarea></div>
+        <div class="field">
+          <label>Image *</label>
+          <input type="file" name="img_file" accept="image/*">
+          <input type="hidden" name="img">
+          <div id="actualiteImgPreview" style="margin-top:8px"></div>
+          <small>JPG, PNG ou WebP — max 5 Mo</small>
+        </div>
+        <div class="form-row">
+          <div class="field"><label>Catégorie</label><input type="text" name="category" placeholder="Ex : Annonce, Événement..."></div>
+          <div class="field"><label>Date de publication</label><input type="text" name="date_publication" placeholder="Ex : 15 Janvier 2026"></div>
+        </div>
+        <div class="checkbox-field">
+          <input type="checkbox" id="actualitePublie" name="published" checked>
+          <label for="actualitePublie">Publier immédiatement</label>
+        </div>
+      </div>
+      <div class="modal__footer">
+        <button type="button" class="btn btn--ghost" data-close="actualiteModal">Annuler</button>
+        <button type="submit" class="btn btn--primary" id="actualiteSubmitBtn">Enregistrer</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- MODAL CARRIÈRE -->
+<div class="modal" id="carriereModal">
+  <div class="modal__content">
+    <div class="modal__header"><h3 id="carriereModalTitle">Nouvelle offre</h3><button class="modal__close" data-close="carriereModal">✕</button></div>
+    <form id="carriereForm">
+      <div class="modal__body">
+        <div class="form-section-title">Type d'offre</div>
+        <div class="field">
+          <label>Type *</label>
+          <select name="type" required>
+            <option value="carriere">Offre de carrière</option>
+            <option value="emploi">Offre d'emploi</option>
+            <option value="stage">Offre de stage</option>
+          </select>
+        </div>
+        <div class="form-section-title">Informations principales</div>
+        <div class="field"><label>Titre *</label><input type="text" name="title" required placeholder="Ex : Assistant(e) Transit"></div>
+        <div class="field"><label>Description *</label><textarea name="description" required style="min-height:110px"></textarea></div>
+        <div class="form-row">
+          <div class="field"><label>Lieu</label><input type="text" name="location" placeholder="Ex : Ouagadougou"></div>
+          <div class="field"><label>Département</label><input type="text" name="department" placeholder="Ex : Transit & Douane"></div>
+        </div>
+        <div class="form-row">
+          <div class="field"><label>Type de contrat</label><input type="text" name="type_contrat" placeholder="Ex : CDI, CDD, Stage 6 mois"></div>
+          <div class="field"><label>Date limite</label><input type="text" name="date_limite" placeholder="Ex : 30 Novembre 2026"></div>
+        </div>
+        <div class="form-section-title">Détails</div>
+        <div class="field"><label>Missions</label><div class="array-field" id="missionsField"><button type="button" class="array-add" data-add="missions">+ Ajouter une mission</button></div></div>
+        <div class="field"><label>Prérequis / Profil recherché</label><div class="array-field" id="requirementsField"><button type="button" class="array-add" data-add="requirements">+ Ajouter un prérequis</button></div></div>
+        <div class="form-section-title">Formulaire de candidature</div>
+        <div class="field">
+          <label>Champs que le candidat doit remplir pour cette offre</label>
+          <div class="dos-fixed">Toujours présents : Nom, Téléphone, Email</div>
+          <div class="array-field" id="dossierField"></div>
+          <button type="button" class="array-add" id="addDossierBtn">+ Ajouter un champ</button>
+        </div>
+        <div class="field">
+          <label>Image (optionnelle)</label>
+          <input type="file" name="img_file" accept="image/*">
+          <input type="hidden" name="img">
+          <div id="carriereImgPreview" style="margin-top:8px"></div>
+          <small>JPG, PNG ou WebP — max 5 Mo</small>
+        </div>
+        <div class="checkbox-field">
+          <input type="checkbox" id="carrierePublie" name="published" checked>
+          <label for="carrierePublie">Publier immédiatement</label>
+        </div>
+      </div>
+      <div class="modal__footer">
+        <button type="button" class="btn btn--ghost" data-close="carriereModal">Annuler</button>
+        <button type="submit" class="btn btn--primary" id="carriereSubmitBtn">Enregistrer</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- MODAL CONFIRM -->
+<div class="modal" id="confirmModal">
+  <div class="modal__content" style="max-width:420px">
+    <div class="modal__header"><h3>Confirmer la suppression</h3><button class="modal__close" data-close="confirmModal">✕</button></div>
+    <div class="modal__body"><p id="confirmMessage" style="color:var(--muted)"></p></div>
+    <div class="modal__footer">
+      <button type="button" class="btn btn--ghost" data-close="confirmModal">Annuler</button>
+      <button type="button" class="btn btn--danger" id="confirmDeleteBtn">Supprimer</button>
     </div>
   </div>
 </div>
 
-<!-- MODAL DÉTAIL ACTUALITÉ -->
-<div class="modal-overlay" id="actualiteDetailModal" role="dialog" aria-modal="true">
-  <div class="modal-card modal-card--wide">
-    <button class="modal-close" data-close-detail aria-label="Fermer">✕</button>
-    <div class="detail-content"></div>
-  </div>
-</div>
+<div class="toasts" id="toasts"></div>
 
-<!-- MODAL DÉTAIL CARRIÈRE -->
-<div class="modal-overlay" id="carriereDetailModal" role="dialog" aria-modal="true">
-  <div class="modal-card modal-card--wide">
-    <button class="modal-close" data-close-detail aria-label="Fermer">✕</button>
-    <div class="detail-content"></div>
-  </div>
-</div>
-
-<!-- MODAL CANDIDATURE -->
-<div class="modal-overlay" id="candidatureModal" role="dialog" aria-modal="true">
-  <div class="modal-card">
-    <button class="modal-close" data-close-detail aria-label="Fermer">✕</button>
-    <div class="modal-header">
-      <div class="modal-icon">📝</div>
-      <h3>Postuler</h3>
-      <p id="candOffreTitre"></p>
-    </div>
-    <form class="modal-body" id="candidatureForm"></form>
-  </div>
-</div>
-
+<script src="https://unpkg.com/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <script>
-(function(){
-  'use strict';
+// ===== AUTH CHECK =====
+(function checkAuth(){
+  if(sessionStorage.getItem('tralog_admin') !== 'true'){
+    document.getElementById('authCheck').innerHTML = `
+      <div>
+        <h1 style="font-size:2rem;margin-bottom:12px">⛔ Accès refusé</h1>
+        <p style="opacity:.7;margin-bottom:24px;max-width:400px">Connectez-vous depuis le site (triple-clic sur le logo).</p>
+        <a href="index.html" style="display:inline-block;padding:12px 24px;background:#1287c0;color:#fff;border-radius:999px;font-weight:600">Retour au site</a>
+      </div>`;
+    return;
+  }
+  setTimeout(() => {
+    document.getElementById('authCheck').style.display = 'none';
+    document.getElementById('layout').style.display = 'grid';
+    initAdmin();
+  }, 300);
+})();
 
-  // ===== CONFIG =====
-  const SUPABASE_URL = "https://otdiywrvzappbmjfkkyi.supabase.co";
-  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im90ZGl5d3J2emFwcGJtamZra3lpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk2MTQyMDcsImV4cCI6MjA4NTE5MDIwN30.O5gHqJF1SCvpu19Z0OFHhQsT_ZmeIFbuEu-bpBZXXtY";
-  const ADMIN_PASSWORD = "tralog2026";
-  const SESSION_KEY = "tralog_admin";
-  const WHATSAPP = "22676853514";
-  const CARRIERE_LABELS = { carriere: "Offre de carrière", emploi: "Offre d'emploi", stage: "Offre de stage" };
+// ===== SUPABASE =====
+const SUPABASE_URL = "https://otdiywrvzappbmjfkkyi.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im90ZGl5d3J2emFwcGJtamZra3lpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk2MTQyMDcsImV4cCI6MjA4NTE5MDIwN30.O5gHqJF1SCvpu19Z0OFHhQsT_ZmeIFbuEu-bpBZXXtY";
+const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-  const $ = (s, ctx) => (ctx || document).querySelector(s);
-  const $$ = (s, ctx) => Array.from((ctx || document).querySelectorAll(s));
-  const escapeHTML = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+// ===== INVALIDATION CACHE SITE PUBLIC =====
+function invalidateSiteCache(){
+  try { localStorage.removeItem('ctl_cache_v1'); } catch(e) {}
+}
 
-  // ===== ACCÈS DONNÉES : REST direct (sans SDK Supabase) =====
-  const REST = SUPABASE_URL + '/rest/v1/';
-  const HEADERS = { apikey: SUPABASE_ANON_KEY, Authorization: 'Bearer ' + SUPABASE_ANON_KEY };
+// ===== UPLOAD IMAGE =====
+async function uploadImage(file, folder){
+  if(!file) return null;
+  if(!file.type.startsWith('image/')) throw new Error('Le fichier doit être une image');
+  if(file.size > 5 * 1024 * 1024) throw new Error('Image trop lourde (max 5 Mo)');
 
-  const fetchTable = async (table) => {
-    const url = REST + table + '?select=*&published=eq.true&order=created_at.desc';
-    const r = await fetch(url, { headers: HEADERS });
-    if (!r.ok) {
-      let detail = '';
-      try { detail = await r.text(); } catch (e) {}
-      console.error(`[CTL] ${table} HTTP ${r.status} — ${detail}\nURL: ${url}`);
-      throw new Error(`${table} ${r.status}`);
-    }
-    return r.json();
-  };
+  const ext = (file.name.split('.').pop() || 'jpg').toLowerCase();
+  const path = `${folder}/${Date.now()}-${Math.random().toString(36).slice(2,8)}.${ext}`;
 
-  // ===== PRELOADER / HERO / NAV / SCROLL =====
-  const header = $('#header');
-  const bar = $('#progress');
-  const hero = $('.hero');
-  const pre = $('#preloader');
-  const reduce = matchMedia('(prefers-reduced-motion:reduce)').matches;
-  const canHover = matchMedia('(hover:hover) and (pointer:fine)').matches;
+  const { error } = await db.storage.from('media').upload(path, file, {
+    cacheControl: '3600',
+    upsert: false,
+    contentType: file.type
+  });
+  if(error) throw error;
 
-  const slides = $$('.hero-slide');
-  const dots = $$('.hero-dot');
-  let slideIdx = 0;
+  const { data } = db.storage.from('media').getPublicUrl(path);
+  return data.publicUrl;
+}
 
-  const showSlide = i => {
-    slideIdx = (i + slides.length) % slides.length;
-    slides.forEach((s, k) => s.classList.toggle('is-active', k === slideIdx));
-    dots.forEach((d, k) => {
-      d.classList.toggle('is-active', k === slideIdx);
-      d.setAttribute('aria-selected', String(k === slideIdx));
-    });
-  };
+// ===== STATE =====
+let ACTUALITES = [];
+let CARRIERES = [];
+let editingActualiteId = null;
+let editingCarriereId = null;
+let currentCarriereFilter = 'all';
+let pendingDelete = null;
 
-  if (slides.length) {
-    slides.forEach(s => {
-      const im = s.querySelector('img');
-      if (!im) return;
-      const ok = () => im.classList.add('loaded');
-      if (im.complete && im.naturalWidth) ok();
-      else im.addEventListener('load', ok, { once: true });
-    });
+// ===== HELPERS =====
+const $ = (s,ctx=document) => ctx.querySelector(s);
+const $$ = (s,ctx=document) => [...ctx.querySelectorAll(s)];
+const escapeHTML = (s) => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
-    let started = false;
-    const startHero = () => {
-      if (started) return;
-      started = true;
-      if (pre) pre.classList.add('done');
-      document.body.classList.remove('is-loading');
+function toast(msg, type='success'){
+  const el = document.createElement('div');
+  el.className = 'toast' + (type==='error' ? ' toast--error' : type==='info' ? ' toast--info' : '');
+  el.textContent = msg;
+  $('#toasts').appendChild(el);
+  setTimeout(() => { el.classList.add('toast--removing'); setTimeout(() => el.remove(), 300); }, 3500);
+}
 
-      slides.slice(1).forEach(s => {
-        const im = s.querySelector('img');
-        if (im && im.dataset.src) {
-          im.src = im.dataset.src;
-          im.removeAttribute('data-src');
-          const ok = () => im.classList.add('loaded');
-          if (im.complete && im.naturalWidth) ok();
-          else im.addEventListener('load', ok, { once: true });
-        }
+const carriereLabels = { carriere:'Offre de carrière', emploi:"Offre d'emploi", stage:'Offre de stage' };
+
+function labelCells(){
+  $$('table').forEach(t => {
+    const heads = [...t.querySelectorAll('thead th')].map(th => th.textContent.trim());
+    t.querySelectorAll('tbody tr').forEach(tr => {
+      [...tr.children].forEach((td, i) => {
+        if (td.colSpan > 1 || !heads[i]) return;
+        td.setAttribute('data-label', heads[i]);
       });
+    });
+  });
+}
 
-      showSlide(0);
+async function loadData(){
+  const [a,c,k] = await Promise.all([
+    db.from('tralog_actualites').select('*').order('created_at',{ascending:false}),
+    db.from('tralog_carrieres').select('*').order('created_at',{ascending:false}),
+    db.from('tralog_candidatures').select('*').order('created_at',{ascending:false})
+  ]);
+  if(a.error){ console.error(a.error); toast('Erreur actualités : '+a.error.message,'error'); } else ACTUALITES = a.data || [];
+  if(c.error){ console.error(c.error); toast('Erreur carrières : '+c.error.message,'error'); } else CARRIERES = c.data || [];
+  if(k.error){ console.error(k.error); toast('Erreur candidatures : '+k.error.message,'error'); } else CANDIDATURES = k.data || [];
+}
 
-      if (slides.length > 1) {
-        setInterval(() => {
-          const nextImg = slides[(slideIdx + 1) % slides.length].querySelector('img');
-          if (nextImg && nextImg.complete && nextImg.naturalWidth) {
-            showSlide(slideIdx + 1);
-          }
-        }, 3000);
-      }
+function renderDashboard(){
+  const stats = {
+    actus:    { total: ACTUALITES.length, published: ACTUALITES.filter(x => x.published).length },
+    carriere: { total: 0, published: 0 },
+    emploi:   { total: 0, published: 0 },
+    stage:    { total: 0, published: 0 }
+  };
+  CARRIERES.forEach(c => {
+    if(stats[c.type]){
+      stats[c.type].total++;
+      if(c.published) stats[c.type].published++;
+    }
+  });
+
+  $('#statsGrid').innerHTML = `
+    <div class="stat-card"><div class="stat-card__label">Actualités</div><div class="stat-card__value">${stats.actus.total}</div><div class="stat-card__hint">${stats.actus.published} publiée${stats.actus.published > 1 ? 's' : ''}</div></div>
+    <div class="stat-card"><div class="stat-card__label">Offres de carrière</div><div class="stat-card__value">${stats.carriere.total}</div><div class="stat-card__hint">${stats.carriere.published} publiée${stats.carriere.published > 1 ? 's' : ''}</div></div>
+    <div class="stat-card"><div class="stat-card__label">Offres d'emploi</div><div class="stat-card__value">${stats.emploi.total}</div><div class="stat-card__hint">${stats.emploi.published} publiée${stats.emploi.published > 1 ? 's' : ''}</div></div>
+    <div class="stat-card"><div class="stat-card__label">Offres de stage</div><div class="stat-card__value">${stats.stage.total}</div><div class="stat-card__hint">${stats.stage.published} publiée${stats.stage.published > 1 ? 's' : ''}</div></div>
+  `;
+
+  const recentA = ACTUALITES.slice(0,5);
+  $('#recentActualitesTbody').innerHTML = recentA.length === 0
+    ? '<tr><td colspan="4" class="empty-state">Aucune actualité</td></tr>'
+    : recentA.map(a => `
+      <tr>
+        <td><img src="${escapeHTML(a.img)}" class="table-thumb" alt="" onerror="this.style.opacity=0.3"></td>
+        <td class="table-title">${escapeHTML(a.title)}</td>
+        <td>${escapeHTML(a.date_publication || '—')}</td>
+        <td><span class="badge ${a.published ? 'badge--published' : 'badge--draft'}">${a.published ? 'Publié' : 'Brouillon'}</span></td>
+      </tr>`).join('');
+
+  const recentC = CARRIERES.slice(0,5);
+  $('#recentCarrieresTbody').innerHTML = recentC.length === 0
+    ? '<tr><td colspan="4" class="empty-state">Aucune offre</td></tr>'
+    : recentC.map(c => `
+      <tr>
+        <td class="table-title">${escapeHTML(c.title)}</td>
+        <td><span class="badge badge--${c.type}">${escapeHTML(carriereLabels[c.type] || c.type)}</span></td>
+        <td>${escapeHTML(c.location || '—')}</td>
+        <td><span class="badge ${c.published ? 'badge--published' : 'badge--draft'}">${c.published ? 'Publié' : 'Brouillon'}</span></td>
+      </tr>`).join('');
+}
+
+function renderActualites(){
+  const tbody = $('#actualitesTbody');
+  if(ACTUALITES.length === 0){
+    tbody.innerHTML = '<tr><td colspan="5" class="empty-state"><h3>Aucune actualité</h3><p>Cliquez sur "+ Nouvelle actualité".</p></td></tr>';
+    return;
+  }
+  tbody.innerHTML = ACTUALITES.map(a => `
+    <tr>
+      <td><img src="${escapeHTML(a.img)}" class="table-thumb" alt="" onerror="this.style.opacity=0.3"></td>
+      <td class="table-title">${escapeHTML(a.title)}</td>
+      <td>${escapeHTML(a.date_publication || '—')}</td>
+      <td><span class="badge ${a.published ? 'badge--published' : 'badge--draft'}">${a.published ? 'Publié' : 'Brouillon'}</span></td>
+      <td><div class="table-actions">
+        <button class="btn btn--ghost btn--sm" data-edit-actualite="${a.id}">✏️</button>
+        <button class="btn btn--danger btn--sm" data-delete-actualite="${a.id}">🗑️</button>
+      </div></td>
+    </tr>`).join('');
+}
+
+function renderCarrieres(){
+  const tbody = $('#carrieresTbody');
+  const list = currentCarriereFilter === 'all' ? CARRIERES : CARRIERES.filter(c => c.type === currentCarriereFilter);
+  if(list.length === 0){
+    tbody.innerHTML = '<tr><td colspan="7" class="empty-state"><h3>Aucune offre</h3></td></tr>';
+    return;
+  }
+  tbody.innerHTML = list.map(c => `
+    <tr>
+      <td>${c.img ? `<img src="${escapeHTML(c.img)}" class="table-thumb" alt="" onerror="this.style.opacity=0.3">` : '<div class="table-thumb"></div>'}</td>
+      <td class="table-title">${escapeHTML(c.title)}</td>
+      <td><span class="badge badge--${c.type}">${escapeHTML(carriereLabels[c.type] || c.type)}</span></td>
+      <td>${escapeHTML(c.location || '—')}</td>
+      <td>${escapeHTML(c.date_limite || '—')}</td>
+      <td><span class="badge ${c.published ? 'badge--published' : 'badge--draft'}">${c.published ? 'Publié' : 'Brouillon'}</span></td>
+      <td><div class="table-actions">
+        <button class="btn btn--ghost btn--sm" data-edit-carriere="${c.id}">✏️</button>
+        <button class="btn btn--danger btn--sm" data-delete-carriere="${c.id}">🗑️</button>
+      </div></td>
+    </tr>`).join('');
+}
+
+function openModal(id){ document.getElementById(id).classList.add('open'); document.body.style.overflow='hidden'; }
+function closeModal(id){ document.getElementById(id).classList.remove('open'); document.body.style.overflow=''; }
+
+const arrayValues = { missions:[], requirements:[] };
+
+// ===== FORMULAIRE DE CANDIDATURE =====
+const FIELD_TYPES = { text:'Texte court', textarea:'Texte long', number:'Nombre', date:'Date', select:'Liste de choix', file:'Fichier' };
+let dossierItems = [];
+let CANDIDATURES = [];
+
+function renderDossier(){
+  $('#dossierField').innerHTML = dossierItems.map((d,i) => `
+    <div class="dos-card">
+      <div class="dos-row">
+        <input type="text" value="${escapeHTML(d.label)}" data-dos="label" data-i="${i}" placeholder="Ex : Âge, Ville, CV, Niveau d'études">
+        <select data-dos="type" data-i="${i}">
+          ${Object.entries(FIELD_TYPES).map(([k,v]) => `<option value="${k}" ${d.type===k?'selected':''}>${v}</option>`).join('')}
+        </select>
+        <label><input type="checkbox" data-dos="required" data-i="${i}" ${d.required?'checked':''}> Obligatoire</label>
+        <button type="button" data-dos-remove="${i}" aria-label="Supprimer">✕</button>
+      </div>
+      ${d.type === 'select' ? `<div class="dos-row"><input type="text" data-dos="options" data-i="${i}" value="${escapeHTML((d.options||[]).join(', '))}" placeholder="Choix séparés par des virgules : BAC, Licence, Master"></div>` : ''}
+    </div>`).join('');
+}
+
+document.addEventListener('click', e => {
+  if(e.target.id === 'addDossierBtn'){ dossierItems.push({label:'', type:'text', required:false}); renderDossier(); }
+  if(e.target.dataset.dosRemove !== undefined){ dossierItems.splice(Number(e.target.dataset.dosRemove), 1); renderDossier(); }
+});
+document.addEventListener('input', e => {
+  const k = e.target.dataset.dos; if(!k) return;
+  const d = dossierItems[Number(e.target.dataset.i)]; if(!d) return;
+  if(k === 'label') d.label = e.target.value;
+  if(k === 'options') d.options = e.target.value.split(',').map(s => s.trim()).filter(Boolean);
+});
+document.addEventListener('change', e => {
+  const k = e.target.dataset.dos; if(!k) return;
+  const d = dossierItems[Number(e.target.dataset.i)]; if(!d) return;
+  if(k === 'type'){ d.type = e.target.value; renderDossier(); }
+  if(k === 'required') d.required = e.target.checked;
+});
+
+function renderCandidatures(){
+  const tb = $('#candidaturesTbody');
+  if(!CANDIDATURES.length){ tb.innerHTML = '<tr><td colspan="6" class="empty-state"><h3>Aucune candidature</h3></td></tr>'; return; }
+  tb.innerHTML = CANDIDATURES.map(c => `
+    <tr>
+      <td>${new Date(c.created_at).toLocaleDateString('fr-FR')}</td>
+      <td class="table-title">${escapeHTML(c.carriere_titre || '—')}</td>
+      <td>${escapeHTML(c.nom)}</td>
+      <td>${escapeHTML(c.telephone || '')}<br>${escapeHTML(c.email || '')}</td>
+      <td>${(c.reponses || []).map(r => r.type === 'file'
+        ? `<div><strong>${escapeHTML(r.label)} :</strong> <a href="${escapeHTML(r.value)}" target="_blank" rel="noopener" style="color:var(--cyan-dark);font-weight:600">Ouvrir</a></div>`
+        : `<div><strong>${escapeHTML(r.label)} :</strong> ${escapeHTML(r.value)}</div>`).join('')}</td>
+      <td><div class="table-actions"><button class="btn btn--danger btn--sm" data-delete-candidature="${c.id}">🗑️</button></div></td>
+    </tr>`).join('');
+}
+
+function renderArrayField(type){
+  const container = document.getElementById(type + 'Field');
+  if(!container) return;
+  const addBtn = container.querySelector('.array-add');
+  container.querySelectorAll('.array-item').forEach(el => el.remove());
+  arrayValues[type].forEach((val, i) => {
+    const item = document.createElement('div');
+    item.className = 'array-item';
+    item.innerHTML = `
+      <input type="text" value="${escapeHTML(val)}" data-array-type="${type}" data-array-index="${i}">
+      <button type="button" data-remove-array="${type}" data-array-index="${i}">✕</button>`;
+    container.insertBefore(item, addBtn);
+  });
+}
+function addArrayItem(type){
+  arrayValues[type].push('');
+  renderArrayField(type);
+  const inputs = $$(`input[data-array-type="${type}"]`);
+  inputs[inputs.length-1]?.focus();
+}
+document.addEventListener('click', e => {
+  if(e.target.dataset.add) addArrayItem(e.target.dataset.add);
+  if(e.target.dataset.removeArray){
+    arrayValues[e.target.dataset.removeArray].splice(Number(e.target.dataset.arrayIndex), 1);
+    renderArrayField(e.target.dataset.removeArray);
+  }
+});
+document.addEventListener('input', e => {
+  if(e.target.dataset.arrayType !== undefined){
+    arrayValues[e.target.dataset.arrayType][Number(e.target.dataset.arrayIndex)] = e.target.value;
+  }
+});
+
+document.addEventListener('change', e => {
+  if(e.target.name !== 'img_file') return;
+  const form = e.target.closest('form');
+  const previewId = form.id === 'actualiteForm' ? 'actualiteImgPreview' : 'carriereImgPreview';
+  const preview = document.getElementById(previewId);
+  const file = e.target.files[0];
+  if(!file){ preview.innerHTML = ''; return; }
+  preview.innerHTML = `<img src="${URL.createObjectURL(file)}" style="width:100%;max-width:220px;border-radius:10px;border:1px solid var(--line)">`;
+});
+
+function openActualiteModal(actualite = null){
+  editingActualiteId = actualite ? actualite.id : null;
+  $('#actualiteModalTitle').textContent = actualite ? 'Modifier l\'actualité' : 'Nouvelle actualité';
+  const form = $('#actualiteForm');
+  form.reset();
+  const prev = document.getElementById('actualiteImgPreview');
+  if(actualite){
+    form.elements.title.value = actualite.title || '';
+    form.elements.content.value = actualite.content || '';
+    form.elements.img.value = actualite.img || '';
+    form.elements.category.value = actualite.category || '';
+    form.elements.date_publication.value = actualite.date_publication || '';
+    $('#actualitePublie').checked = actualite.published !== false;
+    prev.innerHTML = actualite.img
+      ? `<img src="${escapeHTML(actualite.img)}" style="width:100%;max-width:220px;border-radius:10px;border:1px solid var(--line)"><small style="display:block;color:var(--muted);margin-top:4px">Image actuelle — choisissez un fichier pour la remplacer</small>`
+      : '';
+  } else {
+    $('#actualitePublie').checked = true;
+    prev.innerHTML = '';
+  }
+  openModal('actualiteModal');
+}
+
+async function submitActualite(e){
+  e.preventDefault();
+  const form = e.target;
+  const btn = $('#actualiteSubmitBtn');
+  btn.disabled = true; btn.textContent = 'Enregistrement...';
+
+  try {
+    let imgUrl = form.elements.img.value || null;
+    const file = form.elements.img_file.files[0];
+    if(file){
+      btn.textContent = 'Upload image...';
+      imgUrl = await uploadImage(file, 'actualites');
+    }
+    if(!imgUrl){
+      toast('Veuillez sélectionner une image', 'error');
+      btn.disabled = false; btn.textContent = 'Enregistrer';
+      return;
+    }
+
+    const data = {
+      title: form.elements.title.value.trim(),
+      content: form.elements.content.value.trim(),
+      img: imgUrl,
+      category: form.elements.category.value.trim() || null,
+      date_publication: form.elements.date_publication.value.trim() || null,
+      published: $('#actualitePublie').checked
     };
 
-    const firstImg = slides[0].querySelector('img');
-    if (firstImg && firstImg.complete && firstImg.naturalWidth) startHero();
-    else if (firstImg) {
-      firstImg.addEventListener('load', startHero, { once: true });
-      firstImg.addEventListener('error', startHero, { once: true });
-      setTimeout(startHero, 1500);
-    } else {
-      startHero();
-    }
+    const result = editingActualiteId
+      ? await db.from('tralog_actualites').update(data).eq('id', editingActualiteId)
+      : await db.from('tralog_actualites').insert([data]);
 
-    dots.forEach((d, i) => d.addEventListener('click', () => {
-      const im = slides[i].querySelector('img');
-      if (!im) return;
-      if (im.dataset.src) { im.src = im.dataset.src; im.removeAttribute('data-src'); }
-      if (im.complete && im.naturalWidth) showSlide(i);
-      else im.addEventListener('load', () => showSlide(i), { once: true });
-    }));
+    if(result.error) throw result.error;
+
+    toast(editingActualiteId ? 'Actualité modifiée' : 'Actualité créée');
+    invalidateSiteCache();
+    closeModal('actualiteModal');
+    await loadData(); renderAll();
+  } catch(err){
+    toast('Erreur : ' + err.message, 'error');
+  } finally {
+    btn.disabled = false; btn.textContent = 'Enregistrer';
+  }
+}
+
+function openCarriereModal(carriere = null){
+  editingCarriereId = carriere ? carriere.id : null;
+  $('#carriereModalTitle').textContent = carriere ? 'Modifier l\'offre' : 'Nouvelle offre';
+  const form = $('#carriereForm');
+  form.reset();
+  arrayValues.missions = []; arrayValues.requirements = [];
+  const prev = document.getElementById('carriereImgPreview');
+  if(carriere){
+    form.elements.type.value = carriere.type || 'emploi';
+    form.elements.title.value = carriere.title || '';
+    form.elements.description.value = carriere.description || '';
+    form.elements.location.value = carriere.location || '';
+    form.elements.department.value = carriere.department || '';
+    form.elements.type_contrat.value = carriere.type_contrat || '';
+    form.elements.date_limite.value = carriere.date_limite || '';
+    form.elements.img.value = carriere.img || '';
+    $('#carrierePublie').checked = carriere.published !== false;
+    arrayValues.missions = Array.isArray(carriere.missions) ? [...carriere.missions] : [];
+    arrayValues.requirements = Array.isArray(carriere.requirements) ? [...carriere.requirements] : [];
+    prev.innerHTML = carriere.img
+      ? `<img src="${escapeHTML(carriere.img)}" style="width:100%;max-width:220px;border-radius:10px;border:1px solid var(--line)"><small style="display:block;color:var(--muted);margin-top:4px">Image actuelle — choisissez un fichier pour la remplacer</small>`
+      : '';
   } else {
-    if (pre) pre.classList.add('done');
-    document.body.classList.remove('is-loading');
+    $('#carrierePublie').checked = true;
+    prev.innerHTML = '';
   }
+  dossierItems = carriere && Array.isArray(carriere.dossier) ? JSON.parse(JSON.stringify(carriere.dossier)) : [];
+  renderDossier();
+  renderArrayField('missions');
+  renderArrayField('requirements');
+  openModal('carriereModal');
+}
 
-  const onScroll = () => {
-    if (header) header.classList.toggle('scrolled', window.scrollY > 40);
-    if (bar) {
-      const h = document.documentElement.scrollHeight - innerHeight;
-      bar.style.width = (h > 0 ? scrollY / h * 100 : 0) + '%';
-    }
-    if (hero && !reduce && window.matchMedia('(min-width:901px)').matches && scrollY < innerHeight * 1.2) {
-      hero.style.setProperty('--py', Math.min(scrollY * 0.3, 190) + 'px');
-    }
-  };
-  addEventListener('scroll', onScroll, { passive: true });
-  onScroll();
+async function submitCarriere(e){
+  e.preventDefault();
+  const form = e.target;
+  const btn = $('#carriereSubmitBtn');
+  btn.disabled = true; btn.textContent = 'Enregistrement...';
 
-  const navToggle = $('#navToggle');
-  const mainNav = $('#mainNav');
-  const closeNav = () => {
-    if (!mainNav || !navToggle) return;
-    mainNav.classList.remove('open');
-    navToggle.classList.remove('open');
-    navToggle.setAttribute('aria-expanded', 'false');
-  };
-  if (navToggle && mainNav) {
-    navToggle.addEventListener('click', () => {
-      const open = mainNav.classList.toggle('open');
-      navToggle.classList.toggle('open', open);
-      navToggle.setAttribute('aria-expanded', String(open));
-    });
-    $$('.main-nav a', mainNav).forEach(a => a.addEventListener('click', closeNav));
+  try {
+    let imgUrl = form.elements.img.value || null;
+    const file = form.elements.img_file.files[0];
+    if(file){
+      btn.textContent = 'Upload image...';
+      imgUrl = await uploadImage(file, 'carrieres');
+    }
+
+    const data = {
+      type: form.elements.type.value,
+      title: form.elements.title.value.trim(),
+      description: form.elements.description.value.trim(),
+      location: form.elements.location.value.trim() || null,
+      department: form.elements.department.value.trim() || null,
+      type_contrat: form.elements.type_contrat.value.trim() || null,
+      date_limite: form.elements.date_limite.value.trim() || null,
+      img: imgUrl,
+      published: $('#carrierePublie').checked,
+      missions: arrayValues.missions.filter(v => v.trim()),
+      requirements: arrayValues.requirements.filter(v => v.trim()),
+      dossier: dossierItems.filter(d => d.label.trim()).map(d => ({ ...d, label: d.label.trim() }))
+    };
+
+    const result = editingCarriereId
+      ? await db.from('tralog_carrieres').update(data).eq('id', editingCarriereId)
+      : await db.from('tralog_carrieres').insert([data]);
+
+    if(result.error) throw result.error;
+
+    toast(editingCarriereId ? 'Offre modifiée' : 'Offre créée');
+    invalidateSiteCache();
+    closeModal('carriereModal');
+    await loadData(); renderAll();
+  } catch(err){
+    toast('Erreur : ' + err.message, 'error');
+  } finally {
+    btn.disabled = false; btn.textContent = 'Enregistrer';
   }
+}
 
-  ['.services', '.why-grid', '.testi-grid'].forEach(sel => {
-    $$(sel).forEach(g => {
-      $$('.reveal', g).forEach((el, i) => el.style.setProperty('--d', ((i % 3) * 0.12) + 's'));
+function openConfirmDelete(type, id, title){
+  pendingDelete = { type, id, title };
+  $('#confirmMessage').textContent = `Voulez-vous vraiment supprimer "${title}" ?`;
+  openModal('confirmModal');
+}
+async function confirmDelete(){
+  if(!pendingDelete) return;
+  const btn = $('#confirmDeleteBtn');
+  btn.disabled = true; btn.textContent = 'Suppression...';
+  const tables = { actualite:'tralog_actualites', carriere:'tralog_carrieres', candidature:'tralog_candidatures' };
+  const result = await db.from(tables[pendingDelete.type]).delete().eq('id', pendingDelete.id);
+  btn.disabled = false; btn.textContent = 'Supprimer';
+  if(result.error){ toast('Erreur : '+result.error.message,'error'); return; }
+  toast('Élément supprimé');
+  invalidateSiteCache();
+  closeModal('confirmModal');
+  pendingDelete = null;
+  await loadData(); renderAll();
+}
+
+function renderAll(){ renderDashboard(); renderActualites(); renderCarrieres(); renderCandidatures(); }
+
+function bindEvents(){
+  $$('.side-nav button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      $$('.side-nav button').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      $$('.view').forEach(v => v.style.display = 'none');
+      $(`[data-view-content="${btn.dataset.view}"]`).style.display = 'block';
     });
   });
 
-  const io = new IntersectionObserver(es => es.forEach(e => {
-    if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
-  }), { threshold: 0.12 });
-  $$('.reveal').forEach(el => io.observe(el));
-
-  $$('.section-head h2, #a-propos h2').forEach(h => {
-    h.innerHTML = h.textContent.trim().split(/\s+/).map((w, i) => `<span class="w" style="--i:${i}">${w}</span>`).join(' ');
-    h.classList.add('split-words');
-    const wio = new IntersectionObserver(es => es.forEach(e => {
-      if (e.isIntersecting) { h.classList.add('in'); wio.unobserve(h); }
-    }), { threshold: 0.4 });
-    wio.observe(h);
+  $('#logoutBtn').addEventListener('click', () => {
+    sessionStorage.removeItem('tralog_admin');
+    window.location.href = 'index.html';
   });
 
-  if (canHover && !reduce) {
-    $$('.svc').forEach(card => {
-      card.addEventListener('mousemove', e => {
-        const r = card.getBoundingClientRect();
-        const x = (e.clientX - r.left) / r.width - 0.5;
-        const y = (e.clientY - r.top) / r.height - 0.5;
-        card.classList.add('tilting');
-        card.style.transform = `perspective(800px) rotateX(${(-y * 10).toFixed(2)}deg) rotateY(${(x * 12).toFixed(2)}deg) translateY(-8px)`;
-      });
-      card.addEventListener('mouseleave', () => { card.classList.remove('tilting'); card.style.transform = ''; });
-    });
-    $$('.btn').forEach(btn => {
-      btn.addEventListener('mousemove', e => {
-        const r = btn.getBoundingClientRect();
-        const dx = e.clientX - (r.left + r.width / 2);
-        const dy = e.clientY - (r.top + r.height / 2);
-        btn.style.transform = `translate(${(dx * 0.25).toFixed(1)}px, ${(dy * 0.35).toFixed(1)}px)`;
-      });
-      btn.addEventListener('mouseleave', () => { btn.style.transform = ''; });
-    });
-  }
+  $('#addActualiteBtn').addEventListener('click', () => openActualiteModal());
+  $('#addCarriereBtn').addEventListener('click', () => openCarriereModal());
 
-  const navLinks = $$('.main-nav a');
-  if (navLinks.length) {
-    const spy = new IntersectionObserver(es => es.forEach(e => {
-      if (e.isIntersecting) {
-        navLinks.forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#' + e.target.id));
-      }
-    }), { rootMargin: '-40% 0px -55% 0px' });
-    $$('section[id]').forEach(s => spy.observe(s));
-  }
-
-  // ===== FORMULAIRES CONTACT =====
-  const labelOf = (form, name) => {
-    const f = form.querySelector(`[name="${name}"]`);
-    const l = f && f.closest('.field') && f.closest('.field').querySelector('label');
-    return l ? l.textContent.replace('*', '').trim() : name;
-  };
-  const collectForm = form => Array.from(new FormData(form).entries())
-    .filter(([, v]) => String(v).trim())
-    .map(([k, v]) => `${labelOf(form, k)} : ${v}`);
-
-  $$('form[data-mailto]').forEach(form => {
-    form.addEventListener('submit', e => {
-      e.preventDefault();
-      const nom = new FormData(form).get('nom') || '';
-      location.href = `mailto:Compagnietralog@gmail.com?subject=${encodeURIComponent(form.dataset.mailto + ' — ' + nom)}&body=${encodeURIComponent(collectForm(form).join('\n'))}`;
-    });
-  });
-  $$('[data-wa]').forEach(btn => btn.addEventListener('click', () => {
-    const form = btn.closest('form');
-    if (form && !form.checkValidity()) { form.reportValidity(); return; }
-    const lines = form ? collectForm(form) : [];
-    const msg = lines.length ? 'Bonjour CTL,\n' + lines.join('\n') : 'Bonjour CTL, je vous contacte depuis le site.';
-    window.open('https://wa.me/' + WHATSAPP + '?text=' + encodeURIComponent(msg), '_blank');
-  }));
-
-  $$('[data-year]').forEach(el => el.textContent = new Date().getFullYear());
-
-  // ===== ACTUALITÉS & CARRIÈRES (fetch REST + cache) =====
-  let ACTUALITES = [];
-  let CARRIERES = [];
-  let carriereFilter = 'all';
-
-  function renderActualites() {
-    const container = $('#actualitesContainer');
-    if (!container) return;
-    if (!ACTUALITES.length) {
-      container.innerHTML = `<div class="news-empty">
-        <div class="news-empty-icon">📰</div>
-        <h3>Aucune actualité pour le moment</h3>
-        <p>Revenez bientôt pour découvrir nos dernières nouvelles.</p>
-      </div>`;
-      return;
-    }
-    container.innerHTML = '<div class="actu-grid">' + ACTUALITES.map((a, i) => `
-      <article class="actu-card" data-actualite-id="${a.id}" style="animation-delay:${(i * 0.08).toFixed(2)}s">
-        <div class="actu-card__img">
-          <img src="${escapeHTML(a.img)}" alt="${escapeHTML(a.title)}" loading="lazy" onerror="this.style.opacity=.3">
-        </div>
-        <div class="actu-card__body">
-          ${a.category ? `<span class="actu-card__cat">${escapeHTML(a.category)}</span>` : ''}
-          <h3>${escapeHTML(a.title)}</h3>
-          ${a.content ? `<p>${escapeHTML(a.content.slice(0, 140))}${a.content.length > 140 ? '…' : ''}</p>` : ''}
-          <div class="actu-card__meta">
-            ${a.date_publication ? `<span>📅 ${escapeHTML(a.date_publication)}</span>` : ''}
-          </div>
-          <span class="actu-card__more">Lire la suite →</span>
-        </div>
-      </article>
-    `).join('') + '</div>';
-  }
-
-  function renderCarrieres() {
-    const container = $('#carrieresContainer');
-    if (!container) return;
-    const list = carriereFilter === 'all' ? CARRIERES : CARRIERES.filter(c => c.type === carriereFilter);
-    if (!list.length) {
-      container.innerHTML = `<div class="news-empty">
-        <div class="news-empty-icon">💼</div>
-        <h3>Aucune offre ${carriereFilter === 'all' ? 'disponible' : 'pour ce filtre'}</h3>
-        <p>Revenez bientôt pour découvrir nos nouvelles opportunités.</p>
-      </div>`;
-      return;
-    }
-    container.innerHTML = '<div class="carriere-grid">' + list.map((c, i) => `
-      <article class="carriere-card" data-carriere-id="${c.id}" style="animation-delay:${(i * 0.08).toFixed(2)}s">
-        ${c.img ? `<div class="carriere-card__img"><img src="${escapeHTML(c.img)}" alt="${escapeHTML(c.title)}" loading="lazy" onerror="this.parentElement.style.display='none'"></div>` : ''}
-        <div class="carriere-card__body">
-          <div class="carriere-card__head">
-            <span class="carriere-card__badge carriere-card__badge--${escapeHTML(c.type)}">${escapeHTML(CARRIERE_LABELS[c.type] || c.type)}</span>
-            ${c.type_contrat ? `<span class="carriere-card__contrat">${escapeHTML(c.type_contrat)}</span>` : ''}
-          </div>
-          <h3>${escapeHTML(c.title)}</h3>
-          <p>${escapeHTML((c.description || '').slice(0, 160))}${(c.description || '').length > 160 ? '…' : ''}</p>
-          <div class="carriere-card__meta">
-            ${c.location ? `<span>📍 ${escapeHTML(c.location)}</span>` : ''}
-            ${c.department ? `<span>🏢 ${escapeHTML(c.department)}</span>` : ''}
-            ${c.date_limite ? `<span>⏰ ${escapeHTML(c.date_limite)}</span>` : ''}
-          </div>
-          <span class="carriere-card__more">Voir l'offre →</span>
-        </div>
-      </article>
-    `).join('') + '</div>';
-  }
-
-  // ===== CACHE AVEC TTL 60 SECONDES =====
-  const CACHE_KEY = 'ctl_cache_v1';
-  const CACHE_TTL = 60 * 1000; // 60 secondes
-
-  async function loadDynamicContent() {
-    let cacheAge = Infinity;
-    try {
-      const cachedStr = localStorage.getItem(CACHE_KEY) || '';
-      if (cachedStr) {
-        const cachedRaw = JSON.parse(cachedStr);
-        ACTUALITES = cachedRaw.a || [];
-        CARRIERES = cachedRaw.c || [];
-        cacheAge = Date.now() - (cachedRaw.t || 0);
-        renderActualites();
-        renderCarrieres();
-      }
-    } catch (e) {}
-
-    if (cacheAge < CACHE_TTL) return;
-
-    const withTimeout = (p, ms) => Promise.race([
-      p, new Promise((_, rej) => setTimeout(() => rej(new Error('timeout')), ms))
-    ]);
-
-    try {
-      const [a, c] = await withTimeout(
-        Promise.all([fetchTable('tralog_actualites'), fetchTable('tralog_carrieres')]), 10000
-      );
-      ACTUALITES = a;
-      CARRIERES = c;
-      try { localStorage.setItem(CACHE_KEY, JSON.stringify({ a, c, t: Date.now() })); } catch (e) {}
-      renderActualites();
+  $$('#carrieresFilter button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      $$('#carrieresFilter button').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentCarriereFilter = btn.dataset.cfilter;
       renderCarrieres();
-    } catch (e) {
-      console.error('[CTL] loadDynamic:', e);
-      if (!ACTUALITES.length) renderActualites();
-      if (!CARRIERES.length) renderCarrieres();
-    }
-  }
-
-  // ===== MODALS =====
-  function openModalEl(modal) {
-    if (!modal) return;
-    modal.classList.add('open');
-    document.body.style.overflow = 'hidden';
-  }
-  function closeModalEl(modal) {
-    if (!modal) return;
-    modal.classList.remove('open');
-    document.body.style.overflow = '';
-  }
-  function closeAllModals() {
-    $$('.modal-overlay.open').forEach(m => closeModalEl(m));
-  }
-
-  function openActualiteModal(id) {
-    const a = ACTUALITES.find(x => x.id === Number(id));
-    if (!a) return;
-    const modal = $('#actualiteDetailModal');
-    const content = $('.detail-content', modal);
-    content.innerHTML = `
-      <img src="${escapeHTML(a.img)}" alt="${escapeHTML(a.title)}" class="detail-img" onerror="this.style.opacity=.3">
-      <div class="detail-meta">
-        ${a.category ? `<span class="detail-cat">${escapeHTML(a.category)}</span>` : ''}
-        ${a.date_publication ? `<span>📅 ${escapeHTML(a.date_publication)}</span>` : ''}
-      </div>
-      <h2>${escapeHTML(a.title)}</h2>
-      <div class="detail-body">${(a.content || '').split('\n').filter(p => p.trim()).map(p => `<p>${escapeHTML(p)}</p>`).join('')}</div>
-      <div class="detail-actions">
-        <button type="button" class="btn btn-outline" data-close-detail>Fermer</button>
-      </div>
-    `;
-    openModalEl(modal);
-  }
-
-  function openCarriereModal(id) {
-    const c = CARRIERES.find(x => x.id === Number(id));
-    if (!c) return;
-    const modal = $('#carriereDetailModal');
-    const content = $('.detail-content', modal);
-    content.innerHTML = `
-      ${c.img ? `<img src="${escapeHTML(c.img)}" alt="${escapeHTML(c.title)}" class="detail-img" onerror="this.style.display='none'">` : ''}
-      <div class="detail-meta">
-        <span class="detail-cat" style="background:rgba(18,135,192,.12);color:var(--cyan-dark)">${escapeHTML(CARRIERE_LABELS[c.type] || c.type)}</span>
-        ${c.type_contrat ? `<span>💼 ${escapeHTML(c.type_contrat)}</span>` : ''}
-      </div>
-      <h2>${escapeHTML(c.title)}</h2>
-      <div class="detail-info-grid">
-        ${c.location ? `<div><strong>Lieu</strong><span>${escapeHTML(c.location)}</span></div>` : ''}
-        ${c.department ? `<div><strong>Département</strong><span>${escapeHTML(c.department)}</span></div>` : ''}
-        ${c.type_contrat ? `<div><strong>Contrat</strong><span>${escapeHTML(c.type_contrat)}</span></div>` : ''}
-        ${c.date_limite ? `<div><strong>Date limite</strong><span>${escapeHTML(c.date_limite)}</span></div>` : ''}
-      </div>
-      <div class="detail-body">
-        <h3>Description</h3>
-        <p>${escapeHTML(c.description || '')}</p>
-        ${Array.isArray(c.missions) && c.missions.length ? '<h3>Missions</h3><ul>' + c.missions.map(m => `<li>${escapeHTML(m)}</li>`).join('') + '</ul>' : ''}
-        ${Array.isArray(c.requirements) && c.requirements.length ? '<h3>Profil recherché</h3><ul>' + c.requirements.map(r => `<li>${escapeHTML(r)}</li>`).join('') + '</ul>' : ''}
-      </div>
-      <div class="detail-actions">
-        <button type="button" class="btn btn-primary" data-apply="${c.id}">📝 Postuler</button>
-        <button type="button" class="btn btn-outline" data-close-detail>Fermer</button>
-      </div>
-    `;
-    openModalEl(modal);
-  }
-
-  // ===== CANDIDATURE : formulaire construit par l'admin =====
-  function openCandidature(id) {
-    const c = CARRIERES.find(x => x.id === Number(id));
-    if (!c) return;
-    const dossier = Array.isArray(c.dossier) ? c.dossier : [];
-    $('#candOffreTitre').textContent = c.title;
-    const form = $('#candidatureForm');
-    form.dataset.carriereId = c.id;
-    form.innerHTML = `
-      <div class="field"><label>Nom complet *</label><input type="text" name="nom" required></div>
-      <div class="field"><label>Téléphone *</label><input type="tel" name="telephone" required></div>
-      <div class="field"><label>Email</label><input type="email" name="email"></div>
-      ${dossier.map((d, i) => {
-        const req = d.required ? 'required' : '';
-        const n = 'd' + i;
-        let input;
-        if (d.type === 'textarea') input = `<textarea name="${n}" ${req}></textarea>`;
-        else if (d.type === 'select') input = `<select name="${n}" ${req}><option value="">Choisir…</option>${(d.options || []).map(o => `<option>${escapeHTML(o)}</option>`).join('')}</select>`;
-        else if (d.type === 'file') input = `<input type="file" name="${n}" ${req}>`;
-        else input = `<input type="${d.type === 'number' ? 'number' : d.type === 'date' ? 'date' : 'text'}" name="${n}" ${req}>`;
-        return `<div class="field"><label>${escapeHTML(d.label)}${d.required ? ' *' : ''}</label>${input}</div>`;
-      }).join('')}
-      <button type="submit" class="btn btn-primary" id="candSubmit">Envoyer ma candidature</button>
-      <p class="login-error" id="candMsg"></p>`;
-    closeAllModals();
-    openModalEl($('#candidatureModal'));
-  }
-
-  async function uploadCandidatureFile(file) {
-    if (file.size > 5 * 1024 * 1024) throw new Error('Fichier trop lourd (max 5 Mo)');
-    const ext = (file.name.split('.').pop() || 'pdf').toLowerCase().replace(/[^a-z0-9]/g, '');
-    const path = `candidatures/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext || 'pdf'}`;
-    const r = await fetch(`${SUPABASE_URL}/storage/v1/object/media/${path}`, {
-      method: 'POST',
-      headers: { ...HEADERS, 'Content-Type': file.type || 'application/octet-stream' },
-      body: file
     });
-    if (!r.ok) throw new Error('Envoi du fichier impossible');
-    return `${SUPABASE_URL}/storage/v1/object/public/media/${path}`;
-  }
-
-  document.addEventListener('submit', async e => {
-    if (e.target.id !== 'candidatureForm') return;
-    e.preventDefault();
-    const form = e.target;
-    const btn = $('#candSubmit');
-    const msg = $('#candMsg');
-    const c = CARRIERES.find(x => x.id === Number(form.dataset.carriereId));
-    if (!c) return;
-    const dossier = Array.isArray(c.dossier) ? c.dossier : [];
-    btn.disabled = true; btn.textContent = 'Envoi en cours…'; msg.textContent = '';
-    try {
-      const reponses = [];
-      for (let i = 0; i < dossier.length; i++) {
-        const d = dossier[i];
-        const input = form.elements['d' + i];
-        if (d.type === 'file') {
-          const f = input.files[0];
-          if (f) reponses.push({ label: d.label, type: 'file', value: await uploadCandidatureFile(f) });
-        } else if (input.value.trim()) {
-          reponses.push({ label: d.label, type: d.type, value: input.value.trim() });
-        }
-      }
-      const r = await fetch(REST + 'tralog_candidatures', {
-        method: 'POST',
-        headers: { ...HEADERS, 'Content-Type': 'application/json', Prefer: 'return=minimal' },
-        body: JSON.stringify({
-          carriere_id: c.id,
-          carriere_titre: c.title,
-          nom: form.elements.nom.value.trim(),
-          telephone: form.elements.telephone.value.trim(),
-          email: form.elements.email.value.trim() || null,
-          reponses
-        })
-      });
-      if (!r.ok) throw new Error('Envoi impossible, réessayez.');
-      form.innerHTML = '<div class="cand-ok"><span>✅</span>Candidature envoyée.<br>Merci, nous vous recontacterons.</div>';
-    } catch (err) {
-      msg.textContent = err.message || 'Erreur, réessayez.';
-      btn.disabled = false; btn.textContent = 'Envoyer ma candidature';
-    }
   });
 
   document.addEventListener('click', e => {
-    const applyBtn = e.target.closest('[data-apply]');
-    if (applyBtn) { openCandidature(applyBtn.dataset.apply); return; }
-
-    if (e.target.closest('[data-close-detail]')) {
-      const modal = e.target.closest('.modal-overlay');
-      if (modal) closeModalEl(modal);
-      return;
+    if(e.target.dataset.close) closeModal(e.target.dataset.close);
+    if(e.target.dataset.editActualite){
+      const a = ACTUALITES.find(x => x.id === Number(e.target.dataset.editActualite));
+      if(a) openActualiteModal(a);
     }
-    if (e.target.classList && e.target.classList.contains('modal-overlay')) {
-      closeModalEl(e.target);
-      return;
+    if(e.target.dataset.deleteActualite){
+      const a = ACTUALITES.find(x => x.id === Number(e.target.dataset.deleteActualite));
+      if(a) openConfirmDelete('actualite', a.id, a.title);
     }
-    const actuCard = e.target.closest('[data-actualite-id]');
-    if (actuCard) { openActualiteModal(actuCard.dataset.actualiteId); return; }
-    const carrCard = e.target.closest('[data-carriere-id]');
-    if (carrCard) { openCarriereModal(carrCard.dataset.carriereId); return; }
+    if(e.target.dataset.editCarriere){
+      const c = CARRIERES.find(x => x.id === Number(e.target.dataset.editCarriere));
+      if(c) openCarriereModal(c);
+    }
+    if(e.target.dataset.deleteCarriere){
+      const c = CARRIERES.find(x => x.id === Number(e.target.dataset.deleteCarriere));
+      if(c) openConfirmDelete('carriere', c.id, c.title);
+    }
+    if(e.target.dataset.deleteCandidature){
+      const k = CANDIDATURES.find(x => x.id === Number(e.target.dataset.deleteCandidature));
+      if(k) openConfirmDelete('candidature', k.id, k.nom);
+    }
   });
 
+  $$('.modal').forEach(modal => {
+    modal.addEventListener('click', e => {
+      if(e.target === modal && modal.id !== 'confirmModal') closeModal(modal.id);
+    });
+  });
   document.addEventListener('keydown', e => {
-    if (e.key === 'Escape') closeAllModals();
+    if(e.key === 'Escape') $$('.modal.open').forEach(m => { if(m.id !== 'confirmModal') closeModal(m.id); });
   });
 
-  $$('#carriereFilters button').forEach(btn => {
-    btn.addEventListener('click', () => {
-      $$('#carriereFilters button').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      carriereFilter = btn.dataset.cfilter;
-      renderCarrieres();
-    });
-  });
+  $('#actualiteForm').addEventListener('submit', submitActualite);
+  $('#carriereForm').addEventListener('submit', submitCarriere);
+  $('#confirmDeleteBtn').addEventListener('click', confirmDelete);
+}
 
-  // ===== LOGIN ADMIN (triple-clic logo) =====
-  const siteLogo = $('#siteLogo');
-  const loginModal = $('#loginModal');
-  const adminPassword = $('#adminPassword');
-  const loginSubmit = $('#loginSubmit');
-  const loginClose = $('#loginClose');
-  const loginError = $('#loginError');
-
-  let logoClicks = 0;
-  let logoTimer = null;
-
-  function openLogin() {
-    if (!loginModal) return;
-    if (loginError) loginError.textContent = '';
-    if (adminPassword) adminPassword.value = '';
-    openModalEl(loginModal);
-    setTimeout(() => adminPassword && adminPassword.focus(), 250);
-  }
-
-  function closeLogin() {
-    closeModalEl(loginModal);
-    if (adminPassword) adminPassword.value = '';
-    if (loginError) loginError.textContent = '';
-  }
-
-  function tryLogin() {
-    if (!adminPassword) return;
-    if (adminPassword.value === ADMIN_PASSWORD) {
-      try { sessionStorage.setItem(SESSION_KEY, 'true'); } catch (e) {}
-      window.location.href = 'admin.html';
-    } else {
-      if (loginError) loginError.textContent = 'Mot de passe incorrect';
-      adminPassword.value = '';
-      adminPassword.focus();
-    }
-  }
-
-  if (siteLogo) {
-    siteLogo.addEventListener('click', e => {
-      logoClicks++;
-      clearTimeout(logoTimer);
-      logoTimer = setTimeout(() => { logoClicks = 0; }, 800);
-      if (logoClicks >= 3) {
-        e.preventDefault();
-        logoClicks = 0;
-        openLogin();
-      }
-    });
-  }
-  if (loginClose) loginClose.addEventListener('click', closeLogin);
-  if (loginSubmit) loginSubmit.addEventListener('click', tryLogin);
-  if (adminPassword) {
-    adminPassword.addEventListener('keydown', e => {
-      if (e.key === 'Enter') tryLogin();
-    });
-  }
-
-  // ===== BOOT : on charge tout de suite, sans attendre l'événement load =====
-  loadDynamicContent();
-})();
-
-// Safety preloader fallback
-window.addEventListener('load', () => setTimeout(() => {
-  const pre = document.getElementById('preloader');
-  if (pre && !pre.classList.contains('done')) {
-    pre.classList.add('done');
-    document.body.classList.remove('is-loading');
-  }
-}, 2500));
+async function initAdmin(){
+  bindEvents();
+  new MutationObserver(labelCells).observe($('.main'), { childList:true, subtree:true });
+  await loadData();
+  renderAll();
+}
 </script>
 </body>
 </html>
