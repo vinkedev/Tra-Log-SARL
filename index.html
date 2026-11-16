@@ -1016,27 +1016,38 @@ body.is-loading{overflow:hidden}
     `).join('') + '</div>';
   }
 
+  // ===== CACHE AVEC TTL 60 SECONDES =====
   const CACHE_KEY = 'ctl_cache_v1';
+  const CACHE_TTL = 60 * 1000; // 60 secondes
+
   async function loadDynamicContent() {
-    let cachedStr = '';
+    let cachedRaw = null;
+    let cacheAge = Infinity;
     try {
-      cachedStr = localStorage.getItem(CACHE_KEY) || '';
+      const cachedStr = localStorage.getItem(CACHE_KEY) || '';
       if (cachedStr) {
-        const cached = JSON.parse(cachedStr);
-        ACTUALITES = cached.a || []; CARRIERES = cached.c || [];
-        renderActualites(); renderCarrieres();
+        cachedRaw = JSON.parse(cachedStr);
+        ACTUALITES = cachedRaw.a || [];
+        CARRIERES = cachedRaw.c || [];
+        cacheAge = Date.now() - (cachedRaw.t || 0);
+        renderActualites();
+        renderCarrieres();
       }
     } catch (e) {}
+
+    if (cacheAge < CACHE_TTL) return; // cache encore frais
+
     try {
       const [a, c] = await Promise.all([fetchTable('actualites'), fetchTable('carrieres')]);
-      const fresh = JSON.stringify({ a, c });
-      if (fresh === cachedStr) return;
-      ACTUALITES = a; CARRIERES = c;
-      try { localStorage.setItem(CACHE_KEY, fresh); } catch (e) {}
-      renderActualites(); renderCarrieres();
+      ACTUALITES = a;
+      CARRIERES = c;
+      try {
+        localStorage.setItem(CACHE_KEY, JSON.stringify({ a, c, t: Date.now() }));
+      } catch (e) {}
+      renderActualites();
+      renderCarrieres();
     } catch (e) {
       console.error('[CTL] loadDynamic:', e);
-      if (!cachedStr) { renderActualites(); renderCarrieres(); }
     }
   }
 
