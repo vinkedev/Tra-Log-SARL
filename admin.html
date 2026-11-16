@@ -127,6 +127,17 @@ tbody tr:hover{background:rgba(26,167,236,.03)}
 .array-add{align-self:flex-start;padding:6px 12px;border-radius:8px;border:1.5px dashed var(--line);background:transparent;color:var(--cyan-dark);font-weight:600;font-size:.82rem;cursor:pointer;transition:var(--transition)}
 .array-add:hover{border-color:var(--cyan-dark);background:rgba(26,167,236,.05)}
 
+/* === Formulaire de candidature (admin) === */
+.dos-card{border:1px solid var(--line);border-radius:10px;padding:10px;display:grid;gap:8px;background:#fff}
+.dos-row{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.dos-row input[type=text]{flex:1;min-width:140px}
+.dos-row select{padding:9px 10px;border:1.5px solid var(--line);border-radius:8px;background:#fff}
+.dos-row label{display:flex;align-items:center;gap:4px;white-space:nowrap;font-size:.8rem;font-weight:500}
+.dos-row input[type=checkbox]{width:16px;height:16px;padding:0;border:0;flex:none;accent-color:var(--cyan-dark)}
+.dos-row button{width:36px;height:36px;border-radius:8px;border:1.5px solid var(--line);background:#fff;cursor:pointer;color:var(--muted)}
+.dos-row button:hover{border-color:var(--danger);color:var(--danger)}
+.dos-fixed{font-size:.8rem;color:var(--muted);background:var(--bg-soft);border-radius:8px;padding:8px 12px}
+
 .toasts{position:fixed;bottom:24px;right:24px;display:flex;flex-direction:column;gap:10px;z-index:2000}
 .toast{background:#fff;border-radius:10px;box-shadow:0 10px 30px rgba(0,0,0,.15);padding:14px 20px;min-width:240px;border-left:4px solid var(--success);font-size:.88rem;font-weight:500;animation:toastIn .3s cubic-bezier(.2,.7,.3,1)}
 .toast--error{border-left-color:var(--danger)}
@@ -208,6 +219,7 @@ tbody tr:hover{background:rgba(26,167,236,.03)}
       <button data-view="dashboard" class="active"><span class="ico">📊</span> Tableau de bord</button>
       <button data-view="actualites"><span class="ico">📰</span> Actualités</button>
       <button data-view="carrieres"><span class="ico">💼</span> Carrière</button>
+      <button data-view="candidatures"><span class="ico">📥</span> Candidatures</button>
     </nav>
     <div class="sidebar__footer">
       <a href="index.html" target="_blank" rel="noopener"><span class="ico">🌐</span> Voir le site</a>
@@ -269,6 +281,16 @@ tbody tr:hover{background:rgba(26,167,236,.03)}
         <table>
           <thead><tr><th>Image</th><th>Titre</th><th>Type</th><th>Lieu</th><th>Date limite</th><th>Publié</th><th>Actions</th></tr></thead>
           <tbody id="carrieresTbody"><tr><td colspan="7" class="loader"></td></tr></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="view" data-view-content="candidatures" style="display:none">
+      <div class="view__header"><div><h1>Candidatures</h1><p>Dossiers reçus depuis le site</p></div></div>
+      <div class="table-wrapper">
+        <table>
+          <thead><tr><th>Date</th><th>Offre</th><th>Candidat</th><th>Contact</th><th>Réponses</th><th>Actions</th></tr></thead>
+          <tbody id="candidaturesTbody"><tr><td colspan="6" class="loader"></td></tr></tbody>
         </table>
       </div>
     </section>
@@ -340,6 +362,13 @@ tbody tr:hover{background:rgba(26,167,236,.03)}
         <div class="form-section-title">Détails</div>
         <div class="field"><label>Missions</label><div class="array-field" id="missionsField"><button type="button" class="array-add" data-add="missions">+ Ajouter une mission</button></div></div>
         <div class="field"><label>Prérequis / Profil recherché</label><div class="array-field" id="requirementsField"><button type="button" class="array-add" data-add="requirements">+ Ajouter un prérequis</button></div></div>
+        <div class="form-section-title">Formulaire de candidature</div>
+        <div class="field">
+          <label>Champs que le candidat doit remplir pour cette offre</label>
+          <div class="dos-fixed">Toujours présents : Nom, Téléphone, Email</div>
+          <div class="array-field" id="dossierField"></div>
+          <button type="button" class="array-add" id="addDossierBtn">+ Ajouter un champ</button>
+        </div>
         <div class="field">
           <label>Image (optionnelle)</label>
           <input type="file" name="img_file" accept="image/*">
@@ -400,7 +429,6 @@ const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBh
 const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 // ===== INVALIDATION CACHE SITE PUBLIC =====
-// Supprime le cache du site (index.html) pour que la prochaine visite affiche les données fraîches
 function invalidateSiteCache(){
   try { localStorage.removeItem('ctl_cache_v1'); } catch(e) {}
 }
@@ -461,12 +489,14 @@ function labelCells(){
 }
 
 async function loadData(){
-  const [a,c] = await Promise.all([
+  const [a,c,k] = await Promise.all([
     db.from('actualites').select('*').order('created_at',{ascending:false}),
-    db.from('carrieres').select('*').order('created_at',{ascending:false})
+    db.from('carrieres').select('*').order('created_at',{ascending:false}),
+    db.from('candidatures').select('*').order('created_at',{ascending:false})
   ]);
   if(a.error){ console.error(a.error); toast('Erreur actualités : '+a.error.message,'error'); } else ACTUALITES = a.data || [];
   if(c.error){ console.error(c.error); toast('Erreur carrières : '+c.error.message,'error'); } else CARRIERES = c.data || [];
+  if(k.error){ console.error(k.error); toast('Erreur candidatures : '+k.error.message,'error'); } else CANDIDATURES = k.data || [];
 }
 
 function renderDashboard(){
@@ -550,6 +580,59 @@ function openModal(id){ document.getElementById(id).classList.add('open'); docum
 function closeModal(id){ document.getElementById(id).classList.remove('open'); document.body.style.overflow=''; }
 
 const arrayValues = { missions:[], requirements:[] };
+
+// ===== FORMULAIRE DE CANDIDATURE (construit par l'admin) =====
+const FIELD_TYPES = { text:'Texte court', textarea:'Texte long', number:'Nombre', date:'Date', select:'Liste de choix', file:'Fichier' };
+let dossierItems = [];
+let CANDIDATURES = [];
+
+function renderDossier(){
+  $('#dossierField').innerHTML = dossierItems.map((d,i) => `
+    <div class="dos-card">
+      <div class="dos-row">
+        <input type="text" value="${escapeHTML(d.label)}" data-dos="label" data-i="${i}" placeholder="Ex : Âge, Ville, CV, Niveau d'études">
+        <select data-dos="type" data-i="${i}">
+          ${Object.entries(FIELD_TYPES).map(([k,v]) => `<option value="${k}" ${d.type===k?'selected':''}>${v}</option>`).join('')}
+        </select>
+        <label><input type="checkbox" data-dos="required" data-i="${i}" ${d.required?'checked':''}> Obligatoire</label>
+        <button type="button" data-dos-remove="${i}" aria-label="Supprimer">✕</button>
+      </div>
+      ${d.type === 'select' ? `<div class="dos-row"><input type="text" data-dos="options" data-i="${i}" value="${escapeHTML((d.options||[]).join(', '))}" placeholder="Choix séparés par des virgules : BAC, Licence, Master"></div>` : ''}
+    </div>`).join('');
+}
+
+document.addEventListener('click', e => {
+  if(e.target.id === 'addDossierBtn'){ dossierItems.push({label:'', type:'text', required:false}); renderDossier(); }
+  if(e.target.dataset.dosRemove !== undefined){ dossierItems.splice(Number(e.target.dataset.dosRemove), 1); renderDossier(); }
+});
+document.addEventListener('input', e => {
+  const k = e.target.dataset.dos; if(!k) return;
+  const d = dossierItems[Number(e.target.dataset.i)]; if(!d) return;
+  if(k === 'label') d.label = e.target.value;
+  if(k === 'options') d.options = e.target.value.split(',').map(s => s.trim()).filter(Boolean);
+});
+document.addEventListener('change', e => {
+  const k = e.target.dataset.dos; if(!k) return;
+  const d = dossierItems[Number(e.target.dataset.i)]; if(!d) return;
+  if(k === 'type'){ d.type = e.target.value; renderDossier(); }
+  if(k === 'required') d.required = e.target.checked;
+});
+
+function renderCandidatures(){
+  const tb = $('#candidaturesTbody');
+  if(!CANDIDATURES.length){ tb.innerHTML = '<tr><td colspan="6" class="empty-state"><h3>Aucune candidature</h3></td></tr>'; return; }
+  tb.innerHTML = CANDIDATURES.map(c => `
+    <tr>
+      <td>${new Date(c.created_at).toLocaleDateString('fr-FR')}</td>
+      <td class="table-title">${escapeHTML(c.carriere_titre || '—')}</td>
+      <td>${escapeHTML(c.nom)}</td>
+      <td>${escapeHTML(c.telephone || '')}<br>${escapeHTML(c.email || '')}</td>
+      <td>${(c.reponses || []).map(r => r.type === 'file'
+        ? `<div><strong>${escapeHTML(r.label)} :</strong> <a href="${escapeHTML(r.value)}" target="_blank" rel="noopener" style="color:var(--cyan-dark);font-weight:600">Ouvrir</a></div>`
+        : `<div><strong>${escapeHTML(r.label)} :</strong> ${escapeHTML(r.value)}</div>`).join('')}</td>
+      <td><div class="table-actions"><button class="btn btn--danger btn--sm" data-delete-candidature="${c.id}">🗑️</button></div></td>
+    </tr>`).join('');
+}
 
 function renderArrayField(type){
   const container = document.getElementById(type + 'Field');
@@ -656,7 +739,7 @@ async function submitActualite(e){
     if(result.error) throw result.error;
 
     toast(editingActualiteId ? 'Actualité modifiée' : 'Actualité créée');
-    invalidateSiteCache();   // 👈 vide le cache du site public
+    invalidateSiteCache();
     closeModal('actualiteModal');
     await loadData(); renderAll();
   } catch(err){
@@ -692,6 +775,8 @@ function openCarriereModal(carriere = null){
     $('#carrierePublie').checked = true;
     prev.innerHTML = '';
   }
+  dossierItems = carriere && Array.isArray(carriere.dossier) ? JSON.parse(JSON.stringify(carriere.dossier)) : [];
+  renderDossier();
   renderArrayField('missions');
   renderArrayField('requirements');
   openModal('carriereModal');
@@ -722,7 +807,8 @@ async function submitCarriere(e){
       img: imgUrl,
       published: $('#carrierePublie').checked,
       missions: arrayValues.missions.filter(v => v.trim()),
-      requirements: arrayValues.requirements.filter(v => v.trim())
+      requirements: arrayValues.requirements.filter(v => v.trim()),
+      dossier: dossierItems.filter(d => d.label.trim()).map(d => ({ ...d, label: d.label.trim() }))
     };
 
     const result = editingCarriereId
@@ -732,7 +818,7 @@ async function submitCarriere(e){
     if(result.error) throw result.error;
 
     toast(editingCarriereId ? 'Offre modifiée' : 'Offre créée');
-    invalidateSiteCache();   // 👈 vide le cache du site public
+    invalidateSiteCache();
     closeModal('carriereModal');
     await loadData(); renderAll();
   } catch(err){
@@ -751,18 +837,18 @@ async function confirmDelete(){
   if(!pendingDelete) return;
   const btn = $('#confirmDeleteBtn');
   btn.disabled = true; btn.textContent = 'Suppression...';
-  const tables = { actualite:'actualites', carriere:'carrieres' };
+  const tables = { actualite:'actualites', carriere:'carrieres', candidature:'candidatures' };
   const result = await db.from(tables[pendingDelete.type]).delete().eq('id', pendingDelete.id);
   btn.disabled = false; btn.textContent = 'Supprimer';
   if(result.error){ toast('Erreur : '+result.error.message,'error'); return; }
   toast('Élément supprimé');
-  invalidateSiteCache();   // 👈 vide le cache du site public
+  invalidateSiteCache();
   closeModal('confirmModal');
   pendingDelete = null;
   await loadData(); renderAll();
 }
 
-function renderAll(){ renderDashboard(); renderActualites(); renderCarrieres(); }
+function renderAll(){ renderDashboard(); renderActualites(); renderCarrieres(); renderCandidatures(); }
 
 function bindEvents(){
   $$('.side-nav button').forEach(btn => {
@@ -808,6 +894,10 @@ function bindEvents(){
     if(e.target.dataset.deleteCarriere){
       const c = CARRIERES.find(x => x.id === Number(e.target.dataset.deleteCarriere));
       if(c) openConfirmDelete('carriere', c.id, c.title);
+    }
+    if(e.target.dataset.deleteCandidature){
+      const k = CANDIDATURES.find(x => x.id === Number(e.target.dataset.deleteCandidature));
+      if(k) openConfirmDelete('candidature', k.id, k.nom);
     }
   });
 
