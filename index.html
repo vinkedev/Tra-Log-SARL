@@ -206,8 +206,12 @@ body.is-loading{overflow:hidden}
 .carriere-filters button:hover{border-color:var(--cyan);color:var(--cyan-dark)}
 .carriere-filters button.active{background:var(--cyan-dark);color:#fff;border-color:var(--cyan-dark);box-shadow:0 6px 16px rgba(18,135,192,.25)}
 .carriere-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:26px}
-.carriere-card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:26px;display:flex;flex-direction:column;gap:12px;cursor:pointer;transition:transform .3s var(--ease),box-shadow .3s,border-color .3s;animation:cardIn .5s var(--ease) backwards}
+.carriere-card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;display:flex;flex-direction:column;cursor:pointer;transition:transform .3s var(--ease),box-shadow .3s,border-color .3s;animation:cardIn .5s var(--ease) backwards}
 .carriere-card:hover{transform:translateY(-6px);box-shadow:var(--shadow);border-color:rgba(26,167,236,.35)}
+.carriere-card__img{aspect-ratio:16/10;overflow:hidden;background:var(--bg-soft)}
+.carriere-card__img img{width:100%;height:100%;object-fit:cover;transition:transform .5s var(--ease)}
+.carriere-card:hover .carriere-card__img img{transform:scale(1.06)}
+.carriere-card__body{padding:26px;display:flex;flex-direction:column;gap:12px;flex:1}
 .carriere-card__head{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
 .carriere-card__badge{display:inline-block;padding:5px 12px;border-radius:999px;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em}
 .carriere-card__badge--carriere{background:rgba(10,37,64,.12);color:var(--navy)}
@@ -993,18 +997,21 @@ body.is-loading{overflow:hidden}
     }
     container.innerHTML = '<div class="carriere-grid">' + list.map((c, i) => `
       <article class="carriere-card" data-carriere-id="${c.id}" style="animation-delay:${(i * 0.08).toFixed(2)}s">
-        <div class="carriere-card__head">
-          <span class="carriere-card__badge carriere-card__badge--${escapeHTML(c.type)}">${escapeHTML(CARRIERE_LABELS[c.type] || c.type)}</span>
-          ${c.type_contrat ? `<span class="carriere-card__contrat">${escapeHTML(c.type_contrat)}</span>` : ''}
+        ${c.img ? `<div class="carriere-card__img"><img src="${escapeHTML(c.img)}" alt="${escapeHTML(c.title)}" loading="lazy" onerror="this.parentElement.style.display='none'"></div>` : ''}
+        <div class="carriere-card__body">
+          <div class="carriere-card__head">
+            <span class="carriere-card__badge carriere-card__badge--${escapeHTML(c.type)}">${escapeHTML(CARRIERE_LABELS[c.type] || c.type)}</span>
+            ${c.type_contrat ? `<span class="carriere-card__contrat">${escapeHTML(c.type_contrat)}</span>` : ''}
+          </div>
+          <h3>${escapeHTML(c.title)}</h3>
+          <p>${escapeHTML((c.description || '').slice(0, 160))}${(c.description || '').length > 160 ? '…' : ''}</p>
+          <div class="carriere-card__meta">
+            ${c.location ? `<span>📍 ${escapeHTML(c.location)}</span>` : ''}
+            ${c.department ? `<span>🏢 ${escapeHTML(c.department)}</span>` : ''}
+            ${c.date_limite ? `<span>⏰ ${escapeHTML(c.date_limite)}</span>` : ''}
+          </div>
+          <span class="carriere-card__more">Voir l'offre →</span>
         </div>
-        <h3>${escapeHTML(c.title)}</h3>
-        <p>${escapeHTML((c.description || '').slice(0, 160))}${(c.description || '').length > 160 ? '…' : ''}</p>
-        <div class="carriere-card__meta">
-          ${c.location ? `<span>📍 ${escapeHTML(c.location)}</span>` : ''}
-          ${c.department ? `<span>🏢 ${escapeHTML(c.department)}</span>` : ''}
-          ${c.date_limite ? `<span>⏰ ${escapeHTML(c.date_limite)}</span>` : ''}
-        </div>
-        <span class="carriere-card__more">Voir l'offre →</span>
       </article>
     `).join('') + '</div>';
   }
@@ -1081,6 +1088,7 @@ body.is-loading{overflow:hidden}
       '\n\nMerci de me recontacter.'
     );
     content.innerHTML = `
+      ${c.img ? `<img src="${escapeHTML(c.img)}" alt="${escapeHTML(c.title)}" class="detail-img" onerror="this.style.display='none'">` : ''}
       <div class="detail-meta">
         <span class="detail-cat" style="background:rgba(18,135,192,.12);color:var(--cyan-dark)">${escapeHTML(CARRIERE_LABELS[c.type] || c.type)}</span>
         ${c.type_contrat ? `<span>💼 ${escapeHTML(c.type_contrat)}</span>` : ''}
