@@ -261,6 +261,13 @@ body.is-loading{overflow:hidden}
 .detail-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px;padding-top:20px;border-top:1px solid var(--line)}
 .detail-actions .btn{flex:1;min-width:160px}
 
+.modal-body .field textarea,.modal-body .field select{font:inherit;padding:12px 14px;border:1.5px solid var(--line);border-radius:10px;background:#fff;color:var(--ink);font-family:inherit;transition:.2s}
+.modal-body .field textarea{min-height:100px;resize:vertical}
+.modal-body .field textarea:focus,.modal-body .field select:focus{outline:none;border-color:var(--cyan);box-shadow:0 0 0 4px rgba(26,167,236,.15)}
+.modal-body .field input[type=file]{padding:10px 12px;font-size:.88rem;cursor:pointer}
+.cand-ok{text-align:center;padding:24px 0;color:var(--navy);font-weight:600;line-height:1.6}
+.cand-ok span{display:block;font-size:2.4rem;margin-bottom:8px}
+
 .cta-band{background:linear-gradient(120deg,var(--navy),var(--cyan-dark),var(--navy));background-size:200% 100%;animation:shift 10s ease-in-out infinite alternate;color:#fff;border-radius:22px;padding:58px;text-align:center}
 .cta-band h2{color:#fff}
 .cta-band p{color:rgba(255,255,255,.9);max-width:52ch;margin:0 auto 28px}
@@ -725,6 +732,19 @@ body.is-loading{overflow:hidden}
   </div>
 </div>
 
+<!-- MODAL CANDIDATURE -->
+<div class="modal-overlay" id="candidatureModal" role="dialog" aria-modal="true">
+  <div class="modal-card">
+    <button class="modal-close" data-close-detail aria-label="Fermer">✕</button>
+    <div class="modal-header">
+      <div class="modal-icon">📝</div>
+      <h3>Postuler</h3>
+      <p id="candOffreTitre"></p>
+    </div>
+    <form class="modal-body" id="candidatureForm"></form>
+  </div>
+</div>
+
 <script>
 (function(){
   'use strict';
@@ -1021,12 +1041,11 @@ body.is-loading{overflow:hidden}
   const CACHE_TTL = 60 * 1000; // 60 secondes
 
   async function loadDynamicContent() {
-    let cachedRaw = null;
     let cacheAge = Infinity;
     try {
       const cachedStr = localStorage.getItem(CACHE_KEY) || '';
       if (cachedStr) {
-        cachedRaw = JSON.parse(cachedStr);
+        const cachedRaw = JSON.parse(cachedStr);
         ACTUALITES = cachedRaw.a || [];
         CARRIERES = cachedRaw.c || [];
         cacheAge = Date.now() - (cachedRaw.t || 0);
@@ -1035,19 +1054,25 @@ body.is-loading{overflow:hidden}
       }
     } catch (e) {}
 
-    if (cacheAge < CACHE_TTL) return; // cache encore frais
+    if (cacheAge < CACHE_TTL) return;
+
+    const withTimeout = (p, ms) => Promise.race([
+      p, new Promise((_, rej) => setTimeout(() => rej(new Error('timeout')), ms))
+    ]);
 
     try {
-      const [a, c] = await Promise.all([fetchTable('actualites'), fetchTable('carrieres')]);
+      const [a, c] = await withTimeout(
+        Promise.all([fetchTable('actualites'), fetchTable('carrieres')]), 10000
+      );
       ACTUALITES = a;
       CARRIERES = c;
-      try {
-        localStorage.setItem(CACHE_KEY, JSON.stringify({ a, c, t: Date.now() }));
-      } catch (e) {}
+      try { localStorage.setItem(CACHE_KEY, JSON.stringify({ a, c, t: Date.now() })); } catch (e) {}
       renderActualites();
       renderCarrieres();
     } catch (e) {
       console.error('[CTL] loadDynamic:', e);
+      if (!ACTUALITES.length) renderActualites();
+      if (!CARRIERES.length) renderCarrieres();
     }
   }
 
@@ -1118,14 +1143,100 @@ body.is-loading{overflow:hidden}
         ${Array.isArray(c.requirements) && c.requirements.length ? '<h3>Profil recherché</h3><ul>' + c.requirements.map(r => `<li>${escapeHTML(r)}</li>`).join('') + '</ul>' : ''}
       </div>
       <div class="detail-actions">
-        <a href="https://wa.me/${WHATSAPP}?text=${waMsg}" target="_blank" rel="noopener" class="btn btn-primary">💬 Postuler via WhatsApp</a>
+        <button type="button" class="btn btn-primary" data-apply="${c.id}">📝 Postuler</button>
         <button type="button" class="btn btn-outline" data-close-detail>Fermer</button>
       </div>
     `;
     openModalEl(modal);
   }
 
+  // ===== CANDIDATURE : formulaire construit par l'admin =====
+  function openCandidature(id) {
+    const c = CARRIERES.find(x => x.id === Number(id));
+    if (!c) return;
+    const dossier = Array.isArray(c.dossier) ? c.dossier : [];
+    $('#candOffreTitre').textContent = c.title;
+    const form = $('#candidatureForm');
+    form.dataset.carriereId = c.id;
+    form.innerHTML = `
+      <div class="field"><label>Nom complet *</label><input type="text" name="nom" required></div>
+      <div class="field"><label>Téléphone *</label><input type="tel" name="telephone" required></div>
+      <div class="field"><label>Email</label><input type="email" name="email"></div>
+      ${dossier.map((d, i) => {
+        const req = d.required ? 'required' : '';
+        const n = 'd' + i;
+        let input;
+        if (d.type === 'textarea') input = `<textarea name="${n}" ${req}></textarea>`;
+        else if (d.type === 'select') input = `<select name="${n}" ${req}><option value="">Choisir…</option>${(d.options || []).map(o => `<option>${escapeHTML(o)}</option>`).join('')}</select>`;
+        else if (d.type === 'file') input = `<input type="file" name="${n}" ${req}>`;
+        else input = `<input type="${d.type === 'number' ? 'number' : d.type === 'date' ? 'date' : 'text'}" name="${n}" ${req}>`;
+        return `<div class="field"><label>${escapeHTML(d.label)}${d.required ? ' *' : ''}</label>${input}</div>`;
+      }).join('')}
+      <button type="submit" class="btn btn-primary" id="candSubmit">Envoyer ma candidature</button>
+      <p class="login-error" id="candMsg"></p>`;
+    closeAllModals();
+    openModalEl($('#candidatureModal'));
+  }
+
+  async function uploadCandidatureFile(file) {
+    if (file.size > 5 * 1024 * 1024) throw new Error('Fichier trop lourd (max 5 Mo)');
+    const ext = (file.name.split('.').pop() || 'pdf').toLowerCase().replace(/[^a-z0-9]/g, '');
+    const path = `candidatures/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext || 'pdf'}`;
+    const r = await fetch(`${SUPABASE_URL}/storage/v1/object/media/${path}`, {
+      method: 'POST',
+      headers: { ...HEADERS, 'Content-Type': file.type || 'application/octet-stream' },
+      body: file
+    });
+    if (!r.ok) throw new Error('Envoi du fichier impossible');
+    return `${SUPABASE_URL}/storage/v1/object/public/media/${path}`;
+  }
+
+  document.addEventListener('submit', async e => {
+    if (e.target.id !== 'candidatureForm') return;
+    e.preventDefault();
+    const form = e.target;
+    const btn = $('#candSubmit');
+    const msg = $('#candMsg');
+    const c = CARRIERES.find(x => x.id === Number(form.dataset.carriereId));
+    if (!c) return;
+    const dossier = Array.isArray(c.dossier) ? c.dossier : [];
+    btn.disabled = true; btn.textContent = 'Envoi en cours…'; msg.textContent = '';
+    try {
+      const reponses = [];
+      for (let i = 0; i < dossier.length; i++) {
+        const d = dossier[i];
+        const input = form.elements['d' + i];
+        if (d.type === 'file') {
+          const f = input.files[0];
+          if (f) reponses.push({ label: d.label, type: 'file', value: await uploadCandidatureFile(f) });
+        } else if (input.value.trim()) {
+          reponses.push({ label: d.label, type: d.type, value: input.value.trim() });
+        }
+      }
+      const r = await fetch(REST + 'candidatures', {
+        method: 'POST',
+        headers: { ...HEADERS, 'Content-Type': 'application/json', Prefer: 'return=minimal' },
+        body: JSON.stringify({
+          carriere_id: c.id,
+          carriere_titre: c.title,
+          nom: form.elements.nom.value.trim(),
+          telephone: form.elements.telephone.value.trim(),
+          email: form.elements.email.value.trim() || null,
+          reponses
+        })
+      });
+      if (!r.ok) throw new Error('Envoi impossible, réessayez.');
+      form.innerHTML = '<div class="cand-ok"><span>✅</span>Candidature envoyée.<br>Merci, nous vous recontacterons.</div>';
+    } catch (err) {
+      msg.textContent = err.message || 'Erreur, réessayez.';
+      btn.disabled = false; btn.textContent = 'Envoyer ma candidature';
+    }
+  });
+
   document.addEventListener('click', e => {
+    const applyBtn = e.target.closest('[data-apply]');
+    if (applyBtn) { openCandidature(applyBtn.dataset.apply); return; }
+
     if (e.target.closest('[data-close-detail]')) {
       const modal = e.target.closest('.modal-overlay');
       if (modal) closeModalEl(modal);
@@ -1211,9 +1322,8 @@ body.is-loading{overflow:hidden}
     });
   }
 
-  // ===== BOOT : images d'abord, données ensuite =====
-  if (document.readyState === 'complete') loadDynamicContent();
-  else addEventListener('load', loadDynamicContent);
+  // ===== BOOT : on charge tout de suite, sans attendre l'événement load =====
+  loadDynamicContent();
 })();
 
 // Safety preloader fallback
