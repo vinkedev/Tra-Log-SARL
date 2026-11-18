@@ -224,6 +224,24 @@ body.is-loading{overflow:hidden}
 .carriere-card__more{margin-top:auto;align-self:flex-start;font-weight:600;font-size:.88rem;color:var(--cyan-dark);border-bottom:2px solid transparent;transition:border-color .2s}
 .carriere-card:hover .carriere-card__more{border-color:var(--red)}
 
+/* ===== Actions carte carrière : Voir l'offre + Postuler ===== */
+.carriere-card__actions{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-top:auto;
+  padding-top:4px;
+}
+.carriere-card__actions .carriere-card__more{
+  margin-top:0;
+  align-self:center;
+}
+.carriere-card__actions .btn{
+  flex-shrink:0;
+}
+
 .modal-overlay{position:fixed;inset:0;background:rgba(10,37,64,.78);backdrop-filter:blur(8px);z-index:200;display:none;align-items:center;justify-content:center;padding:20px}
 .modal-overlay.open{display:flex}
 .modal-card{background:#fff;border-radius:20px;width:100%;max-width:480px;max-height:92vh;overflow-y:auto;box-shadow:0 30px 80px rgba(0,0,0,.4);position:relative;animation:modalIn .35s var(--ease);border-top:5px solid var(--cyan-dark)}
@@ -1073,7 +1091,10 @@ body.is-loading{overflow:hidden}
             ${c.department ? `<span>🏢 ${escapeHTML(c.department)}</span>` : ''}
             ${c.date_limite ? `<span>⏰ ${escapeHTML(c.date_limite)}</span>` : ''}
           </div>
-          <span class="carriere-card__more">Voir l'offre →</span>
+          <div class="carriere-card__actions">
+            <span class="carriere-card__more">Voir l'offre →</span>
+            <button type="button" class="btn btn-accent btn-sm" data-apply="${c.id}" aria-label="Postuler à l'offre : ${escapeHTML(c.title)}">📝 Postuler</button>
+          </div>
         </div>
       </article>
     `).join('') + '</div>';
